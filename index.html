@@ -40,6 +40,10 @@
 
   <header id="header" class="header d-flex flex-column justify-content-center">
 
+    <div class="branding-logo text-center mb-3">
+      <img src="assets/img/logobranding.png" alt="Brand Logo" style="max-width: 80px; height: auto;">
+    </div>
+
     <i class="header-toggle d-xl-none bi bi-list"></i>
 
     <nav id="navmenu" class="navmenu">
@@ -627,35 +631,26 @@
           </div>
 
           <div class="col-lg-8">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+            <form id="contact-form" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
               <div class="row gy-4">
-
                 <div class="col-md-6">
                   <input type="text" name="name" class="form-control" placeholder="Your Name" required>
                 </div>
-
                 <div class="col-md-6">
                   <input type="email" class="form-control" name="email" placeholder="Your Email" required>
                 </div>
-
                 <div class="col-md-12">
                   <input type="text" class="form-control" name="subject" placeholder="Subject" required>
                 </div>
-
                 <div class="col-md-12">
                   <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
                 </div>
-
                 <div class="col-md-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-
                   <button type="submit">Send Message</button>
                 </div>
-
               </div>
             </form>
+            <div id="form-status" class="text-center mt-2"></div>
           </div><!-- End Contact Form -->
 
         </div>
@@ -710,6 +705,37 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+  document.getElementById('contact-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = {
+      name: form.name.value,
+      email: form.email.value,
+      subject: form.subject.value,
+      message: form.message.value
+    };
+    const statusDiv = document.getElementById('form-status');
+    statusDiv.textContent = 'Sending...';
+
+    try {
+      const response = await fetch('/send_email', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      if (result.success) {
+        statusDiv.textContent = 'Your message has been sent. Thank you!';
+        form.reset();
+      } else {
+        statusDiv.textContent = 'Error: ' + result.message;
+      }
+    } catch (err) {
+      statusDiv.textContent = 'An error occurred. Please try again later.';
+    }
+  });
+  </script>
 
 </body>
 
