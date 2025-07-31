@@ -1,6 +1,9 @@
 import simpleaudio as sa
 import time
 import numpy as np
+import os
+def clear():
+    os.system('clear')  # Windows: 'cls', macOS/Linux: 'clear'
 
 # Morse Code Dictionary
 MORSE_CODE_DICT = {
@@ -49,12 +52,26 @@ def play_morse(morse_code):
         elif symbol == '/':
             time.sleep(WORD_SPACE)
         time.sleep(SYMBOL_SPACE)
+from IPython.display import clear_output
+import os
 
+def clear_screen():
+    # Check the operating system name
+    if os.name == 'nt':  # 'nt' for Windows
+        _ = os.system('cls')
+    else:  # 'posix' for Unix-like systems (macOS, Linux)
+        _ = os.system('clear')
+
+# Call the function to clear the screen
+clear_screen()
 if __name__ == "__main__":
     while True:
+        clear_screen()
         message = input("Enter your message: ")
         morse = text_to_morse(message)
         print("Morse Code:", morse)
         print("Playing audio...")
         play_morse(morse)
+        print("\033c", end="")
+
 

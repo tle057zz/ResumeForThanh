@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Career Advice - TLe Portfolio</title>
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+<body>
+  <header class="header d-flex flex-column justify-content-center">
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="index.html"><i class="bi bi-house navicon"></i><span>Home</span></a></li>
+        <li><a href="career-advice.html" class="active"><i class="bi bi-lightbulb navicon"></i><span>Career Advice</span></a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="main container py-5">
+    <h1 class="mb-4">Career Advice</h1>
+    <div id="posts-list" class="mb-4">
+      <!-- Posts will be listed here -->
+    </div>
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Add New Post</h5>
+        <form id="add-post-form">
+          <div class="mb-3">
+            <input type="text" class="form-control" id="post-title" placeholder="Title" required>
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control" id="post-content" rows="4" placeholder="Content" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Post</button>
+        </form>
+      </div>
+    </div>
+    <div id="edit-post-section" style="display:none;" class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Edit Post</h5>
+        <form id="edit-post-form">
+          <div class="mb-3">
+            <input type="text" class="form-control" id="edit-post-title" required>
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control" id="edit-post-content" rows="4" required></textarea>
+          </div>
+          <input type="hidden" id="edit-post-id">
+          <button type="submit" class="btn btn-success">Save Changes</button>
+          <button type="button" class="btn btn-secondary" id="cancel-edit">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Simple localStorage-based CRUD for demonstration
+    function getPosts() {
+      return JSON.parse(localStorage.getItem('careerAdvicePosts') || '[]');
+    }
+    function savePosts(posts) {
+      localStorage.setItem('careerAdvicePosts', JSON.stringify(posts));
+    }
+    function renderPosts() {
+      const posts = getPosts();
+      const list = document.getElementById('posts-list');
+      if (posts.length === 0) {
+        list.innerHTML = '<p class="text-muted">No posts yet. Add your first career advice post!</p>';
+        return;
+      }
+      list.innerHTML = posts.map((post, idx) => `
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">${post.title}</h5>
+            <p class="card-text">${post.content}</p>
+            <button class="btn btn-sm btn-warning me-2" onclick="editPost(${idx})">Edit</button>
+            <button class="btn btn-sm btn-danger" onclick="deletePost(${idx})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    document.getElementById('add-post-form').onsubmit = function(e) {
+      e.preventDefault();
+      const title = document.getElementById('post-title').value;
+      const content = document.getElementById('post-content').value;
+      const posts = getPosts();
+      posts.unshift({ title, content });
+      savePosts(posts);
+      renderPosts();
+      this.reset();
+    };
+    function editPost(idx) {
+      const posts = getPosts();
+      document.getElementById('edit-post-title').value = posts[idx].title;
+      document.getElementById('edit-post-content').value = posts[idx].content;
+      document.getElementById('edit-post-id').value = idx;
+      document.getElementById('edit-post-section').style.display = '';
+      window.scrollTo(0, document.getElementById('edit-post-section').offsetTop - 60);
+    }
+    document.getElementById('edit-post-form').onsubmit = function(e) {
+      e.preventDefault();
+      const idx = document.getElementById('edit-post-id').value;
+      const posts = getPosts();
+      posts[idx].title = document.getElementById('edit-post-title').value;
+      posts[idx].content = document.getElementById('edit-post-content').value;
+      savePosts(posts);
+      renderPosts();
+      document.getElementById('edit-post-section').style.display = 'none';
+    };
+    document.getElementById('cancel-edit').onclick = function() {
+      document.getElementById('edit-post-section').style.display = 'none';
+    };
+    function deletePost(idx) {
+      if (confirm('Delete this post?')) {
+        const posts = getPosts();
+        posts.splice(idx, 1);
+        savePosts(posts);
+        renderPosts();
+      }
+    }
+    renderPosts();
+  </script>
+</body>
+</html> 
