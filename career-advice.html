@@ -7,6 +7,10 @@
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/css/main.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
   <header class="header d-flex flex-column justify-content-center">
@@ -19,6 +23,14 @@
   </header>
   <main class="main container py-5">
     <h1 class="mb-4">Career Advice</h1>
+    <div class="alert alert-info mb-4">
+      <strong>Content Formatting Options:</strong><br>
+      <ul class="mb-1">
+        <li><strong>Plain Text:</strong> No formatting, displays as-is</li>
+        <li><strong>LaTeX:</strong> Use <code>\textbf{bold}</code>, <code>\textit{italic}</code>, <code>\begin{itemize}\item text\end{itemize}</code>, math <code>\( x^2 \)</code></li>
+        <li><strong>Markdown:</strong> Use <code>**bold**</code>, <code>*italic*</code>, <code>- list item</code>, math <code>\( x^2 \)</code></li>
+      </ul>
+    </div>
     <div id="posts-list" class="mb-4">
       <!-- Posts will be listed here -->
     </div>
@@ -30,7 +42,22 @@
             <input type="text" class="form-control" id="post-title" placeholder="Title" required>
           </div>
           <div class="mb-3">
-            <textarea class="form-control" id="post-content" rows="4" placeholder="Content" required></textarea>
+            <textarea class="form-control" id="post-content" rows="8" placeholder="Content" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Content Format:</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="post-format" id="post-plain" value="plain">
+              <label class="form-check-label" for="post-plain">Plain Text</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="post-format" id="post-latex" value="latex" checked>
+              <label class="form-check-label" for="post-latex">LaTeX</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="post-format" id="post-markdown" value="markdown">
+              <label class="form-check-label" for="post-markdown">Markdown</label>
+            </div>
           </div>
           <button type="submit" class="btn btn-primary">Add Post</button>
         </form>
@@ -44,7 +71,22 @@
             <input type="text" class="form-control" id="edit-post-title" required>
           </div>
           <div class="mb-3">
-            <textarea class="form-control" id="edit-post-content" rows="4" required></textarea>
+            <textarea class="form-control" id="edit-post-content" rows="8" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Content Format:</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="edit-post-format" id="edit-post-plain" value="plain">
+              <label class="form-check-label" for="edit-post-plain">Plain Text</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="edit-post-format" id="edit-post-latex" value="latex">
+              <label class="form-check-label" for="edit-post-latex">LaTeX</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="edit-post-format" id="edit-post-markdown" value="markdown">
+              <label class="form-check-label" for="edit-post-markdown">Markdown</label>
+            </div>
           </div>
           <input type="hidden" id="edit-post-id">
           <button type="submit" class="btn btn-success">Save Changes</button>
@@ -54,13 +96,68 @@
     </div>
   </main>
   <script>
-    // Simple localStorage-based CRUD for demonstration
+    function processLatexText(content) {
+      if (!content) return content;
+      
+      // Process LaTeX text commands
+      content = content
+        // Bold text
+        .replace(/\\textbf\{([^}]*)\}/g, '<strong>$1</strong>')
+        // Italic text
+        .replace(/\\textit\{([^}]*)\}/g, '<em>$1</em>')
+        // Monospace text
+        .replace(/\\texttt\{([^}]*)\}/g, '<code>$1</code>')
+        .replace(/\\verb\|([^|]*)\|/g, '<code>$1</code>')
+        // Line breaks
+        .replace(/\\\\/g, '<br>')
+        // Paragraph breaks
+        .replace(/\n\s*\n/g, '</p><p>')
+        // Process itemize environments
+        .replace(/\\begin\{itemize\}([\s\S]*?)\\end\{itemize\}/g, function(match, items) {
+          const processedItems = items
+            .split(/\\item\s+/)
+            .filter(item => item.trim())
+            .map(item => `<li>${item.trim()}</li>`)
+            .join('');
+          return `<ul>${processedItems}</ul>`;
+        })
+        // Process enumerate environments
+        .replace(/\\begin\{enumerate\}([\s\S]*?)\\end\{enumerate\}/g, function(match, items) {
+          const processedItems = items
+            .split(/\\item\s+/)
+            .filter(item => item.trim())
+            .map(item => `<li>${item.trim()}</li>`)
+            .join('');
+          return `<ol>${processedItems}</ol>`;
+        });
+      
+      // Wrap in paragraph tags if not already wrapped
+      if (!content.includes('<p>') && !content.includes('<ul>') && !content.includes('<ol>')) {
+        content = `<p>${content}</p>`;
+      }
+      
+      return content;
+    }
+
+    function renderMath(element) {
+      renderMathInElement(element, {
+        delimiters: [
+          {left: '\\[', right: '\\]', display: true},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ]
+      });
+    }
+
     function getPosts() {
       return JSON.parse(localStorage.getItem('careerAdvicePosts') || '[]');
     }
+    
     function savePosts(posts) {
       localStorage.setItem('careerAdvicePosts', JSON.stringify(posts));
     }
+    
     function renderPosts() {
       const posts = getPosts();
       const list = document.getElementById('posts-list');
@@ -68,48 +165,116 @@
         list.innerHTML = '<p class="text-muted">No posts yet. Add your first career advice post!</p>';
         return;
       }
-      list.innerHTML = posts.map((post, idx) => `
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">${post.title}</h5>
-            <p class="card-text">${post.content}</p>
-            <button class="btn btn-sm btn-warning me-2" onclick="editPost(${idx})">Edit</button>
-            <button class="btn btn-sm btn-danger" onclick="deletePost(${idx})">Delete</button>
+      
+      list.innerHTML = posts.map((post, idx) => {
+        let content = post.content;
+        const format = post.format || 'plain';
+        
+        if (format === 'latex') {
+          content = processLatexText(content);
+        } else if (format === 'markdown') {
+          content = marked.parse(content);
+        } else {
+          // Plain text - escape HTML and preserve line breaks
+          content = content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+        }
+        
+        // Format timestamp
+        const createdAt = post.createdAt ? new Date(post.createdAt).toLocaleString() : 'Unknown';
+        const updatedAt = post.updatedAt ? new Date(post.updatedAt).toLocaleString() : null;
+        const timestampText = updatedAt && updatedAt !== createdAt ? 
+          `Updated: ${updatedAt}` : `Created: ${createdAt}`;
+        
+        return `
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0">${post.title} <small class="text-muted">(${format})</small></h5>
+                <small class="text-muted">${timestampText}</small>
+              </div>
+              <div class="card-text">${content}</div>
+              <div class="mt-3">
+                <button class="btn btn-sm btn-warning me-2" onclick="editPost(${idx})">Edit</button>
+                <button class="btn btn-sm btn-danger" onclick="deletePost(${idx})">Delete</button>
+              </div>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+      
+      // Render math in LaTeX and Markdown posts
+      const mathElements = list.querySelectorAll('.card-text');
+      mathElements.forEach((element, idx) => {
+        const post = posts[idx];
+        if (post && (post.format === 'latex' || post.format === 'markdown')) {
+          if (element.textContent.includes('\\(') || element.textContent.includes('\\[')) {
+            renderMath(element);
+          }
+        }
+      });
     }
+    
     document.getElementById('add-post-form').onsubmit = function(e) {
       e.preventDefault();
       const title = document.getElementById('post-title').value;
       const content = document.getElementById('post-content').value;
+      const format = document.querySelector('input[name="post-format"]:checked').value;
+      const now = new Date().toISOString();
+      
       const posts = getPosts();
-      posts.unshift({ title, content });
+      posts.unshift({ 
+        title, 
+        content, 
+        format, 
+        createdAt: now,
+        updatedAt: now
+      });
       savePosts(posts);
       renderPosts();
       this.reset();
+      document.getElementById('post-latex').checked = true; // Default to LaTeX
     };
+    
     function editPost(idx) {
       const posts = getPosts();
-      document.getElementById('edit-post-title').value = posts[idx].title;
-      document.getElementById('edit-post-content').value = posts[idx].content;
+      const post = posts[idx];
+      document.getElementById('edit-post-title').value = post.title;
+      document.getElementById('edit-post-content').value = post.content;
+      
+      // Set the correct radio button
+      const format = post.format || 'plain';
+      document.querySelector(`input[name="edit-post-format"][value="${format}"]`).checked = true;
+      
       document.getElementById('edit-post-id').value = idx;
       document.getElementById('edit-post-section').style.display = '';
       window.scrollTo(0, document.getElementById('edit-post-section').offsetTop - 60);
     }
+    
     document.getElementById('edit-post-form').onsubmit = function(e) {
       e.preventDefault();
       const idx = document.getElementById('edit-post-id').value;
       const posts = getPosts();
+      const now = new Date().toISOString();
+      
       posts[idx].title = document.getElementById('edit-post-title').value;
       posts[idx].content = document.getElementById('edit-post-content').value;
+      posts[idx].format = document.querySelector('input[name="edit-post-format"]:checked').value;
+      posts[idx].updatedAt = now;
+      
+      // Set createdAt if it doesn't exist (for backwards compatibility)
+      if (!posts[idx].createdAt) {
+        posts[idx].createdAt = now;
+      }
+      
       savePosts(posts);
       renderPosts();
       document.getElementById('edit-post-section').style.display = 'none';
     };
+    
     document.getElementById('cancel-edit').onclick = function() {
       document.getElementById('edit-post-section').style.display = 'none';
     };
+    
     function deletePost(idx) {
       if (confirm('Delete this post?')) {
         const posts = getPosts();
@@ -118,6 +283,7 @@
         renderPosts();
       }
     }
+    
     renderPosts();
   </script>
 </body>
