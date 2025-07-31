@@ -24,15 +24,19 @@ def ping():
     try:
         response = requests.get(URL, timeout=10)
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"[{now}] Status Code: {response.status_code}")
+        if response.status_code == 200:
+            print(f"[{now}] ✅ App is awake - Status: {response.status_code}")
+        else:
+            print(f"[{now}] ⚠️  Unexpected status: {response.status_code}")
     except requests.RequestException as e:
-        print(f"[{datetime.datetime.now()}] Request failed: {e}")
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{now}] ❌ Ping failed: {e}")
 
 def run_ping_cron():
     """Run ping function every 15 minutes in a separate thread"""
     while True:
         ping()
-        time.sleep(15 * 60)  # 15 minutes in seconds
+        time.sleep(13 * 60)  # 15 minutes in seconds
 
 
 
