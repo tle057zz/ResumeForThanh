@@ -13,6 +13,29 @@ app.config['MAIL_DEFAULT_SENDER'] = 'lenhothanh.nsl@gmail.com'
 
 mail = Mail(app)
 
+import requests
+import time
+import datetime
+import threading
+
+URL = "https://www.thanhle.it.com/"
+
+def ping():
+    try:
+        response = requests.get(URL, timeout=10)
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{now}] Status Code: {response.status_code}")
+    except requests.RequestException as e:
+        print(f"[{datetime.datetime.now()}] Request failed: {e}")
+
+def run_ping_cron():
+    """Run ping function every 15 minutes in a separate thread"""
+    while True:
+        ping()
+        time.sleep(15 * 60)  # 15 minutes in seconds
+
+
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -48,4 +71,10 @@ def send_email():
         return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    # Start the ping cron job in a separate daemon thread
+    ping_thread = threading.Thread(target=run_ping_cron, daemon=True)
+    ping_thread.start()
+    print("Ping cron job started in background thread")
+    
+    # Start the Flask app
+    app.run(debug=True)
