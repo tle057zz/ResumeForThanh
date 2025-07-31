@@ -45,6 +45,12 @@
             <textarea class="form-control" id="post-content" rows="8" placeholder="Content" required></textarea>
           </div>
           <div class="mb-3">
+            <label for="post-images" class="form-label">Images (optional)</label>
+            <input type="file" class="form-control" id="post-images" multiple accept=".jpg,.jpeg,.gif" onchange="previewImages('post-images', 'post-preview')">
+            <small class="form-text text-muted">Supported formats: JPG, JPEG, GIF</small>
+            <div id="post-preview" class="mt-2"></div>
+          </div>
+          <div class="mb-3">
             <label class="form-label">Content Format:</label>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="post-format" id="post-plain" value="plain">
@@ -72,6 +78,13 @@
           </div>
           <div class="mb-3">
             <textarea class="form-control" id="edit-post-content" rows="8" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="edit-post-images" class="form-label">Images (optional)</label>
+            <input type="file" class="form-control" id="edit-post-images" multiple accept=".jpg,.jpeg,.gif" onchange="previewImages('edit-post-images', 'edit-post-preview')">
+            <small class="form-text text-muted">Supported formats: JPG, JPEG, GIF</small>
+            <div id="edit-post-preview" class="mt-2"></div>
+            <div id="edit-existing-images" class="mt-2"></div>
           </div>
           <div class="mb-3">
             <label class="form-label">Content Format:</label>
@@ -158,6 +171,96 @@
       localStorage.setItem('careerAdvicePosts', JSON.stringify(posts));
     }
     
+    function previewImages(inputId, previewId) {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+      preview.innerHTML = '';
+      
+      if (input.files) {
+        Array.from(input.files).forEach((file, index) => {
+          if (file.type.match(/image\/(jpeg|jpg|gif)/)) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const imgDiv = document.createElement('div');
+              imgDiv.className = 'd-inline-block me-2 mb-2 position-relative';
+              imgDiv.innerHTML = `
+                <img src="${e.target.result}" style="width: 100px; height: 100px; object-fit: cover;" class="rounded">
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="removePreviewImage(this, '${inputId}', ${index})" style="transform: translate(50%, -50%);">&times;</button>
+              `;
+              preview.appendChild(imgDiv);
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    }
+
+    function removePreviewImage(button, inputId, index) {
+      const input = document.getElementById(inputId);
+      const dt = new DataTransfer();
+      
+      Array.from(input.files).forEach((file, i) => {
+        if (i !== index) {
+          dt.items.add(file);
+        }
+      });
+      
+      input.files = dt.files;
+      previewImages(inputId, inputId.replace('-images', '-preview'));
+    }
+
+    function displayExistingImages(images, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      
+      if (images && images.length > 0) {
+        const label = document.createElement('div');
+        label.innerHTML = '<strong>Current Images:</strong>';
+        label.className = 'mb-2';
+        container.appendChild(label);
+        
+        images.forEach((image, index) => {
+          const imgDiv = document.createElement('div');
+          imgDiv.className = 'd-inline-block me-2 mb-2 position-relative';
+          imgDiv.innerHTML = `
+            <img src="${image}" style="width: 100px; height: 100px; object-fit: cover;" class="rounded">
+            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="removeExistingImage(${index})" style="transform: translate(50%, -50%);">&times;</button>
+          `;
+          container.appendChild(imgDiv);
+        });
+      }
+    }
+
+    let currentEditIndex = null;
+    function removeExistingImage(imageIndex) {
+      if (currentEditIndex !== null) {
+        const posts = getPosts();
+        if (posts[currentEditIndex].images) {
+          posts[currentEditIndex].images.splice(imageIndex, 1);
+          savePosts(posts);
+          displayExistingImages(posts[currentEditIndex].images, 'edit-existing-images');
+        }
+      }
+    }
+
+    async function processImages(fileInput) {
+      const files = fileInput.files;
+      const images = [];
+      
+      for (let file of files) {
+        if (file.type.match(/image\/(jpeg|jpg|gif)/)) {
+          const base64 = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+          });
+          images.push(base64);
+        }
+      }
+      
+      return images;
+    }
+
     function renderPosts() {
       const posts = getPosts();
       const list = document.getElementById('posts-list');
@@ -185,6 +288,18 @@
         const timestampText = updatedAt && updatedAt !== createdAt ? 
           `Updated: ${updatedAt}` : `Created: ${createdAt}`;
         
+        // Display images
+        let imagesHtml = '';
+        if (post.images && post.images.length > 0) {
+          imagesHtml = `
+            <div class="mb-3">
+              ${post.images.map(image => `
+                <img src="${image}" class="img-thumbnail me-2 mb-2" style="max-width: 200px; max-height: 200px; cursor: pointer;" onclick="openImageModal('${image}')">
+              `).join('')}
+            </div>
+          `;
+        }
+        
         return `
           <div class="card mb-3">
             <div class="card-body">
@@ -193,6 +308,7 @@
                 <small class="text-muted">${timestampText}</small>
               </div>
               <div class="card-text">${content}</div>
+              ${imagesHtml}
               <div class="mt-3">
                 <button class="btn btn-sm btn-warning me-2" onclick="editPost(${idx})">Edit</button>
                 <button class="btn btn-sm btn-danger" onclick="deletePost(${idx})">Delete</button>
@@ -213,31 +329,64 @@
         }
       });
     }
+
+    function openImageModal(imageSrc) {
+      const modal = document.createElement('div');
+      modal.className = 'modal fade';
+      modal.innerHTML = `
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Image Preview</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+              <img src="${imageSrc}" class="img-fluid">
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      const bsModal = new bootstrap.Modal(modal);
+      bsModal.show();
+      
+      modal.addEventListener('hidden.bs.modal', () => {
+        document.body.removeChild(modal);
+      });
+    }
     
-    document.getElementById('add-post-form').onsubmit = function(e) {
+    document.getElementById('add-post-form').onsubmit = async function(e) {
       e.preventDefault();
       const title = document.getElementById('post-title').value;
       const content = document.getElementById('post-content').value;
       const format = document.querySelector('input[name="post-format"]:checked').value;
       const now = new Date().toISOString();
       
+      // Process images
+      const imageInput = document.getElementById('post-images');
+      const images = await processImages(imageInput);
+      
       const posts = getPosts();
       posts.unshift({ 
         title, 
         content, 
         format, 
+        images,
         createdAt: now,
         updatedAt: now
       });
       savePosts(posts);
       renderPosts();
       this.reset();
+      document.getElementById('post-preview').innerHTML = '';
       document.getElementById('post-latex').checked = true; // Default to LaTeX
     };
     
     function editPost(idx) {
       const posts = getPosts();
       const post = posts[idx];
+      currentEditIndex = idx;
+      
       document.getElementById('edit-post-title').value = post.title;
       document.getElementById('edit-post-content').value = post.content;
       
@@ -245,20 +394,36 @@
       const format = post.format || 'plain';
       document.querySelector(`input[name="edit-post-format"][value="${format}"]`).checked = true;
       
+      // Display existing images
+      displayExistingImages(post.images, 'edit-existing-images');
+      
+      // Clear file input and preview
+      document.getElementById('edit-post-images').value = '';
+      document.getElementById('edit-post-preview').innerHTML = '';
+      
       document.getElementById('edit-post-id').value = idx;
       document.getElementById('edit-post-section').style.display = '';
       window.scrollTo(0, document.getElementById('edit-post-section').offsetTop - 60);
     }
     
-    document.getElementById('edit-post-form').onsubmit = function(e) {
+    document.getElementById('edit-post-form').onsubmit = async function(e) {
       e.preventDefault();
       const idx = document.getElementById('edit-post-id').value;
       const posts = getPosts();
       const now = new Date().toISOString();
       
+      // Process new images
+      const imageInput = document.getElementById('edit-post-images');
+      const newImages = await processImages(imageInput);
+      
+      // Combine existing images with new ones
+      const existingImages = posts[idx].images || [];
+      const allImages = [...existingImages, ...newImages];
+      
       posts[idx].title = document.getElementById('edit-post-title').value;
       posts[idx].content = document.getElementById('edit-post-content').value;
       posts[idx].format = document.querySelector('input[name="edit-post-format"]:checked').value;
+      posts[idx].images = allImages;
       posts[idx].updatedAt = now;
       
       // Set createdAt if it doesn't exist (for backwards compatibility)
@@ -269,6 +434,7 @@
       savePosts(posts);
       renderPosts();
       document.getElementById('edit-post-section').style.display = 'none';
+      currentEditIndex = null;
     };
     
     document.getElementById('cancel-edit').onclick = function() {
