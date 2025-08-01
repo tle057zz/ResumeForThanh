@@ -76,7 +76,7 @@ def send_email():
 
 if __name__ == '__main__':
     # Start the ping cron job in a separate daemon thread
-    ping_thread = threading.Thread(target=run_ping_cron, daemon=True)
+    ping_thread = threading.Thread(target=run_ping_cron, daemon=False)
     ping_thread.start()
     print("Ping cron job started in background thread")
     
