@@ -13,7 +13,7 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  <header class="header d-flex flex-column justify-content-center">
+  <header id="header" class="header d-flex flex-column justify-content-center">
     <nav id="navmenu" class="navmenu">
       <ul>
         <li><a href="index.html"><i class="bi bi-house navicon"></i><span>Home</span></a></li>
@@ -21,6 +21,9 @@
       </ul>
     </nav>
   </header>
+
+  <i class="header-toggle d-xl-none bi bi-list"></i>
+
   <main class="main container py-5">
     <div class="mb-3">
       <a href="index.html" class="btn btn-outline-primary">
@@ -457,5 +460,44 @@
     
     renderPosts();
   </script>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- Close menu when clicking outside -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const header = document.querySelector('#header');
+      const headerToggleBtn = document.querySelector('.header-toggle');
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', function(event) {
+        // Check if menu is currently open
+        if (header.classList.contains('header-show')) {
+          // Check if click was outside the header and not on the toggle button
+          if (!header.contains(event.target) && !headerToggleBtn.contains(event.target)) {
+            // Close the menu
+            header.classList.remove('header-show');
+            headerToggleBtn.classList.remove('bi-x');
+            headerToggleBtn.classList.add('bi-list');
+          }
+        }
+      });
+
+      // Close menu when pressing Escape key
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && header.classList.contains('header-show')) {
+          header.classList.remove('header-show');
+          headerToggleBtn.classList.remove('bi-x');
+          headerToggleBtn.classList.add('bi-list');
+        }
+      });
+    });
+  </script>
+
 </body>
 </html> 
