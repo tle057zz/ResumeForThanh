@@ -400,7 +400,7 @@
           // Update summary cards
           document.getElementById('total-visitors').textContent = data.human_visitors || 0;
           document.getElementById('page-views').textContent = Object.values(data.page_views || {}).reduce((a, b) => a + b, 0);
-          document.getElementById('current-visitors').textContent = data.today_human_visitors || 0;
+          document.getElementById('current-visitors').textContent = data.current_online_humans || 0;
           document.getElementById('human-visitors').textContent = data.human_visitors || 0;
           document.getElementById('automated-visitors').textContent = data.automated_visitors || 0;
           // Live feed

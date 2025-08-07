@@ -119,6 +119,18 @@ def get_visitor_stats():
     cursor.execute('SELECT COUNT(*) FROM visitors WHERE DATE(visit_time) = ? AND visitor_type = "Human" AND page_visited != "traffic"', (today,))
     today_human_visitors = cursor.fetchone()[0]
     
+    # Current online humans (active in last 5 minutes, Sydney time, excluding traffic page)
+    sydney_tz = pytz.timezone('Australia/Sydney')
+    sydney_now = datetime.datetime.now(sydney_tz)
+    five_minutes_ago = sydney_now - datetime.timedelta(minutes=5)
+    cursor.execute('''
+        SELECT COUNT(DISTINCT ip_address) FROM visitors
+        WHERE visitor_type = "Human"
+          AND page_visited != "traffic"
+          AND visit_time >= ?
+    ''', (five_minutes_ago.strftime('%Y-%m-%d %H:%M:%S'),))
+    current_online_humans = cursor.fetchone()[0]
+    
     # Page views (human visitors only)
     cursor.execute('SELECT page_name, view_count FROM page_views')
     page_views = dict(cursor.fetchall())
@@ -157,14 +169,20 @@ def get_visitor_stats():
         'unique_visitors': unique_visitors,
         'today_visitors': today_visitors,
         'today_human_visitors': today_human_visitors,
+        'current_online_humans': current_online_humans,
         'page_views': page_views,
         'recent_activity': recent_activity,
         'visitor_types': visitor_types
     }
 
+def get_client_ip():
+    if request.headers.get('X-Forwarded-For'):
+        return request.headers.get('X-Forwarded-For').split(',')[0].strip()
+    return request.remote_addr
+
 def detect_visitor_type():
     """Detect if visitor is human or automated system"""
-    visitor_ip = request.remote_addr
+    visitor_ip = get_client_ip()
     user_agent = request.headers.get('User-Agent', 'Unknown')
     referer = request.headers.get('Referer', '')
     accept_language = request.headers.get('Accept-Language', '')
@@ -231,7 +249,7 @@ def detect_visitor_type():
     }
 
 def record_visit(page_name):
-    visitor_ip = request.remote_addr
+    visitor_ip = get_client_ip()
     user_agent = request.headers.get('User-Agent', 'Unknown')
     
     # Detect visitor type
