@@ -123,6 +123,216 @@
           </div>
         </div>
 
+        <!-- Analytics Overview Section -->
+        <section id="analytics-overview" class="section">
+          <div class="container" data-aos="fade-up">
+            <div class="section-title">
+              <h2>Analytics Overview</h2>
+              <p>Key metrics and performance indicators for the website</p>
+            </div>
+            <div class="row gy-4">
+              <!-- Total Visitors -->
+              <div class="col-lg-3 col-md-6">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-people-fill text-primary" style="font-size: 2rem;"></i>
+                    <h3 class="mt-3" id="total-visitors">1,247</h3>
+                    <p class="text-muted">Total Visitors</p>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> +12.5% this month</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Page Views -->
+              <div class="col-lg-3 col-md-6">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-eye-fill text-info" style="font-size: 2rem;"></i>
+                    <h3 class="mt-3" id="page-views">3,892</h3>
+                    <p class="text-muted">Page Views</p>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> +8.3% this month</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Bounce Rate -->
+              <div class="col-lg-3 col-md-6">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-arrow-repeat text-warning" style="font-size: 2rem;"></i>
+                    <h3 class="mt-3" id="bounce-rate">42.3%</h3>
+                    <p class="text-muted">Bounce Rate</p>
+                    <small class="text-danger"><i class="bi bi-arrow-down"></i> +2.1% this month</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Avg Session Duration -->
+              <div class="col-lg-3 col-md-6">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-clock-fill text-success" style="font-size: 2rem;"></i>
+                    <h3 class="mt-3" id="avg-session">2:34</h3>
+                    <p class="text-muted">Avg Session</p>
+                    <small class="text-success"><i class="bi bi-arrow-up"></i> +15.2% this month</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Traffic Charts Section -->
+        <section id="traffic-charts" class="section">
+          <div class="container" data-aos="fade-up">
+            <div class="section-title">
+              <h2>Traffic Analysis</h2>
+              <p>Detailed traffic patterns and visitor behavior</p>
+            </div>
+            <div class="row gy-4">
+              <!-- Daily Traffic Chart -->
+              <div class="col-lg-8">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Daily Traffic (Last 30 Days)</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="dailyTrafficChart" height="100"></canvas>
+                  </div>
+                </div>
+              </div>
+              <!-- Traffic Sources -->
+              <div class="col-lg-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Traffic Sources</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="trafficSourcesChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row gy-4 mt-4">
+              <!-- Page Performance -->
+              <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Top Pages</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="topPagesChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <!-- Geographic Distribution -->
+              <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Geographic Distribution</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="geoChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Device Analytics Section -->
+        <section id="device-analytics" class="section">
+          <div class="container" data-aos="fade-up">
+            <div class="section-title">
+              <h2>Device & Browser Analytics</h2>
+              <p>Understanding how visitors access the website</p>
+            </div>
+            <div class="row gy-4">
+              <!-- Device Types -->
+              <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Device Types</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="deviceChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <!-- Browser Distribution -->
+              <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">Browser Distribution</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="browserChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Visitor Type Statistics -->
+        <div class="row mt-4">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Visitor Type Distribution</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6 text-center">
+                    <div class="visitor-type-card">
+                      <i class="bi bi-person-circle text-success" style="font-size: 3rem;"></i>
+                      <h3 class="mt-2" id="human-visitors">0</h3>
+                      <p class="text-muted">Human Visitors</p>
+                    </div>
+                  </div>
+                  <div class="col-6 text-center">
+                    <div class="visitor-type-card">
+                      <i class="bi bi-robot text-warning" style="font-size: 3rem;"></i>
+                      <h3 class="mt-2" id="automated-visitors">0</h3>
+                      <p class="text-muted">Automated Visitors</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Detection Methods</h5>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-info">
+                  <h6><i class="bi bi-shield-check"></i> Bot Detection Methods:</h6>
+                  <ul class="mb-0">
+                    <li><strong>User-Agent Analysis:</strong> Detects common bot user agents</li>
+                    <li><strong>IP Address Check:</strong> Identifies automated IP ranges</li>
+                    <li><strong>Header Analysis:</strong> Checks for missing browser headers</li>
+                    <li><strong>Referer Analysis:</strong> Validates request sources</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Activity Feed -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Live Activity Feed <small class="text-muted">(Sydney Time)</small></h5>
+              </div>
+              <div class="card-body">
+                <div id="activity-feed" class="activity-feed">
+                  <!-- Live activity will be injected here by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -169,7 +379,6 @@
         minute: '2-digit',
         second: '2-digit'
       });
-
       const sydneyDate = now.toLocaleDateString('en-AU', {
         timeZone: 'Australia/Sydney',
         weekday: 'long',
@@ -177,29 +386,63 @@
         month: 'long',
         day: 'numeric'
       });
-
       document.getElementById('sydney-clock').textContent = sydneyTime;
       document.getElementById('sydney-date').textContent = sydneyDate;
     }
-
-    // Update Sydney clock immediately and then every second
     updateSydneyClock();
     setInterval(updateSydneyClock, 1000);
 
-    // Simulate real-time updates for visitors, active sessions, and page views
-    setInterval(function() {
-      const currentVisitors = document.getElementById('current-visitors');
-      const visitors = Math.floor(Math.random() * 15) + 5;
-      currentVisitors.textContent = visitors;
-
-      const activeSessions = document.getElementById('active-sessions');
-      const sessions = Math.floor(Math.random() * 20) + 8;
-      activeSessions.textContent = sessions;
-
-      const todayViews = document.getElementById('today-views');
-      const views = parseInt(todayViews.textContent) + Math.floor(Math.random() * 3);
-      todayViews.textContent = views;
-    }, 5000);
+    // Fetch and update dashboard and live feed
+    function fetchAndUpdateDashboard() {
+      fetch('/api/visitor-stats')
+        .then(response => response.json())
+        .then(data => {
+          // Update summary cards
+          document.getElementById('total-visitors').textContent = data.human_visitors || 0;
+          document.getElementById('page-views').textContent = Object.values(data.page_views || {}).reduce((a, b) => a + b, 0);
+          document.getElementById('current-visitors').textContent = data.today_human_visitors || 0;
+          document.getElementById('human-visitors').textContent = data.human_visitors || 0;
+          document.getElementById('automated-visitors').textContent = data.automated_visitors || 0;
+          // Live feed
+          const activityFeed = document.getElementById('activity-feed');
+          if (data.recent_activity && data.recent_activity.length > 0) {
+            activityFeed.innerHTML = '';
+            data.recent_activity.forEach(activity => {
+              // activity: [ip, page, visit_time, visitor_type, detection_reasons, location]
+              let timestamp = activity[2];
+              if (!timestamp.includes('+') && !timestamp.endsWith('Z')) {
+                timestamp += '+00:00'; // Treat as UTC
+              }
+              const time = new Date(timestamp).toLocaleTimeString('en-AU', {
+                timeZone: 'Australia/Sydney',
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+              const page = activity[1] || 'Unknown page';
+              const ip = activity[0] || 'Unknown IP';
+              const visitorType = activity[3] || 'Unknown';
+              const detectionReasons = activity[4] || 'None';
+              const location = activity[5] || 'Unknown location';
+              const typeIcon = visitorType === 'Human' ? '<i class="bi bi-person-circle text-success"></i>' : '<i class="bi bi-robot text-warning"></i>';
+              const typeClass = visitorType === 'Human' ? 'text-success' : 'text-warning';
+              const activityItem = document.createElement('div');
+              activityItem.className = 'activity-item';
+              activityItem.innerHTML = `
+                <span class="time">${time}</span>
+                <span class="activity">
+                  ${typeIcon} <strong class="${typeClass}">${visitorType}</strong> from ${ip}<br>
+                  <span class="text-muted">${location}</span> viewed <strong>${page}</strong>
+                  ${detectionReasons !== 'None' ? `<br><small class="text-muted">Detection: ${detectionReasons}</small>` : ''}
+                </span>
+              `;
+              activityFeed.appendChild(activityItem);
+            });
+          }
+        });
+    }
+    fetchAndUpdateDashboard();
+    setInterval(fetchAndUpdateDashboard, 5000);
   </script>
 
 </body>
