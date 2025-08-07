@@ -70,6 +70,24 @@ def create_db():
     conn.commit()
     conn.close()
 
+def get_location_from_ip(ip):
+    if ip in ('127.0.0.1', '::1', 'localhost'):
+        return 'Localhost'
+    try:
+        resp = requests.get(f'http://ip-api.com/json/{ip}', timeout=2)
+        if resp.status_code == 200:
+            data = resp.json()
+            if data.get('status') == 'success':
+                city = data.get('city') or ''
+                country = data.get('country') or ''
+                if city and country:
+                    return f"{city}, {country}"
+                elif country:
+                    return country
+        return 'Unknown'
+    except Exception:
+        return 'Unknown'
+
 def get_visitor_stats():
     conn = sqlite3.connect('visitor_count.db')
     cursor = conn.cursor()
@@ -113,7 +131,13 @@ def get_visitor_stats():
         ORDER BY visit_time DESC 
         LIMIT 10
     ''')
-    recent_activity = cursor.fetchall()
+    recent_activity_raw = cursor.fetchall()
+    # Geolocate each IP
+    recent_activity = []
+    for row in recent_activity_raw:
+        ip = row[0]
+        location = get_location_from_ip(ip)
+        recent_activity.append(row + (location,))
     
     # Visitor type distribution (excluding traffic page)
     cursor.execute('''
