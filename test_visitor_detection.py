@@ -7,6 +7,8 @@ Demonstrates how the system differentiates between human and automated visitors
 import requests
 import time
 import json
+import pytz
+from datetime import datetime
 
 def test_human_visitor():
     """Simulate a human visitor with proper headers"""
@@ -24,7 +26,7 @@ def test_human_visitor():
     }
     
     try:
-        response = requests.get('http://localhost:5000/', headers=headers)
+        response = requests.get('http://localhost:8000/', headers=headers)
         print(f"✅ Human visitor request successful: {response.status_code}")
         print(f"📋 Headers sent: {json.dumps(headers, indent=2)}")
         return True
@@ -43,7 +45,7 @@ def test_bot_visitor():
     }
     
     try:
-        response = requests.get('http://localhost:5000/', headers=headers)
+        response = requests.get('http://localhost:8000/', headers=headers)
         print(f"✅ Bot visitor request successful: {response.status_code}")
         print(f"📋 Headers sent: {json.dumps(headers, indent=2)}")
         return True
@@ -62,7 +64,7 @@ def test_python_script():
     }
     
     try:
-        response = requests.get('http://localhost:5000/', headers=headers)
+        response = requests.get('http://localhost:8000/', headers=headers)
         print(f"✅ Python script request successful: {response.status_code}")
         print(f"📋 Headers sent: {json.dumps(headers, indent=2)}")
         return True
@@ -82,7 +84,7 @@ def test_localhost_visitor():
     }
     
     try:
-        response = requests.get('http://localhost:5000/', headers=headers)
+        response = requests.get('http://localhost:8000/', headers=headers)
         print(f"✅ Localhost visitor request successful: {response.status_code}")
         print(f"📋 Headers sent: {json.dumps(headers, indent=2)}")
         return True
@@ -101,7 +103,7 @@ def test_missing_headers():
     }
     
     try:
-        response = requests.get('http://localhost:5000/', headers=headers)
+        response = requests.get('http://localhost:8000/', headers=headers)
         print(f"✅ Missing headers request successful: {response.status_code}")
         print(f"📋 Headers sent: {json.dumps(headers, indent=2)}")
         return True
@@ -115,7 +117,7 @@ def check_visitor_stats():
     print("=" * 50)
     
     try:
-        response = requests.get('http://localhost:5000/api/visitor-stats')
+        response = requests.get('http://localhost:8000/api/visitor-stats')
         if response.status_code == 200:
             stats = response.json()
             print("✅ Visitor statistics retrieved successfully")
@@ -125,10 +127,17 @@ def check_visitor_stats():
             print(f"📅 Today's human visitors: {stats.get('today_human_visitors', 0)}")
             
             if stats.get('recent_activity'):
-                print("\n🕒 Recent Activity:")
+                print("\n🕒 Recent Activity (Sydney Time):")
+                sydney_tz = pytz.timezone('Australia/Sydney')
                 for activity in stats['recent_activity'][:3]:  # Show last 3
-                    ip, page, time, visitor_type, reasons = activity
-                    print(f"   {time} - {visitor_type} from {ip} visited {page}")
+                    ip, page, timestamp, visitor_type, reasons = activity
+                    # Convert to Sydney time
+                    try:
+                        dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+                        sydney_time = dt.astimezone(sydney_tz).strftime('%Y-%m-%d %I:%M:%S %p')
+                    except:
+                        sydney_time = timestamp
+                    print(f"   {sydney_time} - {visitor_type} from {ip} visited {page}")
                     if reasons and reasons != 'None':
                         print(f"      Detection: {reasons}")
             
@@ -146,7 +155,7 @@ def main():
     print("=" * 60)
     print("This script tests the visitor detection system by simulating")
     print("different types of visitors (human vs automated).")
-    print("Make sure your Flask server is running on localhost:5000")
+    print("Make sure your Flask server is running on localhost:8000")
     print()
     
     # Wait a moment for server to be ready
@@ -174,7 +183,7 @@ def main():
     check_visitor_stats()
     
     print("\n🎯 Next Steps:")
-    print("1. Visit http://localhost:5000/traffic.html")
+    print("1. Visit http://localhost:8000/traffic.html")
     print("2. Check the 'Live Activity Feed' to see visitor types")
     print("3. Look at the 'Visitor Type Distribution' section")
     print("4. Notice how different requests are classified!")

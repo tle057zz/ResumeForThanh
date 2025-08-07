@@ -3,6 +3,8 @@ from flask_mail import Mail, Message
 import sqlite3
 import datetime
 import json
+from datetime import timezone
+import pytz
 
 app = Flask(__name__)
 
@@ -72,48 +74,52 @@ def get_visitor_stats():
     conn = sqlite3.connect('visitor_count.db')
     cursor = conn.cursor()
     
-    # Total visitors (all types)
-    cursor.execute('SELECT COUNT(*) FROM visitors')
+    # Total visitors (all types, excluding traffic page)
+    cursor.execute('SELECT COUNT(*) FROM visitors WHERE page_visited != "traffic"')
     total_visitors = cursor.fetchone()[0]
     
-    # Human visitors only
-    cursor.execute('SELECT COUNT(*) FROM visitors WHERE visitor_type = "Human"')
+    # Human visitors only (excluding traffic page)
+    cursor.execute('SELECT COUNT(*) FROM visitors WHERE visitor_type = "Human" AND page_visited != "traffic"')
     human_visitors = cursor.fetchone()[0]
     
-    # Automated visitors
-    cursor.execute('SELECT COUNT(*) FROM visitors WHERE visitor_type = "Automated"')
+    # Automated visitors (excluding traffic page)
+    cursor.execute('SELECT COUNT(*) FROM visitors WHERE visitor_type = "Automated" AND page_visited != "traffic"')
     automated_visitors = cursor.fetchone()[0]
     
-    # Unique visitors (by IP)
-    cursor.execute('SELECT COUNT(DISTINCT ip_address) FROM visitors')
+    # Unique visitors (by IP, excluding traffic page)
+    cursor.execute('SELECT COUNT(DISTINCT ip_address) FROM visitors WHERE page_visited != "traffic"')
     unique_visitors = cursor.fetchone()[0]
     
-    # Today's visitors
-    today = datetime.datetime.now().strftime('%Y-%m-%d')
-    cursor.execute('SELECT COUNT(*) FROM visitors WHERE DATE(visit_time) = ?', (today,))
+    # Today's visitors (Sydney timezone, excluding traffic page)
+    sydney_tz = pytz.timezone('Australia/Sydney')
+    sydney_now = datetime.datetime.now(sydney_tz)
+    today = sydney_now.strftime('%Y-%m-%d')
+    cursor.execute('SELECT COUNT(*) FROM visitors WHERE DATE(visit_time) = ? AND page_visited != "traffic"', (today,))
     today_visitors = cursor.fetchone()[0]
     
-    # Today's human visitors
-    cursor.execute('SELECT COUNT(*) FROM visitors WHERE DATE(visit_time) = ? AND visitor_type = "Human"', (today,))
+    # Today's human visitors (excluding traffic page)
+    cursor.execute('SELECT COUNT(*) FROM visitors WHERE DATE(visit_time) = ? AND visitor_type = "Human" AND page_visited != "traffic"', (today,))
     today_human_visitors = cursor.fetchone()[0]
     
     # Page views (human visitors only)
     cursor.execute('SELECT page_name, view_count FROM page_views')
     page_views = dict(cursor.fetchall())
     
-    # Recent activity (last 10 visits with visitor type)
+    # Recent activity (last 10 visits with visitor type, excluding traffic page visits)
     cursor.execute('''
         SELECT ip_address, page_visited, visit_time, visitor_type, detection_reasons
         FROM visitors 
+        WHERE page_visited != 'traffic'
         ORDER BY visit_time DESC 
         LIMIT 10
     ''')
     recent_activity = cursor.fetchall()
     
-    # Visitor type distribution
+    # Visitor type distribution (excluding traffic page)
     cursor.execute('''
         SELECT visitor_type, COUNT(*) as count 
         FROM visitors 
+        WHERE page_visited != 'traffic'
         GROUP BY visitor_type
     ''')
     visitor_types = dict(cursor.fetchall())
@@ -210,11 +216,14 @@ def record_visit(page_name):
     conn = sqlite3.connect('visitor_count.db')
     cursor = conn.cursor()
     
+    # Get current UTC time for consistent timezone handling
+    utc_now = datetime.datetime.now(datetime.timezone.utc)
+    
     # Record the visit with visitor type information
     cursor.execute('''
         INSERT INTO visitors (ip_address, user_agent, page_visited, visit_time, visitor_type, detection_reasons) 
-        VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?)
-    ''', (visitor_ip, user_agent, page_name, visitor_info['visitor_type'], 
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (visitor_ip, user_agent, page_name, utc_now, visitor_info['visitor_type'], 
           ', '.join(visitor_info['detection_reasons']) if visitor_info['detection_reasons'] else 'None'))
     
     # Only update page view count for human visitors
@@ -318,5 +327,5 @@ if __name__ == '__main__':
     ping_thread.start()
     print("Ping cron job started in background thread")
     
-    # Start the Flask app
-    app.run(debug=True)
+    # Start the Flask app on port 8000 to avoid macOS AirPlay conflict
+    app.run(debug=True, port=8000)

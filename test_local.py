@@ -14,15 +14,15 @@ def test_local_access():
     
     try:
         # Test main page
-        response = requests.get('http://localhost:5000/')
+        response = requests.get('http://localhost:8000/')
         print(f"✅ Main page access: {response.status_code}")
         
         # Test traffic page
-        response = requests.get('http://localhost:5000/traffic.html')
+        response = requests.get('http://localhost:8000/traffic.html')
         print(f"✅ Traffic page access: {response.status_code}")
         
         # Test API endpoint
-        response = requests.get('http://localhost:5000/api/visitor-stats')
+        response = requests.get('http://localhost:8000/api/visitor-stats')
         print(f"✅ API endpoint access: {response.status_code}")
         
         if response.status_code == 200:
@@ -32,7 +32,7 @@ def test_local_access():
         return True
         
     except requests.exceptions.ConnectionError:
-        print("❌ Could not connect to localhost:5000")
+        print("❌ Could not connect to localhost:8000")
         print("   Make sure your Flask server is running: python app.py")
         return False
     except Exception as e:
@@ -54,7 +54,7 @@ def test_browser_simulation():
     }
     
     try:
-        response = requests.get('http://localhost:5000/', headers=headers)
+        response = requests.get('http://localhost:8000/', headers=headers)
         print(f"✅ Browser simulation successful: {response.status_code}")
         return True
     except Exception as e:
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     test_browser_simulation()
     
     print("\n🎯 Next Steps:")
-    print("1. Open your browser and go to http://localhost:5000")
+    print("1. Open your browser and go to http://localhost:8000")
     print("2. Navigate to the Traffic page to see visitor tracking")
     print("3. Try the visitor detection tests: python test_visitor_detection.py")
     print("4. Check the database: python test_visitor_tracking.py") 

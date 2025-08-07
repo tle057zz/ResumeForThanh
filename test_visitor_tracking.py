@@ -51,7 +51,7 @@ def test_api_endpoints():
     """Test the API endpoints"""
     import requests
     
-    base_url = "http://localhost:5000"
+    base_url = "http://localhost:8000"
     
     try:
         # Test visitor stats endpoint
@@ -80,6 +80,6 @@ if __name__ == "__main__":
     print("\n" + "=" * 40)
     print("🎯 To test the full system:")
     print("1. Run: python app.py")
-    print("2. Visit: http://localhost:5000")
-    print("3. Visit: http://localhost:5000/traffic.html")
+    print("2. Visit: http://localhost:8000")
+    print("3. Visit: http://localhost:8000/traffic.html")
     print("4. Check the Traffic page for real analytics data!") 
