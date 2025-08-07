@@ -70,8 +70,13 @@ def create_db():
     conn.commit()
     conn.close()
 
+GEOLOCATION_CACHE = {}
+
 def get_location_from_ip(ip):
+    if ip in GEOLOCATION_CACHE:
+        return GEOLOCATION_CACHE[ip]
     if ip in ('127.0.0.1', '::1', 'localhost'):
+        GEOLOCATION_CACHE[ip] = 'Localhost'
         return 'Localhost'
     try:
         resp = requests.get(f'http://ip-api.com/json/{ip}', timeout=2)
@@ -79,13 +84,15 @@ def get_location_from_ip(ip):
             data = resp.json()
             if data.get('status') == 'success':
                 city = data.get('city') or ''
+                region = data.get('regionName') or ''
                 country = data.get('country') or ''
-                if city and country:
-                    return f"{city}, {country}"
-                elif country:
-                    return country
+                location = ', '.join([part for part in [city, region, country] if part])
+                GEOLOCATION_CACHE[ip] = location
+                return location
+        GEOLOCATION_CACHE[ip] = 'Unknown'
         return 'Unknown'
     except Exception:
+        GEOLOCATION_CACHE[ip] = 'Unknown'
         return 'Unknown'
 
 def get_visitor_stats():
