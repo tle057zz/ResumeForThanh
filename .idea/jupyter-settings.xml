@@ -7,7 +7,6 @@
           <value>
             <JupyterConnectionParameters>
               <option name="managed" value="true" />
-              <option name="sdkHomePath" value="$PROJECT_DIR$/../Desktop/anaconda/anaconda3/envs/edsrpro/bin/python3.7" />
             </JupyterConnectionParameters>
           </value>
         </entry>
