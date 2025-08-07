@@ -361,7 +361,54 @@
     window.addEventListener('load', function() {
       console.log('Page loaded, creating charts...');
       
-      // Sample data for charts
+      // Fetch real visitor data from Flask API
+      fetch('/api/visitor-stats')
+        .then(response => response.json())
+        .then(data => {
+          console.log('Visitor stats:', data);
+          updateDashboard(data);
+          createCharts(data);
+        })
+        .catch(error => {
+          console.error('Error fetching visitor stats:', error);
+          // Fallback to sample data if API fails
+          createChartsWithSampleData();
+        });
+    });
+
+    function updateDashboard(data) {
+      // Update overview cards with real data
+      document.getElementById('total-visitors').textContent = data.total_visitors || 0;
+      document.getElementById('page-views').textContent = Object.values(data.page_views || {}).reduce((a, b) => a + b, 0);
+      document.getElementById('current-visitors').textContent = data.today_visitors || 0;
+      
+      // Update activity feed with real data
+      const activityFeed = document.getElementById('activity-feed');
+      if (data.recent_activity && data.recent_activity.length > 0) {
+        activityFeed.innerHTML = '';
+        data.recent_activity.forEach(activity => {
+          const time = new Date(activity[2]).toLocaleTimeString();
+          const page = activity[1] || 'Unknown page';
+          const ip = activity[0] || 'Unknown IP';
+          
+          const activityItem = document.createElement('div');
+          activityItem.className = 'activity-item';
+          activityItem.innerHTML = `
+            <span class="time">${time}</span>
+            <span class="activity">Visitor from ${ip} viewed ${page}</span>
+          `;
+          activityFeed.appendChild(activityItem);
+        });
+      }
+    }
+
+    function createCharts(data) {
+      // Create charts with real data
+      const pageViews = data.page_views || {};
+      const pageNames = Object.keys(pageViews);
+      const pageCounts = Object.values(pageViews);
+      
+      // Daily Traffic Chart (simulated for now, could be enhanced with real daily data)
       const dailyTrafficData = {
         labels: ['Jan 1', 'Jan 2', 'Jan 3', 'Jan 4', 'Jan 5', 'Jan 6', 'Jan 7', 'Jan 8', 'Jan 9', 'Jan 10', 'Jan 11', 'Jan 12', 'Jan 13', 'Jan 14', 'Jan 15', 'Jan 16', 'Jan 17', 'Jan 18', 'Jan 19', 'Jan 20', 'Jan 21', 'Jan 22', 'Jan 23', 'Jan 24', 'Jan 25', 'Jan 26', 'Jan 27', 'Jan 28', 'Jan 29', 'Jan 30'],
         datasets: [{
@@ -388,16 +435,18 @@
       };
 
       const topPagesData = {
-        labels: ['Home', 'About', 'Portfolio', 'Resume', 'Contact'],
+        labels: pageNames,
         datasets: [{
           label: 'Page Views',
-          data: [892, 456, 234, 189, 121],
+          data: pageCounts,
           backgroundColor: [
             'rgba(255, 99, 132, 0.8)',
             'rgba(54, 162, 235, 0.8)',
             'rgba(255, 206, 86, 0.8)',
             'rgba(75, 192, 192, 0.8)',
-            'rgba(153, 102, 255, 0.8)'
+            'rgba(153, 102, 255, 0.8)',
+            'rgba(255, 159, 64, 0.8)',
+            'rgba(199, 199, 199, 0.8)'
           ]
         }]
       };
@@ -549,7 +598,30 @@
       } catch (error) {
         console.error('Error creating charts:', error);
       }
-    });
+    }
+
+    function createChartsWithSampleData() {
+      // Fallback function with sample data
+      console.log('Using sample data for charts');
+      
+      const sampleData = {
+        total_visitors: 1247,
+        unique_visitors: 892,
+        today_visitors: 156,
+        page_views: {
+          'home': 892,
+          'about': 456,
+          'portfolio': 234,
+          'resume': 189,
+          'contact': 121,
+          'career-advice': 89,
+          'traffic': 67
+        }
+      };
+      
+      updateDashboard(sampleData);
+      createCharts(sampleData);
+    }
 
     // Simulate real-time updates
     setInterval(function() {
