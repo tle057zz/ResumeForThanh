@@ -24,15 +24,30 @@ import threading
 def create_db():
     conn = sqlite3.connect('visitor_count.db')
     cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS visitors (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            ip_address TEXT,
-            user_agent TEXT,
-            page_visited TEXT,
-            visit_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
+    
+    # Check if visitors table exists and has the new columns
+    cursor.execute("PRAGMA table_info(visitors)")
+    columns = [column[1] for column in cursor.fetchall()]
+    
+    if 'visitors' not in [table[0] for table in cursor.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()]:
+        # Create new visitors table with all columns
+        cursor.execute('''
+            CREATE TABLE visitors (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                ip_address TEXT,
+                user_agent TEXT,
+                page_visited TEXT,
+                visit_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                visitor_type TEXT DEFAULT 'Unknown',
+                detection_reasons TEXT DEFAULT 'None'
+            )
+        ''')
+    else:
+        # Add new columns if they don't exist
+        if 'visitor_type' not in columns:
+            cursor.execute('ALTER TABLE visitors ADD COLUMN visitor_type TEXT DEFAULT "Unknown"')
+        if 'detection_reasons' not in columns:
+            cursor.execute('ALTER TABLE visitors ADD COLUMN detection_reasons TEXT DEFAULT "None"')
     
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS page_views (
@@ -57,9 +72,17 @@ def get_visitor_stats():
     conn = sqlite3.connect('visitor_count.db')
     cursor = conn.cursor()
     
-    # Total visitors
+    # Total visitors (all types)
     cursor.execute('SELECT COUNT(*) FROM visitors')
     total_visitors = cursor.fetchone()[0]
+    
+    # Human visitors only
+    cursor.execute('SELECT COUNT(*) FROM visitors WHERE visitor_type = "Human"')
+    human_visitors = cursor.fetchone()[0]
+    
+    # Automated visitors
+    cursor.execute('SELECT COUNT(*) FROM visitors WHERE visitor_type = "Automated"')
+    automated_visitors = cursor.fetchone()[0]
     
     # Unique visitors (by IP)
     cursor.execute('SELECT COUNT(DISTINCT ip_address) FROM visitors')
@@ -70,51 +93,142 @@ def get_visitor_stats():
     cursor.execute('SELECT COUNT(*) FROM visitors WHERE DATE(visit_time) = ?', (today,))
     today_visitors = cursor.fetchone()[0]
     
-    # Page views
+    # Today's human visitors
+    cursor.execute('SELECT COUNT(*) FROM visitors WHERE DATE(visit_time) = ? AND visitor_type = "Human"', (today,))
+    today_human_visitors = cursor.fetchone()[0]
+    
+    # Page views (human visitors only)
     cursor.execute('SELECT page_name, view_count FROM page_views')
     page_views = dict(cursor.fetchall())
     
-    # Recent activity (last 10 visits)
+    # Recent activity (last 10 visits with visitor type)
     cursor.execute('''
-        SELECT ip_address, page_visited, visit_time 
+        SELECT ip_address, page_visited, visit_time, visitor_type, detection_reasons
         FROM visitors 
         ORDER BY visit_time DESC 
         LIMIT 10
     ''')
     recent_activity = cursor.fetchall()
     
+    # Visitor type distribution
+    cursor.execute('''
+        SELECT visitor_type, COUNT(*) as count 
+        FROM visitors 
+        GROUP BY visitor_type
+    ''')
+    visitor_types = dict(cursor.fetchall())
+    
     conn.close()
     
     return {
         'total_visitors': total_visitors,
+        'human_visitors': human_visitors,
+        'automated_visitors': automated_visitors,
         'unique_visitors': unique_visitors,
         'today_visitors': today_visitors,
+        'today_human_visitors': today_human_visitors,
         'page_views': page_views,
-        'recent_activity': recent_activity
+        'recent_activity': recent_activity,
+        'visitor_types': visitor_types
+    }
+
+def detect_visitor_type():
+    """Detect if visitor is human or automated system"""
+    visitor_ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent', 'Unknown')
+    referer = request.headers.get('Referer', '')
+    accept_language = request.headers.get('Accept-Language', '')
+    accept_encoding = request.headers.get('Accept-Encoding', '')
+    
+    # Initialize detection flags
+    is_human = True
+    detection_reasons = []
+    
+    # 1. User-Agent Analysis
+    bot_agents = ['curl', 'bot', 'python', 'wget', 'postman', 'scraper', 'spider', 'crawler', 'automation']
+    user_agent_lower = user_agent.lower()
+    
+    for bot_agent in bot_agents:
+        if bot_agent in user_agent_lower:
+            is_human = False
+            detection_reasons.append(f"Bot user agent detected: {bot_agent}")
+            break
+    
+    # 2. IP Address Analysis (common automated IPs)
+    # For local development, be more lenient with localhost
+    automated_ips = [
+        '0.0.0.0',    # broadcast
+    ]
+    
+    # Only flag localhost as automated in production
+    if visitor_ip in automated_ips:
+        is_human = False
+        detection_reasons.append(f"Automated IP detected: {visitor_ip}")
+    elif visitor_ip in ['127.0.0.1', '::1']:
+        # For localhost, just note it but don't flag as automated
+        detection_reasons.append(f"Localhost IP: {visitor_ip}")
+    
+    # 3. Header Analysis
+    # Check for missing or suspicious headers (more lenient for localhost)
+    if not accept_language and visitor_ip not in ['127.0.0.1', '::1']:
+        is_human = False
+        detection_reasons.append("Missing Accept-Language header")
+    elif not accept_language:
+        detection_reasons.append("No Accept-Language header (localhost)")
+    
+    if not accept_encoding and visitor_ip not in ['127.0.0.1', '::1']:
+        is_human = False
+        detection_reasons.append("Missing Accept-Encoding header")
+    elif not accept_encoding:
+        detection_reasons.append("No Accept-Encoding header (localhost)")
+    
+    # 4. Referer Analysis
+    # Note: This check is basic - home page might not have referer
+    if not referer:
+        # Don't immediately flag as automated, just note it
+        detection_reasons.append("No referer header")
+    
+    # 5. Request Timing Analysis (basic)
+    # This would need to be enhanced with session tracking for better accuracy
+    
+    return {
+        'is_human': is_human,
+        'visitor_type': 'Human' if is_human else 'Automated',
+        'detection_reasons': detection_reasons,
+        'ip_address': visitor_ip,
+        'user_agent': user_agent,
+        'referer': referer
     }
 
 def record_visit(page_name):
     visitor_ip = request.remote_addr
     user_agent = request.headers.get('User-Agent', 'Unknown')
     
+    # Detect visitor type
+    visitor_info = detect_visitor_type()
+    
     conn = sqlite3.connect('visitor_count.db')
     cursor = conn.cursor()
     
-    # Record the visit
+    # Record the visit with visitor type information
     cursor.execute('''
-        INSERT INTO visitors (ip_address, user_agent, page_visited, visit_time) 
-        VALUES (?, ?, ?, CURRENT_TIMESTAMP)
-    ''', (visitor_ip, user_agent, page_name))
+        INSERT INTO visitors (ip_address, user_agent, page_visited, visit_time, visitor_type, detection_reasons) 
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?)
+    ''', (visitor_ip, user_agent, page_name, visitor_info['visitor_type'], 
+          ', '.join(visitor_info['detection_reasons']) if visitor_info['detection_reasons'] else 'None'))
     
-    # Update page view count
-    cursor.execute('''
-        UPDATE page_views 
-        SET view_count = view_count + 1, last_updated = CURRENT_TIMESTAMP 
-        WHERE page_name = ?
-    ''', (page_name,))
+    # Only update page view count for human visitors
+    if visitor_info['is_human']:
+        cursor.execute('''
+            UPDATE page_views 
+            SET view_count = view_count + 1, last_updated = CURRENT_TIMESTAMP 
+            WHERE page_name = ?
+        ''', (page_name,))
     
     conn.commit()
     conn.close()
+    
+    return visitor_info
 
 URL = "https://www.thanhle.it.com/"
 

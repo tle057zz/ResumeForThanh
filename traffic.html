@@ -284,6 +284,54 @@
           </div>
         </div>
 
+        <!-- Visitor Type Statistics -->
+        <div class="row mt-4">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Visitor Type Distribution</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6 text-center">
+                    <div class="visitor-type-card">
+                      <i class="bi bi-person-circle text-success" style="font-size: 3rem;"></i>
+                      <h3 class="mt-2" id="human-visitors">0</h3>
+                      <p class="text-muted">Human Visitors</p>
+                    </div>
+                  </div>
+                  <div class="col-6 text-center">
+                    <div class="visitor-type-card">
+                      <i class="bi bi-robot text-warning" style="font-size: 3rem;"></i>
+                      <h3 class="mt-2" id="automated-visitors">0</h3>
+                      <p class="text-muted">Automated Visitors</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Detection Methods</h5>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-info">
+                  <h6><i class="bi bi-shield-check"></i> Bot Detection Methods:</h6>
+                  <ul class="mb-0">
+                    <li><strong>User-Agent Analysis:</strong> Detects common bot user agents</li>
+                    <li><strong>IP Address Check:</strong> Identifies automated IP ranges</li>
+                    <li><strong>Header Analysis:</strong> Checks for missing browser headers</li>
+                    <li><strong>Referer Analysis:</strong> Validates request sources</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Live Activity Feed -->
         <div class="row mt-4">
           <div class="col-12">
@@ -295,23 +343,23 @@
                 <div id="activity-feed" class="activity-feed">
                   <div class="activity-item">
                     <span class="time">2:34 PM</span>
-                    <span class="activity">Visitor from Sydney, Australia viewed Home page</span>
+                    <span class="activity">👤 <strong class="text-success">Human</strong> from 192.168.1.1 viewed home</span>
                   </div>
                   <div class="activity-item">
                     <span class="time">2:31 PM</span>
-                    <span class="activity">Visitor from Melbourne, Australia viewed Portfolio section</span>
+                    <span class="activity">🤖 <strong class="text-warning">Automated</strong> from 127.0.0.1 viewed traffic<br><small class="text-muted">Detection: Bot user agent detected: curl</small></span>
                   </div>
                   <div class="activity-item">
                     <span class="time">2:28 PM</span>
-                    <span class="activity">Visitor from Brisbane, Australia viewed About section</span>
+                    <span class="activity">👤 <strong class="text-success">Human</strong> from 192.168.1.2 viewed about</span>
                   </div>
                   <div class="activity-item">
                     <span class="time">2:25 PM</span>
-                    <span class="activity">Visitor from Perth, Australia viewed Contact page</span>
+                    <span class="activity">🤖 <strong class="text-warning">Automated</strong> from 0.0.0.0 viewed contact<br><small class="text-muted">Detection: Automated IP detected: 0.0.0.0</small></span>
                   </div>
                   <div class="activity-item">
                     <span class="time">2:22 PM</span>
-                    <span class="activity">Visitor from Adelaide, Australia viewed Resume section</span>
+                    <span class="activity">👤 <strong class="text-success">Human</strong> from 192.168.1.3 viewed resume</span>
                   </div>
                 </div>
               </div>
@@ -379,11 +427,15 @@
 
     function updateDashboard(data) {
       // Update overview cards with real data
-      document.getElementById('total-visitors').textContent = data.total_visitors || 0;
+      document.getElementById('total-visitors').textContent = data.human_visitors || 0;
       document.getElementById('page-views').textContent = Object.values(data.page_views || {}).reduce((a, b) => a + b, 0);
-      document.getElementById('current-visitors').textContent = data.today_visitors || 0;
+      document.getElementById('current-visitors').textContent = data.today_human_visitors || 0;
       
-      // Update activity feed with real data
+      // Update visitor type statistics
+      document.getElementById('human-visitors').textContent = data.human_visitors || 0;
+      document.getElementById('automated-visitors').textContent = data.automated_visitors || 0;
+      
+      // Update activity feed with real data including visitor type
       const activityFeed = document.getElementById('activity-feed');
       if (data.recent_activity && data.recent_activity.length > 0) {
         activityFeed.innerHTML = '';
@@ -391,12 +443,22 @@
           const time = new Date(activity[2]).toLocaleTimeString();
           const page = activity[1] || 'Unknown page';
           const ip = activity[0] || 'Unknown IP';
+          const visitorType = activity[3] || 'Unknown';
+          const detectionReasons = activity[4] || 'None';
           
           const activityItem = document.createElement('div');
           activityItem.className = 'activity-item';
+          
+          // Add visual indicator for visitor type
+          const typeIcon = visitorType === 'Human' ? '👤' : '🤖';
+          const typeClass = visitorType === 'Human' ? 'text-success' : 'text-warning';
+          
           activityItem.innerHTML = `
             <span class="time">${time}</span>
-            <span class="activity">Visitor from ${ip} viewed ${page}</span>
+            <span class="activity">
+              ${typeIcon} <strong class="${typeClass}">${visitorType}</strong> from ${ip} viewed ${page}
+              ${detectionReasons !== 'None' ? `<br><small class="text-muted">Detection: ${detectionReasons}</small>` : ''}
+            </span>
           `;
           activityFeed.appendChild(activityItem);
         });
