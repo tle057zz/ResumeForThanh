@@ -306,7 +306,7 @@ def run_ping_cron():
     """Run ping function every 15 minutes in a separate thread"""
     while True:
         ping()
-        time.sleep(10 * 60)  # 15 minutes in seconds
+        time.sleep(15 * 60)  # 15 minutes in seconds
 
 
 
