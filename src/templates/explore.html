@@ -10,10 +10,9 @@
             height: 100%;
             margin: 0;
         }
-        /* Full-page background image with dark overlay for readability.
-           Swap the URL to try other images in assets/img (e.g., services.jpg). */
+        /* Full-page background image (DSCF6732.jpg) with dark overlay for readability */
         body {
-            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('img/hero-bg.jpg') center/cover no-repeat fixed;
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('img/DSCF6732.jpg') center/cover no-repeat fixed;
         }
         /* Flex container that centers the cards both vertically and horizontally */
         .center-container {
@@ -25,29 +24,59 @@
             border: 0;
             box-sizing: border-box;
         }
-        /* Base card appearance and subtle elevation */
+        /* Base card appearance with liquid glass feel */
         .color-box {
-            width: 200px;
-            height: 200px;
-            margin: 0 16px;
-            border-radius: 4px;
+            width: 220px;
+            height: 220px;
+            margin: 0 18px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
             color: #111;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.28);
+            box-shadow: 0 8px 26px rgba(0,0,0,0.22);
+            transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-        /* Lift effect on hover */
-        .color-box:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+        /* Liquid highlight following pointer */
+        .color-box::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.30), rgba(255,255,255,0.0) 58%);
+            opacity: 0;
+            transition: opacity .3s ease;
+            pointer-events: none;
+            mix-blend-mode: screen;
         }
-        /* Individual color themes */
-        .box1 { background: #4ee0ea; }
-        .box2 { background: linear-gradient(90deg, #ff6a9f, #ffe066); }
-        .box3 { background: linear-gradient(90deg, #ffe066, #f9c2ff); }
+        /* Soft animated blob inside card */
+        .color-box::after {
+            content: '';
+            position: absolute;
+            width: 180px; height: 180px; border-radius: 50%;
+            left: -40px; top: -60px;
+            background: radial-gradient(circle, rgba(255,255,255,0.35), rgba(255,255,255,0) 70%);
+            filter: blur(18px);
+            opacity: .35;
+            transform: translate3d(0,0,0);
+            animation: blob 10s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes blob { to { transform: translate3d(40px, 30px, 0) scale(1.1); opacity: .45; } }
+        
+        /* Lift + glow on hover */
+        .color-box:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 16px 40px rgba(0,0,0,0.28); }
+        .color-box:hover::before { opacity: 1; }
+
+        /* Individual color themes with translucent gradients */
+        .box1 { background: linear-gradient(135deg, rgba(79,209,197,0.45), rgba(56,189,248,0.35)); }
+        .box2 { background: linear-gradient(135deg, rgba(236,72,153,0.45), rgba(250,204,21,0.35)); }
+        .box3 { background: linear-gradient(135deg, rgba(250,204,21,0.40), rgba(217,70,239,0.35)); }
         /* Text layout inside each card */
         .box-content {
             text-align: center;
@@ -57,11 +86,15 @@
             margin: 0 0 8px;
             font-size: 20px;
             line-height: 1.2;
+            color: #0f172a;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.25);
         }
         .box-content p {
             margin: 0;
             font-size: 14px;
-            opacity: 0.85;
+            opacity: 0.9;
+            color: #1f2937;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.25);
         }
         /* High-contrast page title over the photo background */
         .page-title {
@@ -69,6 +102,23 @@
             text-align: center;
             text-shadow: 0 2px 8px rgba(0,0,0,0.5);
             margin: 16px 0;
+        }
+
+        /* Fixed local time badge at upper-left corner */
+        .time-badge {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            padding: 10px 14px;
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: .3px;
+            box-shadow: 0 8px 20px rgba(0,0,0,.25);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
         }
     </style>
     <!-- React + ReactDOM for UMD in browser; Babel enables JSX in the inline script below -->
@@ -92,7 +142,13 @@
             return React.createElement('a', { 
                 className: `color-box ${className}`, 
                 href: href 
-            }, React.createElement('div', { className: 'box-content' }, [
+            , onMouseMove: (e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                const x = ((e.clientX - r.left) / r.width) * 100;
+                const y = ((e.clientY - r.top) / r.height) * 100;
+                e.currentTarget.style.setProperty('--mx', x + '%');
+                e.currentTarget.style.setProperty('--my', y + '%');
+            } }, React.createElement('div', { className: 'box-content' }, [
                 React.createElement('h2', { key: 'title' }, title),
                 React.createElement('p', { key: 'subtitle' }, subtitle)
             ]));
@@ -107,14 +163,11 @@
                 return () => clearInterval(i);
             }, []);
             return React.createElement('div', null, [
+                React.createElement('div', { key: 'time', className: 'time-badge' }, 'Local time: ' + time.toLocaleTimeString()),
                 React.createElement('h2', { key: 'title', className: 'page-title' }, 'This is to explore more what I do for the web project'),
                 React.createElement('div', { key: 'container', className: 'center-container' }, 
                     cards.map(card => React.createElement(ColorCard, { key: card.id, ...card }))
-                ),
-                React.createElement('p', { 
-                    key: 'time',
-                    style: { textAlign: 'center', color: '#fff', marginTop: 16, textShadow: '0 2px 8px rgba(0,0,0,0.5)' }
-                }, 'Local time: ' + time.toLocaleTimeString())
+                )
             ]);
         }
 

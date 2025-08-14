@@ -457,6 +457,74 @@
       box-shadow: 0 16px 36px rgba(59,130,246,0.4);
       background: linear-gradient(135deg, #2563eb, #7c3aed, #0891b2);
     }
+
+    /* Skills section enhancements */
+    .skills .section-title h2 { position: relative; display: inline-block; }
+    .skills .section-title h2::after {
+      content: '';
+      display: block; height: 4px; width: 120px; margin: 10px auto 0;
+      border-radius: 999px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #f59e0b);
+    }
+    .skill-pill {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; margin-bottom: 12px; border-radius: 14px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.6), rgba(255,255,255,0.35));
+      border: 1px solid rgba(148,163,184,0.3);
+      box-shadow: 0 10px 26px rgba(2,6,23,0.08);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: transform .3s ease, box-shadow .3s ease, background .3s ease;
+      position: relative; overflow: hidden;
+    }
+    .skill-pill i { font-size: 18px; color: #0ea5e9; }
+    .skill-pill[data-theme="violet"] i { color: #8b5cf6; }
+    .skill-pill[data-theme="amber"] i { color: #f59e0b; }
+    .skill-pill[data-theme="emerald"] i { color: #10b981; }
+    .skill-pill strong, .skill-pill span { color: #0f172a; }
+    .skill-pill::after {
+      content: ''; position: absolute; width: 200px; height: 200px; border-radius: 50%;
+      left: var(--mx, 50%); top: var(--my, 50%); transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(255,255,255,0.45), rgba(255,255,255,0));
+      opacity: 0; transition: opacity .25s ease; pointer-events: none;
+    }
+    .skill-pill:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(2,6,23,0.15); }
+    .skill-pill:hover::after { opacity: 1; }
+    .skill-pill[data-theme="cyan"] { background: linear-gradient(135deg, rgba(6,182,212,0.18), rgba(59,130,246,0.15)); }
+    .skill-pill[data-theme="violet"] { background: linear-gradient(135deg, rgba(139,92,246,0.18), rgba(99,102,241,0.15)); }
+    .skill-pill[data-theme="amber"] { background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(239,68,68,0.15)); }
+    .skill-pill[data-theme="emerald"] { background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(5,150,105,0.15)); }
+
+    /* Resume section enhancements */
+    .resume .section-title h2 { position: relative; display: inline-block; }
+    .resume .section-title h2::after { content: ''; display: block; height: 4px; width: 140px; margin: 10px auto 0; border-radius: 999px; background: linear-gradient(90deg, #8b5cf6, #06b6d4, #f59e0b); }
+    /* Theme variables per column */
+    .resume .row > .col-lg-6:first-child .resume-item { --accent1: 139, 92, 246; --accent2: 59, 130, 246; }
+    .resume .row > .col-lg-6:last-child  .resume-item { --accent1: 6, 182, 212;  --accent2: 16, 185, 129; }
+
+    .resume .resume-title { background: linear-gradient(135deg, rgba(var(--accent1,139,92,246),1), rgba(var(--accent2,59,130,246),1)); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; }
+    .resume .resume-item { position: relative; border-radius: 16px; padding: 18px 22px; margin-bottom: 18px; overflow: hidden; background: linear-gradient(145deg, rgba(255,255,255,0.68), rgba(255,255,255,0.45)); border: 1px solid rgba(148,163,184,0.35); backdrop-filter: blur(8px); box-shadow: 0 10px 26px rgba(2,6,23,0.08); transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; --mx: 70%; --my: 30%; }
+    .resume .resume-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 4px; background: linear-gradient(180deg, rgba(var(--accent1,139,92,246), 1), rgba(var(--accent2,59,130,246), .95)); }
+    .resume .resume-item::after { content: ''; position: absolute; inset: auto -10% -20% auto; height: 150px; width: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--accent1,139,92,246), .16), rgba(var(--accent2,59,130,246), .12) 60%, transparent 70%); filter: blur(16px); opacity: .4; pointer-events: none; transform: translate3d(0,0,0); }
+    .resume .resume-item .sheen { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
+    .resume .resume-item .sheen::before { content: ''; position: absolute; width: 220px; height: 220px; border-radius: 50%; left: var(--mx); top: var(--my); transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(255,255,255,.35), rgba(255,255,255,0) 65%); }
+    .resume .resume-item:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.15); border-color: rgba(var(--accent1,139,92,246), .45); }
+    .resume .resume-item:hover .sheen { opacity: 1; }
+    .resume .resume-item h4 { background: linear-gradient(135deg, rgba(var(--accent1),1), rgba(var(--accent2),1)); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
+    .resume .resume-item h5 { color: #0f172a; }
+    .resume .resume-item p, .resume .resume-item em { color: #334155; }
+    .resume .resume-item ul { margin-top: 8px; }
+    .resume .resume-item ul li { position: relative; padding-left: 24px; margin-bottom: 8px; color: #1f2937; }
+    .resume .resume-item ul li::before { content: '✦'; position: absolute; left: 0; top: 2px; font-size: 14px; color: rgba(var(--accent1,139,92,246), 1); }
+
+    /* Icons & badges for Resume */
+    .resume .title-icon { font-size: 24px; vertical-align: -3px; margin-right: 8px; color: #6366f1; }
+    .resume .col-lg-6:last-child .title-icon { color: #06b6d4; }
+    .resume-badge { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:10px; margin-right:8px; color:#fff; box-shadow:0 8px 18px rgba(2,6,23,.18); }
+    .resume-item[data-kind="edu"] .resume-badge { background: linear-gradient(135deg,#8b5cf6,#3b82f6); }
+    .resume-item[data-kind="job"] .resume-badge { background: linear-gradient(135deg,#06b6d4,#10b981); }
+    .resume-item[data-kind="cert"] .resume-badge { background: linear-gradient(135deg,#f59e0b,#ef4444); }
+    .resume .meta i { color: rgba(var(--accent1,139,92,246),1); margin-right:6px; }
+    .resume .col-lg-6:last-child .meta i { color: rgba(6,182,212,1); }
   </style>
 
   <!-- Vendor CSS Files -->
@@ -750,18 +818,26 @@
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row">
           <div class="col-lg-6">
-            <ul class="list-unstyled">
-              <li><strong>SQL &amp; PostgreSQL</strong></li>
-              <li><strong>Python</strong></li>
-              <li><strong>Data Visualization</strong></li>
-            </ul>
+            <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-database-gear"></i><strong>SQL &amp; PostgreSQL</strong>
+            </div>
+            <div class="skill-pill" data-theme="emerald" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-filetype-py"></i><strong>Python</strong>
+            </div>
+            <div class="skill-pill" data-theme="violet" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-bar-chart-line"></i><strong>Data Visualization</strong>
+            </div>
           </div>
           <div class="col-lg-6">
-            <ul class="list-unstyled">
-              <li><strong>ETL &amp; Data Integration</strong></li>
-              <li><strong>Web Development</strong></li>
-              <li><strong>Machine Learning</strong></li>
-            </ul>
+            <div class="skill-pill" data-theme="amber" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-diagram-3"></i><strong>ETL &amp; Data Integration</strong>
+            </div>
+            <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-code-slash"></i><strong>Web Development</strong>
+            </div>
+            <div class="skill-pill" data-theme="violet" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-cpu"></i><strong>Machine Learning</strong>
+            </div>
           </div>
         </div>
       </div>
@@ -781,28 +857,31 @@
 
         <div class="row">
           <div class="col-lg-6">
-            <h3 class="resume-title">Education</h3>
-            <div class="resume-item">
-              <h4>Master of Information Technology & Master of IT Management</h4>
-              <h5>2023 - Present</h5>
-              <p><em>The University of Sydney, Sydney, NSW</em></p>
+            <h3 class="resume-title"><i class="bi bi-mortarboard title-icon"></i>Education</h3>
+            <div class="resume-item" data-kind="edu" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <div class="sheen"></div>
+              <h4><span class="resume-badge"><i class="bi bi-award"></i></span>Master of Information Technology & Master of IT Management</h4>
+              <h5 class="meta"><i class="bi bi-calendar-event"></i>2023 - Present</h5>
+              <p class="meta"><i class="bi bi-geo-alt"></i><em>The University of Sydney, Sydney, NSW</em></p>
               <p>Data Management & Analytics Major</p>
               <p>Improved skills in PostgreSQL, Tableau, Pandas, Seaborn, Matplotlib, Web Applications, LaTeX, Pentaho Data Integration (PDI)</p>
             </div>
-            <div class="resume-item">
-              <h4>Bachelor of Science in Information Technology</h4>
-              <h5>2019 - 2022</h5>
-              <p><em>University of Technology Sydney, Sydney, NSW</em></p>
+            <div class="resume-item" data-kind="edu" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <div class="sheen"></div>
+              <h4><span class="resume-badge"><i class="bi bi-book"></i></span>Bachelor of Science in Information Technology</h4>
+              <h5 class="meta"><i class="bi bi-calendar-event"></i>2019 - 2022</h5>
+              <p class="meta"><i class="bi bi-geo-alt"></i><em>University of Technology Sydney, Sydney, NSW</em></p>
               <p>Data Analytics Major (Graduated with Distinction)</p>
               <p>Core competencies: SQL, Tableau, Pandas, HTML, CSS, Swift</p>
             </div>
           </div>
           <div class="col-lg-6">
-            <h3 class="resume-title">Professional Experience</h3>
-            <div class="resume-item">
-              <h4>Repair Technician</h4>
-              <h5>2022 - Dec 2022</h5>
-              <p><em>Comserve Technology LTD, Sydney, NSW</em></p>
+            <h3 class="resume-title"><i class="bi bi-briefcase title-icon"></i>Professional Experience</h3>
+            <div class="resume-item" data-kind="job" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <div class="sheen"></div>
+              <h4><span class="resume-badge"><i class="bi bi-wrench-adjustable"></i></span>Repair Technician</h4>
+              <h5 class="meta"><i class="bi bi-calendar-event"></i>2022 - Dec 2022</h5>
+              <p class="meta"><i class="bi bi-building"></i><em>Comserve Technology LTD, Sydney, NSW</em></p>
               <ul>
                 <li>Troubleshot software issues and performed OS reinstallation</li>
                 <li>Provided IT support to customers, resolving technical problems efficiently</li>
@@ -810,8 +889,9 @@
                 <li>Advised customers in selecting laptops and PCs based on their needs</li>
               </ul>
             </div>
-            <div class="resume-item">
-              <h4>Relevant Certifications</h4>
+            <div class="resume-item" data-kind="cert" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <div class="sheen"></div>
+              <h4><span class="resume-badge"><i class="bi bi-patch-check"></i></span>Relevant Certifications</h4>
               <ul>
                 <li>SQL Fundamentals Track (Datacamp) – Introduction & Intermediate SQL with PostgreSQL</li>
                 <li>Building a REST API with Python and Flask (Coursera)</li>
