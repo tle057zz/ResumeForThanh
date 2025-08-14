@@ -144,47 +144,82 @@
     }
     .focus-pill:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
     
-    /* Enhanced service items with distinct themes */
+    /* Enhanced service items with distinct themes and equal heights */
     .professional-focus .service-item {
-      position: relative; border-radius: 20px; padding: 32px; overflow: hidden;
-      background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-      border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(20px);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 30px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      position: relative; border-radius: 24px; padding: 40px; overflow: hidden;
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border: 2px solid rgba(255,255,255,0.15); backdrop-filter: blur(25px);
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 30px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.12);
+      min-height: 480px; /* Ensure equal heights */
+      display: flex; flex-direction: column; justify-content: space-between;
+      height: 100%;
+      /* pointer-follow defaults */
+      --mx: 75%;
+      --my: 25%;
     }
+
+    /* Equal-width/height layout using CSS Grid */
+    .pro-focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; align-items: stretch; }
+    @media (max-width: 991.98px) { .pro-focus-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 575.98px) { .pro-focus-grid { grid-template-columns: 1fr; } }
     
     /* Data Science - Purple/Blue theme */
-    .professional-focus .service-item:nth-child(1) {
-      background: linear-gradient(145deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
-      border: 1px solid rgba(139, 92, 246, 0.2);
+    .professional-focus .service-item[data-theme="science"] {
+      background: linear-gradient(145deg, rgba(139, 92, 246, 0.12), rgba(59, 130, 246, 0.06));
+      border: 2px solid rgba(139, 92, 246, 0.25);
+      position: relative;
     }
-    .professional-focus .service-item:nth-child(1):hover {
-      transform: translateY(-8px) rotateX(5deg); 
-      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
-      background: linear-gradient(145deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1));
+    .professional-focus .service-item[data-theme="science"]:hover {
+      transform: translateY(-12px) rotateX(8deg) scale(1.02); 
+      box-shadow: 0 25px 80px rgba(139, 92, 246, 0.4);
+      background: linear-gradient(145deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.15));
+      border-color: rgba(139, 92, 246, 0.4);
     }
+    .professional-focus .service-item[data-theme="science"]::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(500px circle at var(--mx) var(--my), rgba(139, 92, 246, 0.18), transparent 65%);
+      opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+    }
+    .professional-focus .service-item[data-theme="science"]:hover::after { opacity: 1; }
     
     /* Data Analytics - Cyan/Green theme */
-    .professional-focus .service-item:nth-child(2) {
-      background: linear-gradient(145deg, rgba(6, 182, 212, 0.1), rgba(16, 185, 129, 0.05));
-      border: 1px solid rgba(6, 182, 212, 0.2);
+    .professional-focus .service-item[data-theme="analytics"] {
+      background: linear-gradient(145deg, rgba(6, 182, 212, 0.12), rgba(16, 185, 129, 0.06));
+      border: 2px solid rgba(6, 182, 212, 0.25);
+      position: relative;
     }
-    .professional-focus .service-item:nth-child(2):hover {
-      transform: translateY(-8px) rotateX(5deg); 
-      box-shadow: 0 20px 60px rgba(6, 182, 212, 0.3);
-      background: linear-gradient(145deg, rgba(6, 182, 212, 0.15), rgba(16, 185, 129, 0.1));
+    .professional-focus .service-item[data-theme="analytics"]:hover {
+      transform: translateY(-12px) rotateX(8deg) scale(1.02); 
+      box-shadow: 0 25px 80px rgba(6, 182, 212, 0.4);
+      background: linear-gradient(145deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.15));
+      border-color: rgba(6, 182, 212, 0.4);
     }
+    .professional-focus .service-item[data-theme="analytics"]::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(500px circle at var(--mx) var(--my), rgba(6, 182, 212, 0.18), transparent 65%);
+      opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+    }
+    .professional-focus .service-item[data-theme="analytics"]:hover::after { opacity: 1; }
     
     /* Data Engineering - Orange/Red theme */
-    .professional-focus .service-item:nth-child(3) {
-      background: linear-gradient(145deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.05));
-      border: 1px solid rgba(245, 158, 11, 0.2);
+    .professional-focus .service-item[data-theme="engineering"] {
+      background: linear-gradient(145deg, rgba(245, 158, 11, 0.12), rgba(239, 68, 68, 0.06));
+      border: 2px solid rgba(245, 158, 11, 0.25);
+      position: relative;
     }
-    .professional-focus .service-item:nth-child(3):hover {
-      transform: translateY(-8px) rotateX(5deg); 
-      box-shadow: 0 20px 60px rgba(245, 158, 11, 0.3);
-      background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.1));
+    .professional-focus .service-item[data-theme="engineering"]:hover {
+      transform: translateY(-12px) rotateX(8deg) scale(1.02); 
+      box-shadow: 0 25px 80px rgba(245, 158, 11, 0.4);
+      background: linear-gradient(145deg, rgba(245, 158, 11, 0.2), rgba(239, 68, 68, 0.15));
+      border-color: rgba(245, 158, 11, 0.4);
     }
+    .professional-focus .service-item[data-theme="engineering"]::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(500px circle at var(--mx) var(--my), rgba(245, 158, 11, 0.18), transparent 65%);
+      opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+    }
+    .professional-focus .service-item[data-theme="engineering"]:hover::after { opacity: 1; }
     
     /* Floating orbs for each card */
     .professional-focus .service-item::before {
@@ -202,33 +237,62 @@
       background: radial-gradient(circle, rgba(245, 158, 11, 0.3), rgba(239, 68, 68, 0.2));
     }
     .professional-focus .service-item:hover::before { opacity: 1; }
+
+    /* Animated gradient border ring */
+    .professional-focus .service-item::marker { display: none; }
+    .professional-focus .service-item:before,
+    .professional-focus .service-item:after { pointer-events: none; }
+    .professional-focus .service-item .border-ring { display: none; }
+    .professional-focus .service-item .border-anim { display: none; }
+    .professional-focus .service-item > .ring {
+      content: ''; position: absolute; inset: -2px; border-radius: inherit; padding: 2px;
+      background: conic-gradient(from 0deg, #8b5cf6, #06b6d4, #f59e0b, #ef4444, #8b5cf6);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.35; animation: spinBorder 8s linear infinite;
+    }
+    @keyframes spinBorder { to { transform: rotate(360deg); } }
     
-    /* Enhanced icons with gradient backgrounds */
+    /* Enhanced icons with gradient backgrounds and animated effects */
     .professional-focus .service-item .icon {
-      width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;
-      margin-bottom: 20px; position: relative; overflow: hidden; transition: all 0.4s ease;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      width: 90px; height: 90px; border-radius: 24px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px; position: relative; overflow: hidden; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25);
     }
-    .professional-focus .service-item:nth-child(1) .icon {
-      background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    .professional-focus .service-item[data-theme="science"] .icon {
+      background: linear-gradient(135deg, #8b5cf6, #3b82f6, #6366f1);
+      box-shadow: 0 12px 35px rgba(139, 92, 246, 0.3);
     }
-    .professional-focus .service-item:nth-child(2) .icon {
-      background: linear-gradient(135deg, #06b6d4, #10b981);
+    .professional-focus .service-item[data-theme="analytics"] .icon {
+      background: linear-gradient(135deg, #06b6d4, #10b981, #14b8a6);
+      box-shadow: 0 12px 35px rgba(6, 182, 212, 0.3);
     }
-    .professional-focus .service-item:nth-child(3) .icon {
-      background: linear-gradient(135deg, #f59e0b, #ef4444);
+    .professional-focus .service-item[data-theme="engineering"] .icon {
+      background: linear-gradient(135deg, #f59e0b, #ef4444, #f97316);
+      box-shadow: 0 12px 35px rgba(245, 158, 11, 0.3);
+    }
+    
+    /* Animated icon background effects */
+    .professional-focus .service-item .icon::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.2), transparent);
+      transform: translateX(-100%); transition: transform 0.6s ease;
+    }
+    .professional-focus .service-item:hover .icon::before {
+      transform: translateX(100%);
     }
     
     .professional-focus .service-item .icon i {
-      font-size: 32px; color: white; z-index: 1; position: relative;
-      transition: all 0.3s ease;
+      font-size: 36px; color: white; z-index: 2; position: relative;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
     }
     .professional-focus .service-item:hover .icon {
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      transform: scale(1.15) rotate(8deg) translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
     }
     .professional-focus .service-item:hover .icon i {
-      transform: scale(1.1);
+      transform: scale(1.1) rotate(-8deg);
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
     }
     
     /* Enhanced typography */
@@ -237,13 +301,13 @@
       background: linear-gradient(135deg, #1e293b, #475569); -webkit-background-clip: text;
       background-clip: text; color: transparent;
     }
-    .professional-focus .service-item:nth-child(1) h3 {
+    .professional-focus .service-item[data-theme="science"] h3 {
       background: linear-gradient(135deg, #8b5cf6, #3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent;
     }
-    .professional-focus .service-item:nth-child(2) h3 {
+    .professional-focus .service-item[data-theme="analytics"] h3 {
       background: linear-gradient(135deg, #06b6d4, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent;
     }
-    .professional-focus .service-item:nth-child(3) h3 {
+    .professional-focus .service-item[data-theme="engineering"] h3 {
       background: linear-gradient(135deg, #f59e0b, #ef4444); -webkit-background-clip: text; background-clip: text; color: transparent;
     }
     
@@ -259,9 +323,9 @@
       content: '★'; position: absolute; left: 0; top: 0; font-size: 14px;
       transition: all 0.3s ease;
     }
-    .professional-focus .service-item:nth-child(1) ul li::before { color: #8b5cf6; }
-    .professional-focus .service-item:nth-child(2) ul li::before { color: #06b6d4; }
-    .professional-focus .service-item:nth-child(3) ul li::before { color: #f59e0b; }
+    .professional-focus .service-item[data-theme="science"] ul li::before { color: #8b5cf6; }
+    .professional-focus .service-item[data-theme="analytics"] ul li::before { color: #06b6d4; }
+    .professional-focus .service-item[data-theme="engineering"] ul li::before { color: #f59e0b; }
     
     .professional-focus .service-item:hover ul li::before {
       transform: scale(1.2) rotate(20deg);
@@ -269,6 +333,57 @@
     .professional-focus .service-item:hover ul li {
       transform: translateX(5px); color: #1e293b;
     }
+
+    /* Floating particles animation */
+    .focus-particles {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; overflow: hidden; z-index: -1;
+    }
+    .particle {
+      position: absolute; width: 4px; height: 4px; border-radius: 50%;
+      background: rgba(255,255,255,0.6); opacity: 0;
+      animation: floatParticle 8s linear infinite;
+    }
+    .particle:nth-child(2n) { animation-delay: -2s; background: rgba(139, 92, 246, 0.4); }
+    .particle:nth-child(3n) { animation-delay: -4s; background: rgba(6, 182, 212, 0.4); }
+    .particle:nth-child(4n) { animation-delay: -6s; background: rgba(245, 158, 11, 0.4); }
+    
+    @keyframes floatParticle {
+      0% { transform: translateY(100vh) translateX(0px); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+    }
+
+    /* Enhanced card content structure */
+    .professional-focus .service-item .card-content {
+      flex-grow: 1; display: flex; flex-direction: column; z-index: 1; position: relative;
+    }
+    .professional-focus .service-item .card-description {
+      flex-grow: 1; margin-bottom: 20px;
+    }
+    .professional-focus .service-item .card-skills {
+      margin-top: auto;
+    }
+
+    /* Magnetic hover effect */
+    .professional-focus .service-item {
+      cursor: pointer;
+    }
+    .professional-focus .service-item:hover {
+      transform: translateY(-12px) rotateX(8deg) scale(1.02);
+      animation: magneticPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes magneticPulse {
+      0%, 100% { box-shadow: 0 25px 80px rgba(var(--card-color), 0.4); }
+      50% { box-shadow: 0 30px 90px rgba(var(--card-color), 0.6), 0 0 0 1px rgba(var(--card-color), 0.3); }
+    }
+
+    /* Individual card color variables */
+    .professional-focus .service-item:nth-child(1) { --card-color: 139, 92, 246; }
+    .professional-focus .service-item:nth-child(2) { --card-color: 6, 182, 212; }
+    .professional-focus .service-item:nth-child(3) { --card-color: 245, 158, 11; }
 
     /* Contact section visual enhancements */
     .contact-title-enhanced { position: relative; text-align: center; margin-bottom: 30px; }
@@ -583,7 +698,7 @@
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-        <div class="row gy-4">
+        <div class="pro-focus-grid">
 
           <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
             <i class="bi bi-journal-check"></i>
@@ -811,6 +926,7 @@
         <div class="focus-gradient-underline"></div>
         <p>Areas of expertise and skills I can bring to your organization.</p>
         <div id="focus-react-pills"></div>
+        <div id="focus-particles"></div>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -818,50 +934,68 @@
         <div class="row gy-4">
 
           <div class="col-lg-4 col-md-6">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-activity"></i>
+            <div class="service-item position-relative" data-theme="science">
+              <div class="card-content">
+                <div class="icon">
+                  <i class="bi bi-activity"></i>
+                </div>
+                <h3>Data Science</h3>
+                <div class="card-description">
+                  <p>Applying machine learning models and statistical analysis to solve business problems, with a focus on practical implementation and continuous learning.</p>
+                </div>
+                <div class="card-skills">
+                  <ul>
+                    <li>Machine Learning Implementation</li>
+                    <li>Statistical Analysis</li>
+                    <li>Data Mining</li>
+                    <li>Research & Development</li>
+                  </ul>
+                </div>
               </div>
-              <h3>Data Science</h3>
-              <p>Applying machine learning models and statistical analysis to solve business problems, with a focus on practical implementation and continuous learning.</p>
-              <ul>
-                <li>Machine Learning Implementation</li>
-                <li>Statistical Analysis</li>
-                <li>Data Mining</li>
-                <li>Research & Development</li>
-              </ul>
             </div>
           </div><!-- End Service Item -->
 
           <div class="col-lg-4 col-md-6">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-bar-chart"></i>
+            <div class="service-item position-relative" data-theme="analytics">
+              <div class="card-content">
+                <div class="icon">
+                  <i class="bi bi-bar-chart"></i>
+                </div>
+                <h3>Data Analytics</h3>
+                <div class="card-description">
+                  <p>Transforming data into actionable insights through comprehensive analysis and visualization, with a focus on business impact and decision-making.</p>
+                </div>
+                <div class="card-skills">
+                  <ul>
+                    <li>Data Visualization</li>
+                    <li>Business Intelligence</li>
+                    <li>Performance Metrics</li>
+                    <li>Trend Analysis</li>
+                  </ul>
+                </div>
               </div>
-              <h3>Data Analytics</h3>
-              <p>Transforming data into actionable insights through comprehensive analysis and visualization, with a focus on business impact and decision-making.</p>
-              <ul>
-                <li>Data Visualization</li>
-                <li>Business Intelligence</li>
-                <li>Performance Metrics</li>
-                <li>Trend Analysis</li>
-              </ul>
             </div>
           </div><!-- End Service Item -->
 
           <div class="col-lg-4 col-md-6">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-gear"></i>
+            <div class="service-item position-relative" data-theme="engineering">
+              <div class="card-content">
+                <div class="icon">
+                  <i class="bi bi-gear"></i>
+                </div>
+                <h3>Data Engineering</h3>
+                <div class="card-description">
+                  <p>Designing and implementing data pipelines and database solutions, with a focus on efficiency and scalability.</p>
+                </div>
+                <div class="card-skills">
+                  <ul>
+                    <li>ETL Pipeline Development</li>
+                    <li>Database Design</li>
+                    <li>Data Integration</li>
+                    <li>Performance Optimization</li>
+                  </ul>
+                </div>
               </div>
-              <h3>Data Engineering</h3>
-              <p>Designing and implementing data pipelines and database solutions, with a focus on efficiency and scalability.</p>
-              <ul>
-                <li>ETL Pipeline Development</li>
-                <li>Database Design</li>
-                <li>Data Integration</li>
-                <li>Performance Optimization</li>
-              </ul>
             </div>
           </div><!-- End Service Item -->
 
@@ -1273,9 +1407,45 @@
         );
       }
 
-      const mount = document.getElementById('focus-react-pills');
-      if (mount) {
-        ReactDOM.createRoot(mount).render(React.createElement(FocusPills));
+      // Floating Particles Component
+      function FloatingParticles() {
+        const containerRef = useRef(null);
+
+        useEffect(() => {
+          const container = containerRef.current;
+          if (!container) return;
+
+          // Create 20 floating particles
+          for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+            container.appendChild(particle);
+          }
+
+          return () => {
+            if (container) {
+              container.innerHTML = '';
+            }
+          };
+        }, []);
+
+        return e('div', { 
+          ref: containerRef, 
+          className: 'focus-particles' 
+        });
+      }
+
+      const pillsMount = document.getElementById('focus-react-pills');
+      const particlesMount = document.getElementById('focus-particles');
+      
+      if (pillsMount) {
+        ReactDOM.createRoot(pillsMount).render(React.createElement(FocusPills));
+      }
+      if (particlesMount) {
+        ReactDOM.createRoot(particlesMount).render(React.createElement(FloatingParticles));
       }
     })();
   </script>
@@ -1286,26 +1456,30 @@
       gsap.registerPlugin(ScrollTrigger);
 
       function enhanceFocusCards(){
-        // Animate service cards with 3D lift effect
+        // Animate service cards with advanced 3D effects
         const serviceItems = document.querySelectorAll('.professional-focus .service-item');
         
         serviceItems.forEach((item, index) => {
-          // Entrance animation
+          // Advanced entrance animation with perspective
           gsap.fromTo(item, 
             { 
               opacity: 0, 
-              y: 60, 
-              rotateX: 15,
-              scale: 0.9 
+              y: 80, 
+              rotateX: 25,
+              rotateY: 15,
+              scale: 0.8,
+              z: -100
             }, 
             {
               opacity: 1,
               y: 0,
               rotateX: 0,
+              rotateY: 0,
               scale: 1,
-              duration: 0.8,
-              ease: 'power3.out',
-              delay: index * 0.2,
+              z: 0,
+              duration: 1.2,
+              ease: 'power4.out',
+              delay: index * 0.3,
               scrollTrigger: {
                 trigger: item,
                 start: 'top 85%',
@@ -1315,22 +1489,24 @@
             }
           );
 
-          // Icon animation on scroll
+          // Enhanced icon animation with bounce and glow
           const icon = item.querySelector('.icon');
           if (icon) {
             gsap.fromTo(icon, 
               { 
-                scale: 0.5, 
-                rotation: -180,
-                opacity: 0 
+                scale: 0.3, 
+                rotation: -360,
+                opacity: 0,
+                filter: 'blur(10px)'
               }, 
               {
                 scale: 1,
                 rotation: 0,
                 opacity: 1,
-                duration: 1,
-                ease: 'back.out(1.7)',
-                delay: (index * 0.2) + 0.3,
+                filter: 'blur(0px)',
+                duration: 1.5,
+                ease: 'elastic.out(1, 0.5)',
+                delay: (index * 0.3) + 0.4,
                 scrollTrigger: {
                   trigger: icon,
                   start: 'top 85%'
@@ -1339,23 +1515,58 @@
             );
           }
 
-          // List items stagger animation
+          // Title typewriter effect
+          const title = item.querySelector('h3');
+          if (title) {
+            const text = title.textContent;
+            title.textContent = '';
+            gsap.fromTo(title, 
+              { opacity: 0 },
+              {
+                opacity: 1,
+                duration: 0.5,
+                delay: (index * 0.3) + 0.6,
+                scrollTrigger: {
+                  trigger: title,
+                  start: 'top 85%'
+                },
+                onStart: () => {
+                  let i = 0;
+                  const typeInterval = setInterval(() => {
+                    title.textContent += text[i];
+                    i++;
+                    if (i >= text.length) {
+                      clearInterval(typeInterval);
+                    }
+                  }, 50);
+                }
+              }
+            );
+          }
+
+          // Enhanced list items with wave animation
           const listItems = item.querySelectorAll('ul li');
           if (listItems.length > 0) {
             gsap.fromTo(listItems, 
               { 
                 opacity: 0, 
-                x: -30,
-                scale: 0.8 
+                x: -50,
+                scale: 0.6,
+                rotation: -15
               }, 
               {
                 opacity: 1,
                 x: 0,
                 scale: 1,
-                duration: 0.5,
-                stagger: 0.1,
-                ease: 'power2.out',
-                delay: (index * 0.2) + 0.5,
+                rotation: 0,
+                duration: 0.8,
+                stagger: {
+                  amount: 0.6,
+                  from: "start",
+                  ease: "power2.out"
+                },
+                ease: 'back.out(1.4)',
+                delay: (index * 0.3) + 0.8,
                 scrollTrigger: {
                   trigger: item,
                   start: 'top 80%'
@@ -1363,6 +1574,36 @@
               }
             );
           }
+
+          // Add mouse tracking parallax effect
+          item.addEventListener('mousemove', (e) => {
+            const rect = item.getBoundingClientRect();
+            const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+            const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+            
+            // pointer-follow for gradient highlights
+            const relX = ((e.clientX - rect.left) / rect.width) * 100;
+            const relY = ((e.clientY - rect.top) / rect.height) * 100;
+            item.style.setProperty('--mx', relX + '%');
+            item.style.setProperty('--my', relY + '%');
+
+            gsap.to(item, {
+              duration: 0.3,
+              rotateY: x * 10,
+              rotateX: -y * 10,
+              transformPerspective: 1000,
+              ease: 'power2.out'
+            });
+          });
+
+          item.addEventListener('mouseleave', () => {
+            gsap.to(item, {
+              duration: 0.5,
+              rotateY: 0,
+              rotateX: 0,
+              ease: 'power2.out'
+            });
+          });
         });
 
         // Animate gradient underline
