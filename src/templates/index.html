@@ -458,6 +458,41 @@
       background: linear-gradient(135deg, #2563eb, #7c3aed, #0891b2);
     }
 
+    /* About section – highlight and info chips */
+    #about .content h2 {
+      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      font-weight: 800;
+    }
+    #about .about-info { list-style: none; padding-left: 0; }
+    #about .about-info li {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; margin-bottom: 10px; border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: linear-gradient(145deg, rgba(255,255,255,0.70), rgba(255,255,255,0.50));
+      box-shadow: 0 10px 26px rgba(2,6,23,0.08);
+      backdrop-filter: blur(8px);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      position: relative; overflow: hidden;
+    }
+    #about .about-info li:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(2,6,23,0.12); border-color: rgba(59,130,246,0.35); }
+    #about .about-info li::after {
+      content: ''; position: absolute; width: 160px; height: 160px; right: -40px; bottom: -60px; border-radius: 50%;
+      filter: blur(14px); opacity: .25; background: radial-gradient(circle, rgba(59,130,246,.25), rgba(99,102,241,.15) 60%, transparent 70%);
+      pointer-events: none;
+    }
+    #about .about-info i {
+      width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center;
+      color: #fff; flex-shrink: 0; box-shadow: 0 8px 18px rgba(59,130,246,.25);
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    }
+    #about .about-info i.emerald { background: linear-gradient(135deg, #10b981, #06b6d4); }
+    #about .about-info i.violet { background: linear-gradient(135deg, #8b5cf6, #6366f1); }
+    #about .about-info i.amber { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+    #about .about-info strong { color: #0f172a; margin-right: 6px; }
+    #about .about-info span { color: #334155; }
+    #about .about-info a { color: #0ea5e9; text-decoration: none; }
+
     /* Skills section enhancements */
     .skills .section-title h2 { position: relative; display: inline-block; }
     .skills .section-title h2::after {
@@ -735,19 +770,19 @@
             </p>
             <div class="row">
               <div class="col-lg-6">
-                <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Location:</strong> <span>Sydney, NSW</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>0432 813 909</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>lenhothanh.nsl@gmail.com</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>LinkedIn:</strong> <span><a href="https://linkedin.com/in/tle057/" target="_blank">linkedin.com/in/tle057/</a></span></li>
+                <ul class="about-info" data-aos="fade-up" data-aos-delay="50">
+                  <li><i class="bi bi-geo-alt violet"></i> <strong>Location:</strong> <span>Sydney, NSW</span></li>
+                  <li><i class="bi bi-telephone emerald"></i> <strong>Phone:</strong> <span>0432 813 909</span></li>
+                  <li><i class="bi bi-envelope cyan"></i> <strong>Email:</strong> <span>lenhothanh.nsl@gmail.com</span></li>
+                  <li><i class="bi bi-linkedin violet"></i> <strong>LinkedIn:</strong> <span><a href="https://linkedin.com/in/tle057/" target="_blank">linkedin.com/in/tle057/</a></span></li>
                 </ul>
               </div>
               <div class="col-lg-6">
-                <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Master of IT & IT Management</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Major:</strong> <span>Data Management & Analytics</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>University:</strong> <span>The University of Sydney</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Status:</strong> <span style="color: #22c55e; font-weight: 600;">✓ Open to Work</span></li>
+                <ul class="about-info" data-aos="fade-up" data-aos-delay="100">
+                  <li><i class="bi bi-mortarboard violet"></i> <strong>Degree:</strong> <span>Master of IT & IT Management</span></li>
+                  <li><i class="bi bi-bar-chart-line cyan"></i> <strong>Major:</strong> <span>Data Management & Analytics</span></li>
+                  <li><i class="bi bi-building emerald"></i> <strong>University:</strong> <span>The University of Sydney</span></li>
+                  <li><i class="bi bi-briefcase amber"></i> <strong>Status:</strong> <span style="color: #22c55e; font-weight: 600;">✓ Open to Work</span></li>
                 </ul>
               </div>
             </div>
