@@ -17,6 +17,185 @@
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
+  <style>
+    /* React Intro styles */
+    .react-intro-wrap {
+      position: relative;
+      border-radius: 16px;
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.88), rgba(15,23,42,0.76));
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(148,163,184,0.25);
+      overflow: hidden;
+      color: #e5e7eb;
+    }
+    .react-intro-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 992px) {
+      .react-intro-grid { grid-template-columns: 1fr; }
+    }
+    .intro-title {
+      font-weight: 800;
+      font-size: 42px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #f8fafc;
+      text-shadow: 0 8px 28px rgba(0,0,0,0.55);
+      margin-bottom: 8px;
+    }
+    .intro-sub {
+      font-size: 16px;
+      color: #cbd5e1;
+      opacity: 1;
+    }
+    .badge-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .tech-badge {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(2,6,23,0.55);
+      border: 1px solid rgba(148,163,184,0.28);
+      color: #f8fafc;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+      transform-style: preserve-3d;
+    }
+    .orb {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -60px;
+      top: -60px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #7dd3fc, #a78bfa 55%, transparent 70%);
+      filter: blur(12px) saturate(1.05);
+      opacity: 0.18;
+      z-index: 0;
+      mix-blend-mode: normal;
+      pointer-events: none;
+    }
+    .metric {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(148,163,184,0.24);
+      color: #e5e7eb;
+    }
+    .metric i { font-size: 22px; color: #60a5fa; }
+    /* Portfolio banner */
+    .pf-banner {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      padding: 18px 18px 18px 20px;
+      background: linear-gradient(180deg, rgba(2,6,23,0.9), rgba(2,6,23,0.75));
+      border: 1px solid rgba(148,163,184,0.25);
+      color: #e5e7eb;
+    }
+    .pf-accent {
+      position: absolute; inset: -30% -10% auto auto; height: 220px; width: 420px;
+      background: radial-gradient(closest-side, rgba(59,130,246,0.35), rgba(99,102,241,0.25) 60%, transparent 70%);
+      filter: blur(18px);
+      pointer-events: none;
+      opacity: .45;
+    }
+    .pf-title { font-weight: 800; font-size: 28px; color: #f8fafc; margin: 0 0 6px; }
+    .pf-sub { margin: 0; color: #cbd5e1; }
+    .pf-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .pf-tag {
+      padding:6px 10px; border-radius:999px; font-size:12px; letter-spacing:.02em;
+      background: rgba(255,255,255,0.06); border:1px solid rgba(148,163,184,0.24); color:#f8fafc;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.3);
+    }
+    /* Contact section visual enhancements */
+    .contact-title-enhanced { position: relative; text-align: center; margin-bottom: 30px; }
+    .contact-gradient-line { width: 100px; height: 4px; margin: 12px auto; border-radius: 999px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #f59e0b); }
+    .contact-floating-icons { position: absolute; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
+    .contact-float-icon { position: absolute; font-size: 20px; opacity: 0.1; color: #60a5fa; animation: float 6s ease-in-out infinite; }
+    .contact-float-icon:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+    .contact-float-icon:nth-child(2) { top: 20%; right: 8%; animation-delay: 1s; }
+    .contact-float-icon:nth-child(3) { bottom: 25%; left: 10%; animation-delay: 2s; }
+    .contact-float-icon:nth-child(4) { bottom: 15%; right: 15%; animation-delay: 3s; }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    /* Enhanced info items */
+    .contact .info-item { 
+      position: relative; border-radius: 16px; padding: 24px; margin-bottom: 20px;
+      background: linear-gradient(145deg, rgba(15,23,42,0.08), rgba(15,23,42,0.04));
+      border: 1px solid rgba(148,163,184,0.15); backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden;
+    }
+    .contact .info-item:before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(96,165,250,0.1), transparent 50%);
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    .contact .info-item:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .contact .info-item:hover:before { opacity: 1; }
+    .contact .info-item:nth-child(1):hover:before { background: radial-gradient(circle at 80% 20%, rgba(6,182,212,0.15), transparent 50%); }
+    .contact .info-item:nth-child(2):hover:before { background: radial-gradient(circle at 80% 20%, rgba(16,185,129,0.15), transparent 50%); }
+    .contact .info-item:nth-child(3):hover:before { background: radial-gradient(circle at 80% 20%, rgba(245,158,11,0.15), transparent 50%); }
+    .contact .info-item i { 
+      font-size: 28px; padding: 12px; border-radius: 12px; margin-bottom: 12px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white;
+      box-shadow: 0 8px 24px rgba(59,130,246,0.3); transition: all 0.3s ease;
+    }
+    .contact .info-item:nth-child(1) i { background: linear-gradient(135deg, #06b6d4, #0891b2); box-shadow: 0 8px 24px rgba(6,182,212,0.3); }
+    .contact .info-item:nth-child(2) i { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 8px 24px rgba(16,185,129,0.3); }
+    .contact .info-item:nth-child(3) i { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 8px 24px rgba(245,158,11,0.3); }
+    .contact .info-item:hover i { transform: scale(1.1) rotate(5deg); }
+    .contact .info-item h3 { color: #1e293b; font-weight: 700; margin-bottom: 8px; position: relative; z-index: 1; }
+    .contact .info-item p { color: #475569; margin: 0; position: relative; z-index: 1; }
+    /* Enhanced form styling */
+    .contact .php-email-form {
+      background: linear-gradient(145deg, rgba(15,23,42,0.06), rgba(15,23,42,0.02));
+      border: 1px solid rgba(148,163,184,0.12); border-radius: 20px; padding: 32px;
+      backdrop-filter: blur(10px); position: relative; overflow: hidden;
+    }
+    .contact .php-email-form:before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(96,165,250,0.05), transparent 70%);
+      animation: formGlow 8s ease-in-out infinite;
+    }
+    @keyframes formGlow { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(180deg); } }
+    .contact .form-control { 
+      background: rgba(255,255,255,0.7); border: 2px solid rgba(148,163,184,0.2);
+      border-radius: 12px; padding: 16px 20px; font-size: 15px; color: #1e293b;
+      transition: all 0.3s ease; position: relative; z-index: 1;
+    }
+    .contact .form-control:focus { 
+      background: rgba(255,255,255,0.9); border-color: #60a5fa;
+      box-shadow: 0 0 0 4px rgba(96,165,250,0.1), 0 8px 24px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+    .contact .php-email-form button {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+      border: none; border-radius: 14px; padding: 16px 32px; font-weight: 700;
+      font-size: 16px; color: white; position: relative; z-index: 1;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 12px 28px rgba(59,130,246,0.3);
+    }
+    .contact .php-email-form button:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(59,130,246,0.4);
+      background: linear-gradient(135deg, #2563eb, #7c3aed, #0891b2);
+    }
+  </style>
+
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -64,6 +243,10 @@
         <div class="section-title">
           <h2>Basic Introductions</h2>
           <p>Welcome to my personal portfolio website! Here's some technical information about this site.</p>
+          <div class="alert alert-success mt-3">
+            <h5><i class="bi bi-briefcase text-success"></i> Currently Open to Work</h5>
+            <p class="mb-0">I am actively seeking opportunities in <strong>Data Science, Data Analytics, and Data Engineering</strong> roles. Available for full-time positions, internships, or project collaborations in Sydney or remote work arrangements.</p>
+          </div>
         </div>
 
         <div class="row gy-4" data-aos="fade-up" data-aos-delay="100">
@@ -71,6 +254,9 @@
             <div class="card">
               <div class="card-body">
                 <h3 class="card-title mb-4">🛠️ Technical Stack</h3>
+                
+                <!-- React Animated Intro Mount -->
+                <div id="react-intro" class="react-intro-wrap mb-4" aria-label="Animated introduction"></div>
                 
                 <div class="row mb-4">
                   <div class="col-md-6">
@@ -167,6 +353,13 @@
           <div class="col-lg-9">
             <h2 style="color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">Thanh Le</h2>
             <p style="color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">I'm <span class="typed" data-typed-items="Student, Data Analyst, postgraduate student, Data Scientist, postgraduate student, Data Engineer, Student">Data Analyst</span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
+            <div class="alert alert-success" style="background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); backdrop-filter: blur(10px); margin-top: 20px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="bi bi-check-circle-fill" style="color: #22c55e; font-size: 18px;"></i>
+                <strong style="color: #fff;">Open to Work</strong>
+              </div>
+              <p style="color: #e5e7eb; margin: 8px 0 0 0; font-size: 14px;">Seeking Data Science, Analytics & Engineering opportunities in Sydney or remote</p>
+            </div>
             <div class="social-links" style="color: #fff;">
               <a href="https://linkedin.com/in/tle057/" target="_blank"><i class="bi bi-linkedin"></i></a>
               <a href="mailto:lenhothanh.nsl@gmail.com"><i class="bi bi-envelope"></i></a>
@@ -186,6 +379,16 @@
         <h2>About</h2>
         <p>A postgraduate student with a foundation in data science, analytics, and engineering, seeking opportunities to apply and expand my skills in real-world projects.</p>
         <p>I am also interested in coding. Therefore, I created this website to improve my coding skill alongwith demonstrating something related to my study as well as my future plan</p>
+        <div class="alert alert-info mt-3">
+          <h5><i class="bi bi-person-check text-info"></i> Open to Work & Collaboration</h5>
+          <p class="mb-2">I am currently <strong>available and actively seeking</strong>:</p>
+          <ul class="mb-0">
+            <li><strong>Full-time positions</strong> in Data Science, Analytics, or Engineering</li>
+            <li><strong>Internship opportunities</strong> to gain hands-on industry experience</li>
+            <li><strong>Project collaborations</strong> for data-driven solutions</li>
+            <li><strong>Remote work</strong> or <strong>Sydney-based</strong> opportunities</li>
+          </ul>
+        </div>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -213,7 +416,7 @@
                   <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Master of IT & IT Management</span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Major:</strong> <span>Data Management & Analytics</span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>University:</strong> <span>The University of Sydney</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Status:</strong> <span>Available for Opportunities</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Status:</strong> <span style="color: #22c55e; font-weight: 600;">✓ Open to Work</span></li>
                 </ul>
               </div>
             </div>
@@ -366,6 +569,8 @@
         <h2>Portfolio</h2>
         <p>Showcasing my projects in data science, analytics, and engineering, demonstrating practical applications of technical skills and problem-solving abilities.</p>
         <h1>in progress! something would be added later! finializing to match with current cv</h1>
+        <h1>scroll down for more useful information</h1>
+        <div id="portfolio-react-banner"></div>
       </div><!-- End Section Title -->
 
       <div class="container">
@@ -653,8 +858,15 @@
     <section id="contact" class="contact section">
 
       <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
+      <div class="container section-title contact-title-enhanced" data-aos="fade-up">
+        <div class="contact-floating-icons">
+          <i class="contact-float-icon bi bi-envelope-at"></i>
+          <i class="contact-float-icon bi bi-telephone"></i>
+          <i class="contact-float-icon bi bi-geo-alt"></i>
+          <i class="contact-float-icon bi bi-chat-dots"></i>
+        </div>
         <h2>Contact</h2>
+        <div class="contact-gradient-line"></div>
         <p>Open to opportunities in data science, analytics, or engineering roles. Feel free to reach out for potential collaborations or job opportunities.</p>
         <p>Make sure you enter your correct email so that I can respond to it</p>
       </div><!-- End Section Title -->
@@ -760,6 +972,190 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  
+  <!-- React + GSAP (CDN) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+  
+  <script>
+    (function () {
+      const e = React.createElement;
+      const { useEffect, useRef } = React;
+      
+      function Intro() {
+        const wrapRef = useRef(null);
+        const titleRef = useRef(null);
+        const subRef = useRef(null);
+        const badgesRef = useRef([]);
+        const metricsRef = useRef([]);
+        badgesRef.current = [];
+        metricsRef.current = [];
+        
+        useEffect(() => {
+          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+          tl.fromTo(wrapRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 })
+            .fromTo(titleRef.current, { opacity: 0, y: 20, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.7 }, '-=0.2')
+            .fromTo(subRef.current, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.35')
+            .fromTo(badgesRef.current, { opacity: 0, y: 10, rotateX: -35 }, { opacity: 1, y: 0, rotateX: 0, duration: 0.5, stagger: 0.06 }, '-=0.2')
+            .fromTo(metricsRef.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08 }, '-=0.2');
+          
+          gsap.to('.orb', { x: 20, y: 10, duration: 6, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+        }, []);
+        
+        const addBadgeRef = (el) => { if (el && !badgesRef.current.includes(el)) badgesRef.current.push(el); };
+        const addMetricRef = (el) => { if (el && !metricsRef.current.includes(el)) metricsRef.current.push(el); };
+        
+        const badges = ['React', 'GSAP', 'Flask', 'SQLite', 'Bootstrap', 'Python', 'REST API', 'AOS'];
+        const metrics = [
+          { icon: 'bi bi-lightning', title: 'Fast Load', sub: 'Optimized static assets' },
+          { icon: 'bi bi-shield-check', title: 'Secure', sub: 'Controlled API endpoints' },
+          { icon: 'bi bi-graph-up', title: 'Tracking', sub: 'Visitor analytics' }
+        ];
+        
+        return e('div', { ref: wrapRef }, [
+          e('div', { key: 'orb', className: 'orb' }),
+          e('div', { key: 'grid', className: 'react-intro-grid' }, [
+            e('div', { key: 'copy' }, [
+              e('div', { key: 'title', ref: titleRef, className: 'intro-title' }, 'Hi, I\'m Thanh — Data Analyst / Engineer'),
+              e('div', { key: 'sub', ref: subRef, className: 'intro-sub' }, 'Building data-driven solutions, visual analytics, and robust pipelines.'),
+              e('div', { key: 'badges', className: 'badge-cloud' }, badges.map((b) => e('span', { key: b, ref: addBadgeRef, className: 'tech-badge' }, b)))
+            ]),
+            e('div', { key: 'side' }, metrics.map((m, i) => (
+              e('div', { key: i, ref: addMetricRef, className: 'metric mb-2' }, [
+                e('i', { key: 'i', className: m.icon }),
+                e('div', { key: 't' }, [
+                  e('div', { key: 'h', style: { fontWeight: 700, color: '#f3f4f6' } }, m.title),
+                  e('div', { key: 's', style: { fontSize: '12px', opacity: 0.8 } }, m.sub)
+                ])
+              ])
+            )))
+          ])
+        ]);
+      }
+      
+      const mount = document.getElementById('react-intro');
+      if (mount) {
+        const root = ReactDOM.createRoot(mount);
+        root.render(React.createElement(Intro));
+      }
+    })();
+  </script>
+
+  <!-- Portfolio banner animation -->
+  <script>
+    (function () {
+      const e = React.createElement;
+      const { useEffect, useRef } = React;
+      function PFBanner() {
+        const wrap = useRef(null);
+        const title = useRef(null);
+        const sub = useRef(null);
+        const tagsRef = useRef([]);
+        tagsRef.current = [];
+        useEffect(() => {
+          const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+          tl.fromTo(wrap.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5 })
+            .fromTo(title.current, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.45 }, '-=0.2')
+            .fromTo(sub.current, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.4 }, '-=0.25')
+            .fromTo(tagsRef.current, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.06 }, '-=0.1');
+          gsap.to('.pf-accent', { x: 14, y: 8, duration: 5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+        }, []);
+        const addTag = (el) => { if (el && !tagsRef.current.includes(el)) tagsRef.current.push(el); };
+        const tags = ['React', 'GSAP', 'Isotope', 'Glightbox', 'Bootstrap', 'Flask'];
+        return e('div', { className: 'pf-banner', ref: wrap }, [
+          e('div', { key: 'accent', className: 'pf-accent' }),
+          e('div', { key: 'content' }, [
+            e('h3', { key: 't', className: 'pf-title', ref: title }, 'Portfolio — Coming Soon'),
+            e('p', { key: 's', className: 'pf-sub', ref: sub }, 'Work in progress. Scroll to explore other sections while this area is being finalized.'),
+            e('div', { key: 'tags', className: 'pf-tags' }, tags.map((t) => e('span', { key: t, className: 'pf-tag', ref: addTag }, t)))
+          ])
+        ]);
+      }
+      const mount = document.getElementById('portfolio-react-banner');
+      if (mount) {
+        ReactDOM.createRoot(mount).render(React.createElement(PFBanner));
+      }
+    })();
+  </script>
+
+  <!-- Contact section scroll animations -->
+  <script>
+    (function(){
+      // Add scroll-triggered animations for contact elements
+      function animateContactElements(){
+        // Animate contact info cards on scroll
+        const infoItems = document.querySelectorAll('#contact .info-item');
+        infoItems.forEach((item, i) => {
+          gsap.fromTo(item, 
+            { opacity: 0, y: 30, scale: 0.9 }, 
+            { 
+              opacity: 1, y: 0, scale: 1, 
+              duration: 0.6, ease: 'power3.out', delay: i * 0.1,
+              scrollTrigger: { trigger: item, start: 'top 85%' }
+            }
+          );
+        });
+
+        // Animate form inputs on scroll
+        const formInputs = document.querySelectorAll('#contact .form-control');
+        formInputs.forEach((input, i) => {
+          gsap.fromTo(input,
+            { opacity: 0, x: -20 },
+            {
+              opacity: 1, x: 0,
+              duration: 0.5, ease: 'power3.out', delay: i * 0.05,
+              scrollTrigger: { trigger: input, start: 'top 90%' }
+            }
+          );
+        });
+
+        // Animate submit button
+        const submitBtn = document.querySelector('#contact button[type="submit"]');
+        if (submitBtn) {
+          gsap.fromTo(submitBtn,
+            { opacity: 0, y: 20, scale: 0.9 },
+            {
+              opacity: 1, y: 0, scale: 1,
+              duration: 0.6, ease: 'back.out(1.7)',
+              scrollTrigger: { trigger: submitBtn, start: 'top 90%' }
+            }
+          );
+        }
+
+        // Animate floating icons with stagger
+        const floatIcons = document.querySelectorAll('.contact-float-icon');
+        gsap.fromTo(floatIcons,
+          { opacity: 0, scale: 0 },
+          { 
+            opacity: 0.1, scale: 1, 
+            duration: 0.8, ease: 'back.out(1.7)', stagger: 0.2,
+            scrollTrigger: { trigger: '#contact', start: 'top 80%' }
+          }
+        );
+
+        // Animate gradient line
+        const gradientLine = document.querySelector('.contact-gradient-line');
+        if (gradientLine) {
+          gsap.fromTo(gradientLine,
+            { scaleX: 0 },
+            {
+              scaleX: 1,
+              duration: 0.8, ease: 'power3.out',
+              scrollTrigger: { trigger: gradientLine, start: 'top 85%' }
+            }
+          );
+        }
+      }
+
+      // Run animations when ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', animateContactElements);
+      } else {
+        animateContactElements();
+      }
+    })();
+  </script>
   <script>
   document.getElementById('contact-form').addEventListener('submit', async function(e) {
     e.preventDefault();
