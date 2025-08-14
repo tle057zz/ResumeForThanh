@@ -1,0 +1,17 @@
+# Web Framework
+Flask==3.0.0
+Flask-Mail==0.9.1
+
+# Production Server
+gunicorn==21.2.0
+
+# HTTP Requests
+requests==2.31.0
+
+# Timezone Support
+pytz==2024.1
+
+# Development and Testing (optional)
+# Uncomment for development
+# pytest==7.4.3
+# flask-testing==0.8.1 
