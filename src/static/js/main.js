@@ -90,6 +90,30 @@
   window.addEventListener('load', aosInit);
 
   /**
+   * Lazy-load images with data-src attribute to speed up first paint
+   */
+  const lazyImages = document.querySelectorAll('img[data-src]');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.getAttribute('data-src');
+          img.removeAttribute('data-src');
+          observer.unobserve(img);
+        }
+      });
+    }, { rootMargin: '200px' });
+    lazyImages.forEach(img => io.observe(img));
+  } else {
+    // Fallback: eager load
+    lazyImages.forEach(img => {
+      img.src = img.getAttribute('data-src');
+      img.removeAttribute('data-src');
+    });
+  }
+
+  /**
    * Init typed.js
    */
   const selectTyped = document.querySelector('.typed');

@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, send_from_directory, render_template
+from flask import Flask, request, jsonify, send_from_directory, render_template, make_response
+from flask_compress import Compress
 from flask_mail import Mail, Message
 import sqlite3
 import datetime
@@ -11,6 +12,9 @@ import os
 app = Flask(__name__, 
             template_folder='src/templates',
             static_folder='src/static')
+
+# Enable gzip/Brotli compression for faster first loads
+Compress(app)
 
 # Flask-Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -366,8 +370,11 @@ def starter_page():
 
 @app.route('/<path:path>')
 def static_proxy(path):
-    # Serve static files from the static folder
-    return send_from_directory('src/static', path)
+    # Serve static files with aggressive caching headers in production
+    response = make_response(send_from_directory('src/static', path))
+    # Cache static assets for 30 days; fingerprinted files will benefit most
+    response.headers['Cache-Control'] = 'public, max-age=2592000, immutable'
+    return response
 
 @app.route('/api/visitor-stats')
 def visitor_stats():

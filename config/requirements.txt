@@ -1,6 +1,8 @@
 # Web Framework
 Flask==3.0.0
 Flask-Mail==0.9.1
+Flask-Compress==1.15
+Brotli==1.1.0
 
 # Production Server
 gunicorn==21.2.0
