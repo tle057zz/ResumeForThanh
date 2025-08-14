@@ -2,42 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Centered Divs Example</title>
+    <title>Exploration</title>
+    <!-- Styles controlling layout, card look-and-feel, and hover interaction -->
     <style>
+        /* Page-level reset and full-height canvas */
         body, html {
             height: 100%;
             margin: 0;
         }
+        /* Full-page background image with dark overlay for readability.
+           Swap the URL to try other images in assets/img (e.g., services.jpg). */
+        body {
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('assets/img/hero-bg.jpg') center/cover no-repeat fixed;
+        }
+        /* Flex container that centers the cards both vertically and horizontally */
         .center-container {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #888;
-            border: 2px solid #a0f;
+            background: transparent;
+            border: 0;
             box-sizing: border-box;
         }
+        /* Base card appearance and subtle elevation */
         .color-box {
             width: 200px;
             height: 200px;
             margin: 0 16px;
             border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #111;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+        /* Lift effect on hover */
+        .color-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+        }
+        /* Individual color themes */
         .box1 { background: #4ee0ea; }
         .box2 { background: linear-gradient(90deg, #ff6a9f, #ffe066); }
         .box3 { background: linear-gradient(90deg, #ffe066, #f9c2ff); }
+        /* Text layout inside each card */
+        .box-content {
+            text-align: center;
+            padding: 12px;
+        }
+        .box-content h2 {
+            margin: 0 0 8px;
+            font-size: 20px;
+            line-height: 1.2;
+        }
+        .box-content p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.85;
+        }
+        /* High-contrast page title over the photo background */
+        .page-title {
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            margin: 16px 0;
+        }
     </style>
+    <!-- React + ReactDOM for UMD in browser; Babel enables JSX in the inline script below -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-    <h2 style="text-align: center;"> This is to explore more what I do for the web project</h2>
-    <div class="center-container">
-        <div class="color-box box1">
-            <h1 style="text-align: center;">Admin's portfolio</h1>
-        </div>
-        <div class="color-box box2">
-            <h2 style="text-align: center;">Blog pages</h2>
-        </div>
-        <div class="color-box box3"></div>
-    </div>
+    <!-- React mounts into this root container -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Card metadata powering the three clickable boxes
+        const cards = [
+            { id: 1, title: "Admin's portfolio", subtitle: "CV, contacts and some other things", className: "box1", href: "index.html#portfolio" },
+            { id: 2, title: "Blog pages", subtitle: "Career advice & notes", className: "box2", href: "career-advice.html" },
+            { id: 3, title: "Playground", subtitle: "Experiments & demos", className: "box3", href: "explore.html" }
+        ];
+
+        // Presentational component: a single clickable card
+        function ColorCard({ title, subtitle, className, href }) {
+            return (
+                <a className={`color-box ${className}`} href={href}>
+                    <div className="box-content">
+                        <h2>{title}</h2>
+                        <p>{subtitle}</p>
+                    </div>
+                </a>
+            );
+        }
+
+        // Root UI: renders heading, cards, and a live clock
+        function App() {
+            const [time, setTime] = React.useState(new Date());
+            // Update the clock every second; clean up on unmount
+            React.useEffect(() => {
+                const i = setInterval(() => setTime(new Date()), 1000);
+                return () => clearInterval(i);
+            }, []);
+            return (
+                <div>
+                    <h2 className="page-title">This is to explore more what I do for the web project</h2>
+                    <div className="center-container">
+                        {cards.map(card => (
+                            <ColorCard key={card.id} {...card} />
+                        ))}
+                    </div>
+                    <p style={{ textAlign: 'center', color: '#fff', marginTop: 16, textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+                        Local time: {time.toLocaleTimeString()}
+                    </p>
+                </div>
+            );
+        }
+
+        // Bootstrapping: create the React root and render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
