@@ -13,7 +13,7 @@
         /* Full-page background image with dark overlay for readability.
            Swap the URL to try other images in assets/img (e.g., services.jpg). */
         body {
-            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('assets/img/hero-bg.jpg') center/cover no-repeat fixed;
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('img/hero-bg.jpg') center/cover no-repeat fixed;
         }
         /* Flex container that centers the cards both vertically and horizontally */
         .center-container {
@@ -74,13 +74,12 @@
     <!-- React + ReactDOM for UMD in browser; Babel enables JSX in the inline script below -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
     <!-- React mounts into this root container -->
     <div id="root"></div>
 
-    <script type="text/babel">
+    <script>
         // Card metadata powering the three clickable boxes
         const cards = [
             { id: 1, title: "Admin's portfolio", subtitle: "CV, contacts and some other things", className: "box1", href: "index.html#portfolio" },
@@ -90,14 +89,13 @@
 
         // Presentational component: a single clickable card
         function ColorCard({ title, subtitle, className, href }) {
-            return (
-                <a className={`color-box ${className}`} href={href}>
-                    <div className="box-content">
-                        <h2>{title}</h2>
-                        <p>{subtitle}</p>
-                    </div>
-                </a>
-            );
+            return React.createElement('a', { 
+                className: `color-box ${className}`, 
+                href: href 
+            }, React.createElement('div', { className: 'box-content' }, [
+                React.createElement('h2', { key: 'title' }, title),
+                React.createElement('p', { key: 'subtitle' }, subtitle)
+            ]));
         }
 
         // Root UI: renders heading, cards, and a live clock
@@ -108,24 +106,21 @@
                 const i = setInterval(() => setTime(new Date()), 1000);
                 return () => clearInterval(i);
             }, []);
-            return (
-                <div>
-                    <h2 className="page-title">This is to explore more what I do for the web project</h2>
-                    <div className="center-container">
-                        {cards.map(card => (
-                            <ColorCard key={card.id} {...card} />
-                        ))}
-                    </div>
-                    <p style={{ textAlign: 'center', color: '#fff', marginTop: 16, textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
-                        Local time: {time.toLocaleTimeString()}
-                    </p>
-                </div>
-            );
+            return React.createElement('div', null, [
+                React.createElement('h2', { key: 'title', className: 'page-title' }, 'This is to explore more what I do for the web project'),
+                React.createElement('div', { key: 'container', className: 'center-container' }, 
+                    cards.map(card => React.createElement(ColorCard, { key: card.id, ...card }))
+                ),
+                React.createElement('p', { 
+                    key: 'time',
+                    style: { textAlign: 'center', color: '#fff', marginTop: 16, textShadow: '0 2px 8px rgba(0,0,0,0.5)' }
+                }, 'Local time: ' + time.toLocaleTimeString())
+            ]);
         }
 
         // Bootstrapping: create the React root and render the app
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(React.createElement(App));
     </script>
 </body>
 </html>

@@ -1,12 +1,16 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template
 from flask_mail import Mail, Message
 import sqlite3
 import datetime
 import json
 from datetime import timezone
 import pytz
+import os
 
-app = Flask(__name__)
+# Configure Flask app with new folder structure
+app = Flask(__name__, 
+            template_folder='src/templates',
+            static_folder='src/static')
 
 # Flask-Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -24,7 +28,7 @@ import threading
 
 # Database functions
 def create_db():
-    conn = sqlite3.connect('visitor_count.db')
+    conn = sqlite3.connect('database/visitor_count.db')
     cursor = conn.cursor()
     
     # Check if visitors table exists and has the new columns
@@ -96,7 +100,7 @@ def get_location_from_ip(ip):
         return 'Unknown'
 
 def get_visitor_stats():
-    conn = sqlite3.connect('visitor_count.db')
+    conn = sqlite3.connect('database/visitor_count.db')
     cursor = conn.cursor()
     
     # Total visitors (all types, excluding traffic page)
@@ -262,7 +266,7 @@ def record_visit(page_name):
     # Detect visitor type
     visitor_info = detect_visitor_type()
     
-    conn = sqlite3.connect('visitor_count.db')
+    conn = sqlite3.connect('database/visitor_count.db')
     cursor = conn.cursor()
     
     # Get current UTC time for consistent timezone handling
@@ -313,21 +317,44 @@ def run_ping_cron():
 @app.route('/')
 def index():
     record_visit('home')
-    return send_from_directory('.', 'index.html')
+    return render_template('index.html')
+
+@app.route('/index.html')
+def index_html():
+    record_visit('home')
+    return render_template('index.html')
+
+@app.route('/career-advice.html')
+def career_advice():
+    record_visit('career-advice')
+    return render_template('career-advice.html')
+
+@app.route('/traffic.html')
+def traffic():
+    record_visit('traffic')
+    return render_template('traffic.html')
+
+@app.route('/explore.html')
+def explore():
+    record_visit('explore')
+    return render_template('explore.html')
+
+@app.route('/portfolio-details.html')
+def portfolio_details():
+    return render_template('portfolio-details.html')
+
+@app.route('/service-details.html')
+def service_details():
+    return render_template('service-details.html')
+
+@app.route('/starter-page.html')
+def starter_page():
+    return render_template('starter-page.html')
 
 @app.route('/<path:path>')
 def static_proxy(path):
-    # Record visits for specific pages
-    if path in ['traffic.html', 'career-advice.html']:
-        page_name = path.replace('.html', '')
-        record_visit(page_name)
-    elif path == 'index.html':
-        record_visit('home')
-    else:
-        # For other static files, don't record visits
-        pass
-    
-    return send_from_directory('.', path)
+    # Serve static files from the static folder
+    return send_from_directory('src/static', path)
 
 @app.route('/api/visitor-stats')
 def visitor_stats():

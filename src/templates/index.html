@@ -9,8 +9,8 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -122,6 +122,154 @@
       background: rgba(255,255,255,0.06); border:1px solid rgba(148,163,184,0.24); color:#f8fafc;
       box-shadow: 0 8px 22px rgba(0,0,0,0.3);
     }
+    /* Professional Focus Enhanced Styling */
+    .focus-gradient-underline { 
+      width: 140px; height: 4px; margin: 12px auto; border-radius: 999px; 
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4, #f59e0b, #ef4444); 
+      position: relative; overflow: hidden;
+    }
+    .focus-gradient-underline::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+    
+    .focus-pills { display: flex; justify-content: center; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
+    .focus-pill {
+      padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
+      background: linear-gradient(135deg, #667eea, #764ba2); color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2); letter-spacing: 0.5px;
+    }
+    .focus-pill:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+    
+    /* Enhanced service items with distinct themes */
+    .professional-focus .service-item {
+      position: relative; border-radius: 20px; padding: 32px; overflow: hidden;
+      background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(20px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    /* Data Science - Purple/Blue theme */
+    .professional-focus .service-item:nth-child(1) {
+      background: linear-gradient(145deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+      border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    .professional-focus .service-item:nth-child(1):hover {
+      transform: translateY(-8px) rotateX(5deg); 
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
+      background: linear-gradient(145deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1));
+    }
+    
+    /* Data Analytics - Cyan/Green theme */
+    .professional-focus .service-item:nth-child(2) {
+      background: linear-gradient(145deg, rgba(6, 182, 212, 0.1), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(6, 182, 212, 0.2);
+    }
+    .professional-focus .service-item:nth-child(2):hover {
+      transform: translateY(-8px) rotateX(5deg); 
+      box-shadow: 0 20px 60px rgba(6, 182, 212, 0.3);
+      background: linear-gradient(145deg, rgba(6, 182, 212, 0.15), rgba(16, 185, 129, 0.1));
+    }
+    
+    /* Data Engineering - Orange/Red theme */
+    .professional-focus .service-item:nth-child(3) {
+      background: linear-gradient(145deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.05));
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .professional-focus .service-item:nth-child(3):hover {
+      transform: translateY(-8px) rotateX(5deg); 
+      box-shadow: 0 20px 60px rgba(245, 158, 11, 0.3);
+      background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.1));
+    }
+    
+    /* Floating orbs for each card */
+    .professional-focus .service-item::before {
+      content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%;
+      top: -60px; right: -60px; opacity: 0; transition: opacity 0.4s ease;
+      pointer-events: none; filter: blur(20px);
+    }
+    .professional-focus .service-item:nth-child(1)::before {
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.3), rgba(59, 130, 246, 0.2));
+    }
+    .professional-focus .service-item:nth-child(2)::before {
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.3), rgba(16, 185, 129, 0.2));
+    }
+    .professional-focus .service-item:nth-child(3)::before {
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.3), rgba(239, 68, 68, 0.2));
+    }
+    .professional-focus .service-item:hover::before { opacity: 1; }
+    
+    /* Enhanced icons with gradient backgrounds */
+    .professional-focus .service-item .icon {
+      width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; position: relative; overflow: hidden; transition: all 0.4s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .professional-focus .service-item:nth-child(1) .icon {
+      background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    }
+    .professional-focus .service-item:nth-child(2) .icon {
+      background: linear-gradient(135deg, #06b6d4, #10b981);
+    }
+    .professional-focus .service-item:nth-child(3) .icon {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+    }
+    
+    .professional-focus .service-item .icon i {
+      font-size: 32px; color: white; z-index: 1; position: relative;
+      transition: all 0.3s ease;
+    }
+    .professional-focus .service-item:hover .icon {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+    .professional-focus .service-item:hover .icon i {
+      transform: scale(1.1);
+    }
+    
+    /* Enhanced typography */
+    .professional-focus .service-item h3 {
+      font-size: 24px; font-weight: 700; margin-bottom: 16px; position: relative;
+      background: linear-gradient(135deg, #1e293b, #475569); -webkit-background-clip: text;
+      background-clip: text; color: transparent;
+    }
+    .professional-focus .service-item:nth-child(1) h3 {
+      background: linear-gradient(135deg, #8b5cf6, #3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .professional-focus .service-item:nth-child(2) h3 {
+      background: linear-gradient(135deg, #06b6d4, #10b981); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .professional-focus .service-item:nth-child(3) h3 {
+      background: linear-gradient(135deg, #f59e0b, #ef4444); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    
+    /* Enhanced list styling with star bullets */
+    .professional-focus .service-item ul {
+      list-style: none; padding: 0; margin-top: 20px;
+    }
+    .professional-focus .service-item ul li {
+      position: relative; padding-left: 25px; margin-bottom: 8px; color: #475569;
+      transition: all 0.3s ease; font-weight: 500;
+    }
+    .professional-focus .service-item ul li::before {
+      content: '★'; position: absolute; left: 0; top: 0; font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .professional-focus .service-item:nth-child(1) ul li::before { color: #8b5cf6; }
+    .professional-focus .service-item:nth-child(2) ul li::before { color: #06b6d4; }
+    .professional-focus .service-item:nth-child(3) ul li::before { color: #f59e0b; }
+    
+    .professional-focus .service-item:hover ul li::before {
+      transform: scale(1.2) rotate(20deg);
+    }
+    .professional-focus .service-item:hover ul li {
+      transform: translateX(5px); color: #1e293b;
+    }
+
     /* Contact section visual enhancements */
     .contact-title-enhanced { position: relative; text-align: center; margin-bottom: 30px; }
     .contact-gradient-line { width: 100px; height: 4px; margin: 12px auto; border-radius: 999px; background: linear-gradient(90deg, #06b6d4, #8b5cf6, #f59e0b); }
@@ -197,14 +345,14 @@
   </style>
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="vendor/aos/aos.css" rel="stylesheet">
+  <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Main CSS File -->
-  <link href="assets/css/main.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
 
 </head>
 
@@ -213,7 +361,7 @@
   <header id="header" class="header d-flex flex-column justify-content-center">
 
     <div class="branding-logo text-center mb-3">
-      <img src="assets/img/logobranding.png" alt="Brand Logo" style="max-width: 80px; height: auto;">
+      <img src="img/logobranding.png" alt="Brand Logo" style="max-width: 80px; height: auto;">
     </div>
 
     <i class="header-toggle d-xl-none bi bi-list"></i>
@@ -345,7 +493,7 @@
     <section id="hero" class="hero section light-background" style="position: relative; height: 100vh; min-height: 100vh; overflow: hidden;">
 
       <div class="hero-bg-gif" style="position: absolute; top: 0; left: 0; width: 100%; height: 100vh; z-index: 0; overflow: hidden;">
-        <img src="20250702_174018-ANIMATION.gif" alt="Animated Background" style="width: 100%; height: 100vh; object-fit: cover; object-position: center;">
+        <img src="img/20250702_174018-ANIMATION.gif" alt="Animated Background" style="width: 100%; height: 100vh; object-fit: cover; object-position: center;">
       </div>
 
       <div class="container" data-aos="zoom-out" style="position: relative; z-index: 10; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">
@@ -395,7 +543,7 @@
 
         <div class="row gy-4 justify-content-center">
           <div class="col-lg-4">
-            <img src="assets/img/profile-img.jpg" class="img-fluid" alt="">
+            <img src="img/profile-img.jpg" class="img-fluid" alt="">
           </div>
           <div class="col-lg-8 content">
             <h2>Postgraduate Student in Data Management & Analytics</h2>
@@ -587,61 +735,61 @@
           <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-data-science">
-              <img src="assets/img/masonry-portfolio/masonry-portfolio-1.jpg" class="img-fluid" alt="">
+              <img src="img/masonry-portfolio/masonry-portfolio-1.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Supersize the Image – AI-Powered Image Processing</h4>
                 <p>Deep Learning & Image Enhancement</p>
-                <a href="assets/img/masonry-portfolio/masonry-portfolio-1.jpg" title="AI Image Processing" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="img/masonry-portfolio/masonry-portfolio-1.jpg" title="AI Image Processing" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-data-analytics">
-              <img src="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" class="img-fluid" alt="">
+              <img src="img/masonry-portfolio/masonry-portfolio-2.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Visual Analytics of Social Media Strategies</h4>
                 <p>U.S. 2016 Election Analysis</p>
-                <a href="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" title="Social Media Analysis" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="img/masonry-portfolio/masonry-portfolio-2.jpg" title="Social Media Analysis" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-web-dev">
-              <img src="assets/img/masonry-portfolio/masonry-portfolio-3.jpg" class="img-fluid" alt="">
+              <img src="img/masonry-portfolio/masonry-portfolio-3.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Coffee Shop Management System</h4>
                 <p>Full-stack Web Application</p>
-                <a href="assets/img/masonry-portfolio/masonry-portfolio-3.jpg" title="Coffee Shop System" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="img/masonry-portfolio/masonry-portfolio-3.jpg" title="Coffee Shop System" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-data-analytics">
-              <img src="assets/img/masonry-portfolio/masonry-portfolio-4.jpg" class="img-fluid" alt="">
+              <img src="img/masonry-portfolio/masonry-portfolio-4.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Google Play Store Analysis</h4>
                 <p>Data Analysis & Visualization</p>
-                <a href="assets/img/masonry-portfolio/masonry-portfolio-4.jpg" title="Play Store Analysis" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="img/masonry-portfolio/masonry-portfolio-4.jpg" title="Play Store Analysis" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-data-analytics">
-              <img src="assets/img/masonry-portfolio/masonry-portfolio-5.jpg" class="img-fluid" alt="">
+              <img src="img/masonry-portfolio/masonry-portfolio-5.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Netflix Movie Duration Trends</h4>
                 <p>Time Series Analysis</p>
-                <a href="assets/img/masonry-portfolio/masonry-portfolio-5.jpg" title="Netflix Analysis" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="img/masonry-portfolio/masonry-portfolio-5.jpg" title="Netflix Analysis" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-web-dev">
-              <img src="assets/img/masonry-portfolio/masonry-portfolio-6.jpg" class="img-fluid" alt="">
+              <img src="img/masonry-portfolio/masonry-portfolio-6.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Marvel Heroes Analysis</h4>
                 <p>Web App & Data Visualization</p>
-                <a href="assets/img/masonry-portfolio/masonry-portfolio-6.jpg" title="Marvel Heroes" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                <a href="img/masonry-portfolio/masonry-portfolio-6.jpg" title="Marvel Heroes" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
             </div><!-- End Portfolio Item -->
@@ -660,7 +808,9 @@
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Professional Focus</h2>
+        <div class="focus-gradient-underline"></div>
         <p>Areas of expertise and skills I can bring to your organization.</p>
+        <div id="focus-react-pills"></div>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -768,7 +918,7 @@
 <!--                    </div>-->
 <!--                  </div>-->
 <!--                  <div class="col-lg-2 text-center">-->
-<!--                    <img src="assets/img/testimonials/testimonials-1.jpg" class="img-fluid testimonial-img" alt="">-->
+<!--                    <img src="img/testimonials/testimonials-1.jpg" class="img-fluid testimonial-img" alt="">-->
 <!--                  </div>-->
 <!--                </div>-->
 <!--              </div>-->
@@ -792,7 +942,7 @@
 <!--                    </div>-->
 <!--                  </div>-->
 <!--                  <div class="col-lg-2 text-center">-->
-<!--                    <img src="assets/img/testimonials/testimonials-2.jpg" class="img-fluid testimonial-img" alt="">-->
+<!--                    <img src="img/testimonials/testimonials-2.jpg" class="img-fluid testimonial-img" alt="">-->
 <!--                  </div>-->
 <!--                </div>-->
 <!--              </div>-->
@@ -816,7 +966,7 @@
 <!--                    </div>-->
 <!--                  </div>-->
 <!--                  <div class="col-lg-2 text-center">-->
-<!--                    <img src="assets/img/testimonials/testimonials-3.jpg" class="img-fluid testimonial-img" alt="">-->
+<!--                    <img src="img/testimonials/testimonials-3.jpg" class="img-fluid testimonial-img" alt="">-->
 <!--                  </div>-->
 <!--                </div>-->
 <!--              </div>-->
@@ -840,7 +990,7 @@
 <!--                    </div>-->
 <!--                  </div>-->
 <!--                  <div class="col-lg-2 text-center">-->
-<!--                    <img src="assets/img/testimonials/testimonials-4.jpg" class="img-fluid testimonial-img" alt="">-->
+<!--                    <img src="img/testimonials/testimonials-4.jpg" class="img-fluid testimonial-img" alt="">-->
 <!--                  </div>-->
 <!--                </div>-->
 <!--              </div>-->
@@ -959,24 +1109,25 @@
   <div id="preloader"></div>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/typed.js/typed.umd.js"></script>
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/php-email-form/validate.js"></script>
+  <script src="vendor/aos/aos.js"></script>
+  <script src="vendor/typed.js/typed.umd.js"></script>
+  <script src="vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="vendor/swiper/swiper-bundle.min.js"></script>
 
   <!-- Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script src="js/main.js"></script>
   
   <!-- React + GSAP (CDN) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
   
   <script>
     (function () {
@@ -1075,6 +1226,169 @@
       const mount = document.getElementById('portfolio-react-banner');
       if (mount) {
         ReactDOM.createRoot(mount).render(React.createElement(PFBanner));
+      }
+    })();
+  </script>
+
+  <!-- Professional Focus React Pills Component -->
+  <script>
+    (function () {
+      const e = React.createElement;
+      const { useEffect, useRef } = React;
+
+      function FocusPills() {
+        const pillsRef = useRef([]);
+        pillsRef.current = [];
+
+        useEffect(() => {
+          gsap.registerPlugin(ScrollTrigger);
+          
+          gsap.fromTo(pillsRef.current, 
+            { opacity: 0, y: 20, scale: 0.8 }, 
+            { 
+              opacity: 1, y: 0, scale: 1, 
+              duration: 0.6, stagger: 0.1, ease: 'back.out(1.7)',
+              scrollTrigger: {
+                trigger: '#focus-react-pills',
+                start: 'top 80%'
+              }
+            }
+          );
+        }, []);
+
+        const addPillRef = (el) => { 
+          if (el && !pillsRef.current.includes(el)) pillsRef.current.push(el); 
+        };
+
+        const pills = ['Machine Learning', 'Data Visualization', 'ETL Pipelines', 'Statistical Analysis', 'Business Intelligence', 'Database Design'];
+
+        return e('div', { className: 'focus-pills' }, 
+          pills.map((pill) => 
+            e('span', { 
+              key: pill, 
+              className: 'focus-pill', 
+              ref: addPillRef 
+            }, pill)
+          )
+        );
+      }
+
+      const mount = document.getElementById('focus-react-pills');
+      if (mount) {
+        ReactDOM.createRoot(mount).render(React.createElement(FocusPills));
+      }
+    })();
+  </script>
+
+  <!-- Professional Focus Enhanced Animations -->
+  <script>
+    (function(){
+      gsap.registerPlugin(ScrollTrigger);
+
+      function enhanceFocusCards(){
+        // Animate service cards with 3D lift effect
+        const serviceItems = document.querySelectorAll('.professional-focus .service-item');
+        
+        serviceItems.forEach((item, index) => {
+          // Entrance animation
+          gsap.fromTo(item, 
+            { 
+              opacity: 0, 
+              y: 60, 
+              rotateX: 15,
+              scale: 0.9 
+            }, 
+            {
+              opacity: 1,
+              y: 0,
+              rotateX: 0,
+              scale: 1,
+              duration: 0.8,
+              ease: 'power3.out',
+              delay: index * 0.2,
+              scrollTrigger: {
+                trigger: item,
+                start: 'top 85%',
+                end: 'bottom 20%',
+                toggleActions: 'play none none reverse'
+              }
+            }
+          );
+
+          // Icon animation on scroll
+          const icon = item.querySelector('.icon');
+          if (icon) {
+            gsap.fromTo(icon, 
+              { 
+                scale: 0.5, 
+                rotation: -180,
+                opacity: 0 
+              }, 
+              {
+                scale: 1,
+                rotation: 0,
+                opacity: 1,
+                duration: 1,
+                ease: 'back.out(1.7)',
+                delay: (index * 0.2) + 0.3,
+                scrollTrigger: {
+                  trigger: icon,
+                  start: 'top 85%'
+                }
+              }
+            );
+          }
+
+          // List items stagger animation
+          const listItems = item.querySelectorAll('ul li');
+          if (listItems.length > 0) {
+            gsap.fromTo(listItems, 
+              { 
+                opacity: 0, 
+                x: -30,
+                scale: 0.8 
+              }, 
+              {
+                opacity: 1,
+                x: 0,
+                scale: 1,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: 'power2.out',
+                delay: (index * 0.2) + 0.5,
+                scrollTrigger: {
+                  trigger: item,
+                  start: 'top 80%'
+                }
+              }
+            );
+          }
+        });
+
+        // Animate gradient underline
+        const gradientLine = document.querySelector('.focus-gradient-underline');
+        if (gradientLine) {
+          gsap.fromTo(gradientLine,
+            { scaleX: 0, opacity: 0 },
+            {
+              scaleX: 1,
+              opacity: 1,
+              duration: 1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: gradientLine,
+                start: 'top 85%'
+              }
+            }
+          );
+        }
+      }
+
+      // Initialize when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', enhanceFocusCards);
+      } else {
+        enhanceFocusCards();
       }
     })();
   </script>
