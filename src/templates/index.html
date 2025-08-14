@@ -220,6 +220,26 @@
       opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
     }
     .professional-focus .service-item[data-theme="engineering"]:hover::after { opacity: 1; }
+
+    /* Software Engineering - Blue/Cyan theme */
+    .professional-focus .service-item[data-theme="software"] {
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.12), rgba(6, 182, 212, 0.06));
+      border: 2px solid rgba(59, 130, 246, 0.25);
+      position: relative;
+    }
+    .professional-focus .service-item[data-theme="software"]:hover {
+      transform: translateY(-12px) rotateX(8deg) scale(1.02);
+      box-shadow: 0 25px 80px rgba(59, 130, 246, 0.4);
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.15));
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+    .professional-focus .service-item[data-theme="software"]::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(500px circle at var(--mx) var(--my), rgba(59, 130, 246, 0.18), rgba(6, 182, 212, 0.14) 60%, transparent 70%);
+      opacity: 0; transition: opacity 0.5s ease; pointer-events: none;
+    }
+    .professional-focus .service-item[data-theme="software"]:hover::after { opacity: 1; }
     
     /* Floating orbs for each card */
     .professional-focus .service-item::before {
@@ -237,6 +257,11 @@
       background: radial-gradient(circle, rgba(245, 158, 11, 0.3), rgba(239, 68, 68, 0.2));
     }
     .professional-focus .service-item:hover::before { opacity: 1; }
+    .professional-focus .service-item[data-theme="software"]::before {
+      content: ''; position: absolute; width: 120px; height: 120px; border-radius: 50%;
+      top: -60px; right: -60px; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; filter: blur(20px);
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.3), rgba(6, 182, 212, 0.2));
+    }
 
     /* Animated gradient border ring */
     .professional-focus .service-item::marker { display: none; }
@@ -269,6 +294,10 @@
     .professional-focus .service-item[data-theme="engineering"] .icon {
       background: linear-gradient(135deg, #f59e0b, #ef4444, #f97316);
       box-shadow: 0 12px 35px rgba(245, 158, 11, 0.3);
+    }
+    .professional-focus .service-item[data-theme="software"] .icon {
+      background: linear-gradient(135deg, #3b82f6, #06b6d4, #22d3ee);
+      box-shadow: 0 12px 35px rgba(59, 130, 246, 0.3);
     }
     
     /* Animated icon background effects */
@@ -310,6 +339,9 @@
     .professional-focus .service-item[data-theme="engineering"] h3 {
       background: linear-gradient(135deg, #f59e0b, #ef4444); -webkit-background-clip: text; background-clip: text; color: transparent;
     }
+    .professional-focus .service-item[data-theme="software"] h3 {
+      background: linear-gradient(135deg, #3b82f6, #06b6d4); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
     
     /* Enhanced list styling with star bullets */
     .professional-focus .service-item ul {
@@ -326,6 +358,7 @@
     .professional-focus .service-item[data-theme="science"] ul li::before { color: #8b5cf6; }
     .professional-focus .service-item[data-theme="analytics"] ul li::before { color: #06b6d4; }
     .professional-focus .service-item[data-theme="engineering"] ul li::before { color: #f59e0b; }
+    .professional-focus .service-item[data-theme="software"] ul li::before { color: #3b82f6; }
     
     .professional-focus .service-item:hover ul li::before {
       transform: scale(1.2) rotate(20deg);
@@ -619,7 +652,7 @@
           <div class="col-lg-8 mx-auto">
             <div class="card">
               <div class="card-body">
-                <h3 class="card-title mb-4">🛠️ Technical Stack</h3>
+                <h3 class="card-title mb-4">🛠️ Technical Stack in this website</h3>
                 
                 <!-- React Animated Intro Mount -->
                 <div id="react-intro" class="react-intro-wrap mb-4" aria-label="Animated introduction"></div>
@@ -1046,7 +1079,7 @@
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-        <div class="row gy-4">
+        <div class="row gy-4 justify-content-center">
 
           <div class="col-lg-4 col-md-6">
             <div class="service-item position-relative" data-theme="science">
@@ -1108,6 +1141,30 @@
                     <li>Database Design</li>
                     <li>Data Integration</li>
                     <li>Performance Optimization</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6">
+            <div class="service-item position-relative" data-theme="software">
+              <div class="card-content">
+                <div class="icon">
+                  <i class="bi bi-code-slash"></i>
+                </div>
+                <h3>Software Engineering</h3>
+                <div class="card-description">
+                  <p>Building end‑to‑end web solutions and integrations across front‑end and back‑end stacks, image processing workflows, and large language model integrations.</p>
+                </div>
+                <div class="card-skills">
+                  <ul>
+                    <li>HTML & CSS</li>
+                    <li>JavaScript (Vanilla) & React.js</li>
+                    <li>Node.js Backend</li>
+                    <li>Flask Backend (Python)</li>
+                    <li>Image Processing</li>
+                    <li>Integrating LLMs</li>
                   </ul>
                 </div>
               </div>
