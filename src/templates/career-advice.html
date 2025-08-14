@@ -669,13 +669,40 @@
       });
     }
 
-    function getPosts() {
-      return JSON.parse(localStorage.getItem('careerAdvicePosts') || '[]');
+    // ---------------- Server-backed storage helpers ----------------
+    async function fetchPosts() {
+      try {
+        const res = await fetch('/api/career-posts', { cache: 'no-store' });
+        const data = await res.json();
+        if (Array.isArray(data)) return data;
+        return [];
+      } catch (_) {
+        return [];
+      }
     }
-    
-    function savePosts(posts) {
-      localStorage.setItem('careerAdvicePosts', JSON.stringify(posts));
+
+    async function createPostOnServer(post) {
+      await fetch('/api/career-posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(post)
+      });
     }
+
+    async function updatePostOnServer(id, payload) {
+      await fetch(`/api/career-posts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    async function deletePostOnServer(id) {
+      await fetch(`/api/career-posts/${id}`, { method: 'DELETE' });
+    }
+
+    // In-memory cache of posts for the current page session
+    let postsCache = [];
     
     function previewImages(inputId, previewId) {
       const input = document.getElementById(inputId);
@@ -768,7 +795,7 @@
     }
 
     function renderPosts() {
-      const posts = getPosts();
+      const posts = postsCache;
       const list = document.getElementById('posts-list');
       if (posts.length === 0) {
         list.innerHTML = '<p class="text-muted">No posts yet. Add your first career advice post!</p>';
@@ -807,7 +834,7 @@
         }
         
         return `
-          <div class="card mb-3 post-card" data-post-index="${idx}">
+          <div class="card mb-3 post-card" data-post-index="${idx}" data-post-id="${post.id}">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-start mb-2">
                 <h5 class="card-title mb-0">${post.title} <small class="text-muted">(${format})</small></h5>
@@ -870,22 +897,13 @@
       const title = document.getElementById('post-title').value;
       const content = document.getElementById('post-content').value;
       const format = document.querySelector('input[name="post-format"]:checked').value;
-      const now = new Date().toISOString();
       
       // Process images
       const imageInput = document.getElementById('post-images');
       const images = await processImages(imageInput);
       
-      const posts = getPosts();
-      posts.unshift({ 
-        title, 
-        content, 
-        format, 
-        images,
-        createdAt: now,
-        updatedAt: now
-      });
-      savePosts(posts);
+      await createPostOnServer({ title, content, format, images });
+      postsCache = await fetchPosts();
       renderPosts();
       this.reset();
       document.getElementById('post-preview').innerHTML = '';
@@ -899,8 +917,7 @@
     };
     
     function editPost(idx) {
-      const posts = getPosts();
-      const post = posts[idx];
+      const post = postsCache[idx];
       currentEditIndex = idx;
       
       document.getElementById('edit-post-title').value = post.title;
@@ -924,30 +941,24 @@
     
     document.getElementById('edit-post-form').onsubmit = async function(e) {
       e.preventDefault();
-      const idx = document.getElementById('edit-post-id').value;
-      const posts = getPosts();
-      const now = new Date().toISOString();
+      const idx = Number(document.getElementById('edit-post-id').value);
+      const postId = postsCache[idx].id;
       
       // Process new images
       const imageInput = document.getElementById('edit-post-images');
       const newImages = await processImages(imageInput);
       
       // Combine existing images with new ones
-      const existingImages = posts[idx].images || [];
+      const existingImages = postsCache[idx].images || [];
       const allImages = [...existingImages, ...newImages];
       
-      posts[idx].title = document.getElementById('edit-post-title').value;
-      posts[idx].content = document.getElementById('edit-post-content').value;
-      posts[idx].format = document.querySelector('input[name="edit-post-format"]:checked').value;
-      posts[idx].images = allImages;
-      posts[idx].updatedAt = now;
-      
-      // Set createdAt if it doesn't exist (for backwards compatibility)
-      if (!posts[idx].createdAt) {
-        posts[idx].createdAt = now;
-      }
-      
-      savePosts(posts);
+      await updatePostOnServer(postId, {
+        title: document.getElementById('edit-post-title').value,
+        content: document.getElementById('edit-post-content').value,
+        format: document.querySelector('input[name="edit-post-format"]:checked').value,
+        images: allImages
+      });
+      postsCache = await fetchPosts();
       renderPosts();
       document.getElementById('edit-post-section').style.display = 'none';
       currentEditIndex = null;
@@ -962,16 +973,20 @@
       document.getElementById('edit-post-section').style.display = 'none';
     };
     
-    function deletePost(idx) {
+    async function deletePost(idx) {
       if (confirm('Delete this post?')) {
-        const posts = getPosts();
-        posts.splice(idx, 1);
-        savePosts(posts);
+        const id = postsCache[idx].id;
+        await deletePostOnServer(id);
+        postsCache = await fetchPosts();
         renderPosts();
       }
     }
     
-    renderPosts();
+    // Initial load
+    (async function() {
+      postsCache = await fetchPosts();
+      renderPosts();
+    })();
     
     // Initialize enhancements after initial render
     setTimeout(() => {

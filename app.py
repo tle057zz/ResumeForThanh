@@ -63,6 +63,19 @@ def create_db():
             last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+
+    # Career advice posts table for server-backed persistence
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS career_posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            format TEXT DEFAULT 'plain',
+            images TEXT DEFAULT '[]',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
     
     # Initialize page views if empty
     cursor.execute('SELECT COUNT(*) FROM page_views')
@@ -366,6 +379,83 @@ def record_visit_api():
     page_name = data.get('page', 'unknown')
     record_visit(page_name)
     return jsonify({'success': True, 'message': 'Visit recorded'})
+
+# -------------------- Career Advice Posts API --------------------
+@app.route('/api/career-posts', methods=['GET', 'POST'])
+def career_posts_api():
+    conn = sqlite3.connect('database/visitor_count.db')
+    cursor = conn.cursor()
+    if request.method == 'GET':
+        cursor.execute('''
+            SELECT id, title, content, format, images, created_at, updated_at
+            FROM career_posts
+            ORDER BY datetime(created_at) DESC, id DESC
+        ''')
+        rows = cursor.fetchall()
+        conn.close()
+        posts = [
+            {
+                'id': r[0],
+                'title': r[1],
+                'content': r[2],
+                'format': r[3] or 'plain',
+                'images': json.loads(r[4] or '[]'),
+                'createdAt': r[5],
+                'updatedAt': r[6],
+            }
+            for r in rows
+        ]
+        return jsonify(posts)
+    else:
+        data = request.get_json() or {}
+        title = (data.get('title') or '').strip()
+        content = (data.get('content') or '').strip()
+        fmt = (data.get('format') or 'plain').strip()
+        images = data.get('images') or []
+        now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        cursor.execute(
+            'INSERT INTO career_posts (title, content, format, images, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
+            (title, content, fmt, json.dumps(images), now_iso, now_iso)
+        )
+        post_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+        return jsonify({'success': True, 'id': post_id})
+
+
+@app.route('/api/career-posts/<int:post_id>', methods=['PUT', 'DELETE'])
+def career_post_update_delete(post_id: int):
+    conn = sqlite3.connect('database/visitor_count.db')
+    cursor = conn.cursor()
+    if request.method == 'PUT':
+        data = request.get_json() or {}
+        fields = []
+        values = []
+        if 'title' in data:
+            fields.append('title = ?')
+            values.append((data.get('title') or '').strip())
+        if 'content' in data:
+            fields.append('content = ?')
+            values.append((data.get('content') or '').strip())
+        if 'format' in data:
+            fields.append('format = ?')
+            values.append((data.get('format') or 'plain').strip())
+        if 'images' in data:
+            fields.append('images = ?')
+            values.append(json.dumps(data.get('images') or []))
+        # Always update timestamp
+        fields.append('updated_at = ?')
+        values.append(datetime.datetime.now(datetime.timezone.utc).isoformat())
+        values.append(post_id)
+        cursor.execute(f'UPDATE career_posts SET {", ".join(fields)} WHERE id = ?', values)
+        conn.commit()
+        conn.close()
+        return jsonify({'success': True})
+    else:
+        cursor.execute('DELETE FROM career_posts WHERE id = ?', (post_id,))
+        conn.commit()
+        conn.close()
+        return jsonify({'success': True})
 
 @app.route('/send_email', methods=['POST'])
 def send_email():
