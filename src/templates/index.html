@@ -139,6 +139,13 @@
     }
     @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
     
+    /* Slow animation for basic intro background */
+    @keyframes slowPulse {
+      0% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.05); }
+      100% { opacity: 0.2; transform: scale(1); }
+    }
+    
     .focus-pills { display: flex; justify-content: center; gap: 12px; margin: 20px 0; flex-wrap: wrap; }
     .focus-pill {
       padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
@@ -641,8 +648,11 @@
   <main class="main">
 
     <!-- Basic Introductions Section -->
-    <section id="basic-intro" class="basic-intro section">
-      <div class="container" data-aos="fade-up">
+    <section id="basic-intro" class="basic-intro section" style="position: relative; overflow: hidden;">
+      <div class="intro-bg-gif" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.3;">
+        <img src="img/intro.gif" alt="Background Animation" style="width: 100%; height: 100%; object-fit: cover; object-position: center; animation: slowPulse 15s ease-in-out infinite alternate;" loading="lazy" decoding="async">
+      </div>
+      <div class="container" data-aos="fade-up" style="position: relative; z-index: 1;">
         <div class="section-title">
           <h2>Basic Introductions</h2>
           <p>Welcome to my personal portfolio website! Here's some technical information about this site.</p>
