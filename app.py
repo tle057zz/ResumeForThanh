@@ -310,8 +310,8 @@ def record_visit(page_name):
     return visitor_info
 
 URL = "https://www.thanhle.it.com/"
-
-def ping():
+URL2 = "https://modelbasedapp.onrender.com/"
+def ping(URL):
     try:
         response = requests.get(URL, timeout=10)
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -326,7 +326,8 @@ def ping():
 def run_ping_cron():
     """Run ping function every 15 minutes in a separate thread"""
     while True:
-        ping()
+        ping(URL)
+        ping(URL2)
         time.sleep(15 * 60)  # 15 minutes in seconds
 
 
@@ -346,17 +347,17 @@ def career_advice():
     record_visit('career-advice')
     return render_template('career-advice.html')
 
-@app.route('/traffic.html')
+@app.route('/traffic_logs')
 def traffic():
     record_visit('traffic')
     return render_template('traffic.html')
 
-@app.route('/explore.html')
+@app.route('/exploration')
 def explore():
     record_visit('explore')
     return render_template('explore.html')
 
-@app.route('/portfolio-details.html')
+@app.route('/portfolio-details')
 def portfolio_details():
     return render_template('portfolio-details.html')
 

@@ -17,3 +17,11 @@ pytz==2024.1
 # Uncomment for development
 # pytest==7.4.3
 # flask-testing==0.8.1 
+
+# LLM Inference
+torch==2.8.0
+transformers==4.43.3
+accelerate==0.33.0
+safetensors==0.4.3
+sentencepiece==0.2.0
+huggingface-hub==0.24.6

@@ -8,6 +8,8 @@ database/
 .env
 .env.local
 .env.production
+.env.development
+.env.test
 
 # Python cache
 __pycache__/
@@ -18,6 +20,7 @@ __pycache__/
 env/
 venv/
 .venv/
+.venv312/
 
 # IDE files
 .vscode/
@@ -42,3 +45,30 @@ logs/
 # Temporary files
 tmp/
 temp/
+
+# Python build/test artifacts
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python version managers
+.python-version
+
+# Caches and local ML assets
+.cache/
+cache/
+hf_cache/
+models/
+data/
+
+# Flask instance folder (runtime config)
+instance/
