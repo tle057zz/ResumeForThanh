@@ -347,17 +347,17 @@ def career_advice():
     record_visit('career-advice')
     return render_template('career-advice.html')
 
-@app.route('/traffic_logs')
+@app.route('/traffic.html')
 def traffic():
     record_visit('traffic')
     return render_template('traffic.html')
 
-@app.route('/exploration')
+@app.route('/explore.html')
 def explore():
     record_visit('explore')
     return render_template('explore.html')
 
-@app.route('/portfolio-details')
+@app.route('/portfolio-details.html')
 def portfolio_details():
     return render_template('portfolio-details.html')
 
