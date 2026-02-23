@@ -310,7 +310,8 @@ def record_visit(page_name):
     return visitor_info
 
 URL = "https://www.thanhle.it.com/"
-URL2 = "https://modelbasedapp.onrender.com/"
+# URL2 = "https://modelbasedapp.onrender.com/"
+URL2 = ""
 def ping(URL):
     try:
         response = requests.get(URL, timeout=10)
@@ -328,7 +329,7 @@ def run_ping_cron():
     while True:
         ping(URL)
         ping(URL2)
-        time.sleep(15 * 60)  # 15 minutes in seconds
+        time.sleep(12 * 60)  # 15 minutes in seconds
 
 
 
