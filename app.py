@@ -310,8 +310,8 @@ def record_visit(page_name):
     return visitor_info
 
 URL = "https://www.thanhle.it.com/"
-# URL2 = "https://modelbasedapp.onrender.com/"
-URL2 = ""
+URL2 = "https://cs15-multimodal-fake-news-analysis.onrender.com"
+
 def ping(URL):
     try:
         response = requests.get(URL, timeout=10)
