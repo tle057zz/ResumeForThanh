@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import os
 from typing import List, Dict, Any, Tuple, Set
 
 import pandas as pd
@@ -11,10 +12,7 @@ from dash import dash_table
 
 # ---------- Constants and data paths ----------
 BASE_DIR = Path(__file__).resolve().parent
-RAW_DATA_CANDIDATES = [
-    BASE_DIR / "Teen_Mental_Health_Dataset.csv",
-    BASE_DIR.parent / "Final_Project" / "Teen_Mental_Health_Dataset.csv",
-]
+RAW_DATA_CANDIDATES = [BASE_DIR / "Teen_Mental_Health_Dataset.csv"]
 CHART_DECIMAL_FORMAT = ".5f"
 
 AGE_ORDER = ["Early Teen", "Middle Teen", "Late Teen"]
@@ -35,11 +33,16 @@ REQUIRED_DATA_FILES = [
 
 def resolve_data_dir() -> Path:
     """Find a directory that contains all required processed CSV files."""
+    # 1) Allow override via environment variable
+    env_dir = os.environ.get("MENTAL_HEALTH_DATA_DIR", "").strip()
+    if env_dir:
+        p = Path(env_dir)
+        if all((p / f).exists() for f in REQUIRED_DATA_FILES):
+            return p
+    # 2) Common in-repo locations
     candidates = [
         BASE_DIR / "processed",
-        BASE_DIR.parent / "Final_Project" / "processed",
         Path.cwd() / "projects" / "Mental_Health" / "processed",
-        Path.cwd() / "projects" / "Final_Project" / "processed",
     ]
     for cand in candidates:
         if all((cand / f).exists() for f in REQUIRED_DATA_FILES):
@@ -214,7 +217,6 @@ def bar(
             color=color if color in df.columns else None,
             title=title,
             barmode=barmode,
-            text_auto=CHART_DECIMAL_FORMAT,
             custom_data=custom_data_fields,
             category_orders=category_orders or {},
         )
@@ -225,7 +227,8 @@ def bar(
             fig.add_bar(x=df[x], y=df[y], name=title)
         fig.update_layout(title=title, xaxis_title=x, yaxis_title=y)
     fig.update_layout(legend_title_text=color if color in df.columns else None, yaxis_title=y, xaxis_title=x)
-    fig.update_traces(texttemplate=f"%{{y:{CHART_DECIMAL_FORMAT}}}")
+    # Keep hover concise
+    fig.update_traces(hovertemplate=f"{x}: %{{x}}<br>{y}: %{{y:{CHART_DECIMAL_FORMAT}}}<extra></extra>")
     return fig
 
 
@@ -260,7 +263,7 @@ def register_dash(server) -> None:
         df = load_data(data_dir)
     except Exception as e:
         # Show a helpful inline error page instead of crashing Flask
-        err = html.Div(
+        app.layout = html.Div(
             style={"padding": "16px"},
             children=[
                 html.H3("Mental Health dashboard data not found"),
@@ -269,9 +272,20 @@ def register_dash(server) -> None:
                     f"Required files: {', '.join(REQUIRED_DATA_FILES)}."
                 ),
                 html.Pre(str(e)),
+                html.P("Tip: set env var MENTAL_HEALTH_DATA_DIR to the absolute path of your processed folder."),
             ],
         )
-        app.layout = err
+        return
+    # If dataframe loaded but empty, render a friendly message
+    if df is None or len(df) == 0:
+        app.layout = html.Div(
+            style={"padding": "16px"},
+            children=[
+                html.H3("No data loaded"),
+                html.P(f"Processed files were found in {data_dir}, but no rows were loaded."),
+                html.P("Verify the CSV contents on the server and file permissions."),
+            ],
+        )
         return
 
     # Shared filters
@@ -399,7 +413,7 @@ def register_dash(server) -> None:
                         {"name": "AverageAnxietyLevel", "id": "AverageAnxietyLevel", "type": "numeric", "format": {"specifier": ".2f"}},
                     ],
                     data=[],
-                    page_size=10,
+                    page_size=5,
                     style_table={"overflowX": "auto"},
                     style_cell={"textAlign": "left"},
                     row_selectable="multi",
@@ -420,7 +434,7 @@ def register_dash(server) -> None:
                         {"name": "AverageSocialMediaHours", "id": "AverageSocialMediaHours", "type": "numeric", "format": {"specifier": ".2f"}},
                     ],
                     data=[],
-                    page_size=10,
+                    page_size=5,
                     style_table={"overflowX": "auto"},
                     style_cell={"textAlign": "left"},
                     row_selectable="multi",
@@ -477,7 +491,7 @@ def register_dash(server) -> None:
                         {"name": "AverageSleepHours", "id": "AverageSleepHours", "type": "numeric", "format": {"specifier": ".2f"}},
                     ],
                     data=[],
-                    page_size=10,
+                    page_size=5,
                     style_table={"overflowX": "auto"},
                     style_cell={"textAlign": "left"},
                     row_selectable="multi",

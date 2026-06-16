@@ -13,6 +13,11 @@ app = Flask(__name__,
             template_folder='src/templates',
             static_folder='src/static')
 
+# Project-root anchored paths (works locally and in production)
+from pathlib import Path
+ROOT_DIR = Path(app.root_path)
+DB_PATH = str(ROOT_DIR / "database" / "visitor_count.db")
+
 # Enable gzip/Brotli compression for faster first loads
 Compress(app)
 
@@ -34,7 +39,7 @@ from urllib.parse import urljoin
 
 # Database functions
 def create_db():
-    conn = sqlite3.connect('database/visitor_count.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     # Check if visitors table exists and has the new columns
@@ -119,7 +124,7 @@ def get_location_from_ip(ip):
         return 'Unknown'
 
 def get_visitor_stats():
-    conn = sqlite3.connect('database/visitor_count.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     # Total visitors (all types, excluding traffic page)
@@ -285,7 +290,7 @@ def record_visit(page_name):
     # Detect visitor type
     visitor_info = detect_visitor_type()
     
-    conn = sqlite3.connect('database/visitor_count.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     # Get current UTC time for consistent timezone handling
@@ -407,7 +412,7 @@ def starter_page():
 @app.route('/<path:path>')
 def static_proxy(path):
     # Serve static files with aggressive caching headers in production
-    response = make_response(send_from_directory('src/static', path))
+    response = make_response(send_from_directory(app.static_folder, path))
     # Cache static assets for 30 days; fingerprinted files will benefit most
     response.headers['Cache-Control'] = 'public, max-age=2592000, immutable'
     return response
@@ -448,12 +453,9 @@ def mental_health_download():
     """Serve the original Teen_Mental_Health_Dataset.csv if available."""
     record_visit('mental-health-download')
     filename = 'Teen_Mental_Health_Dataset.csv'
-    mental_dir = os.path.join('projects', 'Mental_Health')
-    final_dir = os.path.join('projects', 'Final_Project')
+    mental_dir = os.path.join(app.root_path, 'projects', 'Mental_Health')
     if os.path.exists(os.path.join(mental_dir, filename)):
         return send_from_directory(mental_dir, filename, as_attachment=True, mimetype='text/csv')
-    if os.path.exists(os.path.join(final_dir, filename)):
-        return send_from_directory(final_dir, filename, as_attachment=True, mimetype='text/csv')
     return make_response(("Original CSV file not found.", 404))
 
 # Register Dash app at import time so it works under gunicorn/production
@@ -468,7 +470,7 @@ except Exception as e:
 # -------------------- Career Advice Posts API --------------------
 @app.route('/api/career-posts', methods=['GET', 'POST'])
 def career_posts_api():
-    conn = sqlite3.connect('database/visitor_count.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     if request.method == 'GET':
         cursor.execute('''
@@ -510,7 +512,7 @@ def career_posts_api():
 
 @app.route('/api/career-posts/<int:post_id>', methods=['PUT', 'DELETE'])
 def career_post_update_delete(post_id: int):
-    conn = sqlite3.connect('database/visitor_count.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     if request.method == 'PUT':
         data = request.get_json() or {}
