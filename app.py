@@ -368,8 +368,9 @@ def ensure_streamlit_running():
 
 @app.route('/')
 def index():
-    record_visit('home')
-    return render_template('index.html')
+    # Direct visitors to the Resume section by default
+    record_visit('resume')
+    return redirect('/index.html#resume', code=302)
 
 @app.route('/index.html')
 def index_html():
