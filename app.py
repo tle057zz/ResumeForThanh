@@ -30,6 +30,7 @@ import requests
 import time
 import threading
 import subprocess
+from urllib.parse import urljoin
 
 # Database functions
 def create_db():
@@ -335,8 +336,13 @@ def run_ping_cron():
 
 STREAMLIT_PROCESS = None
 
+STREAMLIT_PUBLIC_URL = os.environ.get("STREAMLIT_PUBLIC_URL", "").strip()
+
 def ensure_streamlit_running():
     """Start the Streamlit app for Mental Health project if not already running."""
+    # If an external URL is configured, we don't start a local process
+    if STREAMLIT_PUBLIC_URL:
+        return True
     global STREAMLIT_PROCESS
     # Quick health check
     try:
@@ -420,11 +426,34 @@ def record_visit_api():
 @app.route('/mental-health')
 def mental_health():
     record_visit('mental-health')
-    try:
-        ensure_streamlit_running()
-    except Exception:
-        pass
-    return redirect('http://localhost:8501', code=302)
+    # Prefer Dash mounted app within Flask
+    return redirect('/mental-health/', code=302)
+
+@app.route('/mental-health/embed')
+def mental_health_embed():
+    record_visit('mental-health-embed')
+    # Resolve target URL for iframe
+    target = STREAMLIT_PUBLIC_URL or 'http://localhost:8501'
+    # Best effort start local if not using external
+    if not STREAMLIT_PUBLIC_URL:
+        try:
+            ensure_streamlit_running()
+        except Exception:
+            pass
+    return render_template('mental-health-embed.html', target_url=target)
+
+@app.route('/mental-health/download')
+def mental_health_download():
+    """Serve the original Teen_Mental_Health_Dataset.csv if available."""
+    record_visit('mental-health-download')
+    filename = 'Teen_Mental_Health_Dataset.csv'
+    mental_dir = os.path.join('projects', 'Mental_Health')
+    final_dir = os.path.join('projects', 'Final_Project')
+    if os.path.exists(os.path.join(mental_dir, filename)):
+        return send_from_directory(mental_dir, filename, as_attachment=True, mimetype='text/csv')
+    if os.path.exists(os.path.join(final_dir, filename)):
+        return send_from_directory(final_dir, filename, as_attachment=True, mimetype='text/csv')
+    return make_response(("Original CSV file not found.", 404))
 
 # -------------------- Career Advice Posts API --------------------
 @app.route('/api/career-posts', methods=['GET', 'POST'])
@@ -539,8 +568,13 @@ if __name__ == '__main__':
     ping_thread.start()
     print("Ping cron job started in background thread")
     
-    # Optionally pre-start the Streamlit app in the background
-    threading.Thread(target=ensure_streamlit_running, daemon=True).start()
+    # Register the Dash app (Flask-mounted) before serving
+    try:
+        from projects.Mental_Health.dash_app import register_dash as register_mental_health_dash
+        register_mental_health_dash(app)
+        print("Dash app registered at /mental-health/")
+    except Exception as e:
+        print(f"Warning: Dash app not registered: {e}")
     
     # Start the Flask app on port 8000 to avoid macOS AirPlay conflict
     app.run(debug=True, port=8000)

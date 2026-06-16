@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mental Health Analytics (Embedded)</title>
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    .app-frame { width: 100%; height: 100vh; border: 0; }
+    .header { padding: 10px 16px; border-bottom: 1px solid rgba(0,0,0,.08); }
+  </style>
+</head>
+<body>
+  <div class="header d-flex align-items-center gap-2">
+    <a href="/" class="btn btn-sm btn-outline-secondary">← Back</a>
+    <strong>Mental Health Analytics</strong>
+    <a href="{{ target_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-primary ms-auto">Open in new tab</a>
+  </div>
+  <iframe
+    class="app-frame"
+    src="{{ target_url }}"
+    title="Teen Mental Health Analytics"
+    allow="fullscreen"
+    referrerpolicy="no-referrer-when-downgrade"
+  ></iframe>
+  <noscript>
+    <div class="container mt-3">
+      <div class="alert alert-warning">
+        JavaScript is required to display the embedded dashboard. You can open it directly here:
+        <a href="{{ target_url }}" target="_blank" rel="noopener">{{ target_url }}</a>
+      </div>
+    </div>
+  </noscript>
+</body>
+</html>
+
