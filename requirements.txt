@@ -13,6 +13,11 @@ requests==2.31.0
 # Timezone Support
 pytz==2024.1
 
+# Streamlit Analytics App
+streamlit
+pandas
+plotly
+
 # Development and Testing (optional)
 # Uncomment for development
 # pytest==7.4.3

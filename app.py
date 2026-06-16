@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, render_template, make_response
+from flask import Flask, request, jsonify, send_from_directory, render_template, make_response, redirect
 from flask_compress import Compress
 from flask_mail import Mail, Message
 import sqlite3
@@ -29,6 +29,7 @@ mail = Mail(app)
 import requests
 import time
 import threading
+import subprocess
 
 # Database functions
 def create_db():
@@ -332,6 +333,32 @@ def run_ping_cron():
         time.sleep(12 * 60)  # 15 minutes in seconds
 
 
+STREAMLIT_PROCESS = None
+
+def ensure_streamlit_running():
+    """Start the Streamlit app for Mental Health project if not already running."""
+    global STREAMLIT_PROCESS
+    # Quick health check
+    try:
+        resp = requests.get("http://localhost:8501/healthz", timeout=1.5)
+        if resp.status_code == 200:
+            return True
+    except Exception:
+        pass
+    # If a process exists and is still running, nothing to do
+    if STREAMLIT_PROCESS is not None and STREAMLIT_PROCESS.poll() is None:
+        return True
+    # Launch Streamlit app in background
+    try:
+        STREAMLIT_PROCESS = subprocess.Popen(
+            ["python", "-m", "streamlit", "run", "projects/Mental_Health/streamlit_app.py",
+             "--server.port", "8501", "--server.headless", "true", "--browser.gatherUsageStats", "false"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        return True
+    except Exception:
+        return False
+
 
 @app.route('/')
 def index():
@@ -388,6 +415,16 @@ def record_visit_api():
     page_name = data.get('page', 'unknown')
     record_visit(page_name)
     return jsonify({'success': True, 'message': 'Visit recorded'})
+
+# Route to open the Streamlit Mental Health dashboard
+@app.route('/mental-health')
+def mental_health():
+    record_visit('mental-health')
+    try:
+        ensure_streamlit_running()
+    except Exception:
+        pass
+    return redirect('http://localhost:8501', code=302)
 
 # -------------------- Career Advice Posts API --------------------
 @app.route('/api/career-posts', methods=['GET', 'POST'])
@@ -501,6 +538,9 @@ if __name__ == '__main__':
     ping_thread = threading.Thread(target=run_ping_cron, daemon=False)
     ping_thread.start()
     print("Ping cron job started in background thread")
+    
+    # Optionally pre-start the Streamlit app in the background
+    threading.Thread(target=ensure_streamlit_running, daemon=True).start()
     
     # Start the Flask app on port 8000 to avoid macOS AirPlay conflict
     app.run(debug=True, port=8000)
