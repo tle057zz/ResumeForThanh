@@ -993,8 +993,9 @@
       <div class="container section-title" data-aos="fade-up">
         <h2>Portfolio</h2>
         <p>Showcasing my projects in data science, analytics, and engineering, demonstrating practical applications of technical skills and problem-solving abilities.</p>
-        <h1>in progress! something would be added later! finializing to match with current cv</h1>
-        <h1>scroll down for more useful information</h1>
+        <div class="alert alert-warning" role="alert" style="margin-top: 10px;">
+          This portfolio is <strong>actively being updated</strong>. A few projects are already live and more will be added regularly as I finalize artifacts to match my latest CV.
+        </div>
         <div id="portfolio-react-banner"></div>
       </div><!-- End Section Title -->
 
@@ -1520,8 +1521,8 @@
         return e('div', { className: 'pf-banner', ref: wrap }, [
           e('div', { key: 'accent', className: 'pf-accent' }),
           e('div', { key: 'content' }, [
-            e('h3', { key: 't', className: 'pf-title', ref: title }, 'Portfolio — Coming Soon'),
-            e('p', { key: 's', className: 'pf-sub', ref: sub }, 'Work in progress. Scroll to explore other sections while this area is being finalized.'),
+            e('h3', { key: 't', className: 'pf-title', ref: title }, 'Portfolio — Actively Updating'),
+            e('p', { key: 's', className: 'pf-sub', ref: sub }, 'Some projects are published; more will be added regularly. Check back soon for updates.'),
             e('div', { key: 'tags', className: 'pf-tags' }, tags.map((t) => e('span', { key: t, className: 'pf-tag', ref: addTag }, t)))
           ])
         ]);

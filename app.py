@@ -456,6 +456,15 @@ def mental_health_download():
         return send_from_directory(final_dir, filename, as_attachment=True, mimetype='text/csv')
     return make_response(("Original CSV file not found.", 404))
 
+# Register Dash app at import time so it works under gunicorn/production
+try:
+    from projects.Mental_Health.dash_app import register_dash as register_mental_health_dash
+    register_mental_health_dash(app)
+    print("Dash app registered at /mental-health/")
+except Exception as e:
+    # Don't crash the server if Dash fails; routes may 404 until data is configured
+    print(f"Warning: Dash app not registered at import time: {e}")
+
 # -------------------- Career Advice Posts API --------------------
 @app.route('/api/career-posts', methods=['GET', 'POST'])
 def career_posts_api():
@@ -568,14 +577,6 @@ if __name__ == '__main__':
     ping_thread = threading.Thread(target=run_ping_cron, daemon=False)
     ping_thread.start()
     print("Ping cron job started in background thread")
-    
-    # Register the Dash app (Flask-mounted) before serving
-    try:
-        from projects.Mental_Health.dash_app import register_dash as register_mental_health_dash
-        register_mental_health_dash(app)
-        print("Dash app registered at /mental-health/")
-    except Exception as e:
-        print(f"Warning: Dash app not registered: {e}")
     
     # Start the Flask app on port 8000 to avoid macOS AirPlay conflict
     app.run(debug=True, port=8000)
