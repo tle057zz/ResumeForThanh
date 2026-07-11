@@ -21,13 +21,13 @@ DB_PATH = str(ROOT_DIR / "database" / "visitor_count.db")
 # Enable gzip/Brotli compression for faster first loads
 Compress(app)
 
-# Flask-Mail configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'lenhothanh.nsl@gmail.com'
-app.config['MAIL_PASSWORD'] = 'zqfniibwzgvziibb'
-app.config['MAIL_DEFAULT_SENDER'] = 'lenhothanh.nsl@gmail.com'
+# Flask-Mail configuration (use environment variables; no secrets in code)
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', '587'))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'true').lower() == 'true'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER') or os.getenv('MAIL_USERNAME')
 
 mail = Mail(app)
 
