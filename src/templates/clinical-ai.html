@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clinical AI Assistance — Demo</title>
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+  <style>
+    body { background: #0b1220; color: #e5e7eb; }
+    .wrap { max-width: 960px; margin: 40px auto; padding: 20px; background: rgba(255,255,255,0.06); border:1px solid rgba(148,163,184,0.2); border-radius: 16px; }
+    .video { width: 100%; border-radius: 12px; border:1px solid rgba(148,163,184,0.2); background:#000; }
+    .fallback {
+      width: 100%; border-radius: 12px; overflow: hidden; border:1px solid rgba(148,163,184,0.2);
+      position: relative; background:#000;
+    }
+    .fallback img { width: 100%; height: auto; display: block; opacity: 0.9; }
+    .fallback .overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(180deg, rgba(2,6,23,.25), rgba(2,6,23,.55));
+    }
+    .fallback .btn { box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+  </style>
+  <meta name="description" content="Clinical AI Assistance System demo video">
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="h3 mb-3">Clinical AI Assistance — Demo</h1>
+    <p class="mb-3">Short walkthrough of the 8‑stage document analysis pipeline and standardized outputs.</p>
+    <video id="demoVideo" class="video" controls muted playsinline preload="metadata" poster="img/masonry-portfolio/masonry-portfolio-1.jpg">
+      <!-- Muted MP4 preferred -->
+      <source src="videos/video_muted.mp4" type="video/mp4">
+      <!-- Fallbacks if muted file is unavailable -->
+      <source src="videos/2A2C302C-7577-428A-80EC-824D4F588A55%20Copy.mp4" type="video/mp4">
+      <source src="videos/My%20Movie.mov" type="video/quicktime">
+      Your browser does not support the video tag.
+    </video>
+    <div id="fallback" class="fallback mt-2" style="display:none;">
+      <img src="img/masonry-portfolio/masonry-portfolio-1.jpg" alt="Clinical AI Assistance">
+      <div class="overlay p-3">
+        <div class="text-center">
+          <p class="mb-2">Video preview is unavailable in your browser.</p>
+          <a href="videos/clinical-ai-demo.mp4" class="btn btn-primary btn-sm me-2">Download MP4</a>
+          <a href="https://github.com/tle057zz/5620medai" target="_blank" rel="noopener" class="btn btn-outline-light btn-sm">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3">
+      <a href="/" class="btn btn-outline-light btn-sm">← Back</a>
+      <a href="https://github.com/tle057zz/5620medai" target="_blank" rel="noopener" class="btn btn-primary btn-sm ms-2">GitHub</a>
+    </div>
+  </div>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      const video = document.getElementById('demoVideo');
+      const fb = document.getElementById('fallback');
+      if (!video) return;
+      // If the browser can't play mp4/mov, show fallback image + links
+      const canPlayMp4 = !!video.canPlayType && video.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+      const canPlayMov = !!video.canPlayType && video.canPlayType('video/quicktime');
+      if (!canPlayMp4 && !canPlayMov) {
+        video.style.display = 'none';
+        fb.style.display = '';
+      }
+    })();
+  </script>
+</body>
+</html>
+

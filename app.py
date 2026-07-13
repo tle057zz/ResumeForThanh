@@ -409,6 +409,11 @@ def service_details():
 def starter_page():
     return render_template('starter-page.html')
 
+@app.route('/clinical-ai.html')
+def clinical_ai_page():
+    record_visit('clinical-ai')
+    return render_template('clinical-ai.html')
+
 @app.route('/<path:path>')
 def static_proxy(path):
     # Serve static files with aggressive caching headers in production
