@@ -414,6 +414,13 @@ def clinical_ai_page():
     record_visit('clinical-ai')
     return render_template('clinical-ai.html')
 
+@app.route('/toy-projects/<path:subpath>')
+def serve_toy_projects(subpath: str):
+    """Serve static HTML assets from projects/toy_projects."""
+    record_visit('toy-projects')
+    base_dir = os.path.join(app.root_path, 'projects', 'toy_projects')
+    return send_from_directory(base_dir, subpath)
+
 @app.route('/<path:path>')
 def static_proxy(path):
     # Serve static files with aggressive caching headers in production
