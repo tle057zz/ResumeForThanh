@@ -1,0 +1,5 @@
+"product_id","product_name","units_sold","revenue","cogs","gross_profit","refunded_items","refund_amount","refund_rate"
+1,"The Original Mr. Fuzzy",24226,1211057.74,472164.74,738893.00,1237,61837.63,0.0511
+2,"The Forever Love Bear",5796,347702.04,130352.04,217350.00,129,7738.71,0.0223
+3,"The Birthday Sugar Panda",4985,229260.15,72232.65,157027.50,301,13842.99,0.0604
+4,"The Hudson River Mini bear",5018,150489.82,47620.82,102869.00,64,1919.36,0.0128

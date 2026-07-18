@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maven Fuzzy Factory | Project Report</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5d687a;
+      --line: #d9e1ea;
+      --surface: #ffffff;
+      --canvas: #f5f7fa;
+      --accent: #1264a3;
+      --accent-soft: #e8f2fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    main {
+      width: min(1040px, calc(100% - 40px));
+      margin: 48px auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+
+    header {
+      padding: 48px 56px 42px;
+      background: var(--ink);
+      color: white;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #9ed2ff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 700px;
+      margin-bottom: 14px;
+      font-size: clamp(2rem, 5vw, 3.45rem);
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+    }
+
+    .subtitle {
+      max-width: 700px;
+      margin: 0;
+      color: #d4dfeb;
+      font-size: 1.05rem;
+    }
+
+    .content { padding: 48px 56px 56px; }
+
+    section + section {
+      margin-top: 48px;
+      padding-top: 42px;
+      border-top: 1px solid var(--line);
+    }
+
+    h2 {
+      margin-bottom: 16px;
+      font-size: 1.55rem;
+      letter-spacing: -0.025em;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    p { color: var(--muted); }
+
+    .callout {
+      margin: 24px 0 0;
+      padding: 20px 22px;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-soft);
+      color: #24445e;
+    }
+
+    .goal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .goal {
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .goal p { margin-bottom: 0; }
+
+    .source {
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    a {
+      color: var(--accent);
+      font-weight: 650;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    figure {
+      margin: 26px 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid #edf1f5;
+    }
+
+    figcaption {
+      padding: 10px 4px 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .dashboard-page + .dashboard-page {
+      margin-top: 44px;
+      padding-top: 38px;
+      border-top: 1px solid var(--line);
+    }
+
+    ul {
+      margin: 14px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    li + li { margin-top: 8px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+
+    th, td {
+      padding: 15px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f0f4f8;
+      color: #364152;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    td { color: var(--muted); }
+    td:first-child {
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 700;
+    }
+
+    footer {
+      padding: 20px 56px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 700px) {
+      main { width: 100%; margin: 0; border: 0; }
+      header, .content, footer { padding-left: 24px; padding-right: 24px; }
+      .goal-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">SQL + Power BI Analytics Project</p>
+      <h1>Maven Fuzzy Factory E-Commerce Performance</h1>
+      <p class="subtitle">A marketing, conversion, product, and landing-page performance analysis for an online toy retailer.</p>
+    </header>
+
+    <div class="content">
+      <section>
+        <h2>Project Overview</h2>
+        <p>
+          This project analyzes the end-to-end performance of Maven Fuzzy Factory, an online retailer selling
+          teddy bear products. Raw e-commerce data was loaded into PostgreSQL, validated, and transformed into
+          analytics views. The resulting data was exported for an interactive Power BI dashboard.
+        </p>
+        <p>
+          The dashboard is organised into four reporting areas: executive performance, marketing performance,
+          product and refund performance, and landing-page performance. Together, these views connect website
+          traffic and acquisition activity to orders, revenue, gross profit, refunds, and conversion outcomes.
+        </p>
+        <aside class="callout">
+          <strong>Project workflow:</strong> CSV source files → PostgreSQL raw tables → validation and analytics views
+          → exported reporting datasets → Power BI dashboard.
+        </aside>
+      </section>
+
+      <section>
+        <h2>Business Objective</h2>
+        <p>
+          The objective is to give Maven Fuzzy Factory a clear, evidence-based view of how visitors move from
+          acquisition channels and landing pages to orders and revenue, while identifying opportunities to improve
+          marketing efficiency, conversion performance, product profitability, and refund outcomes.
+        </p>
+        <div class="goal-grid">
+          <article class="goal">
+            <h3>Measure commercial performance</h3>
+            <p>Track website sessions, orders, revenue, gross profit, average order value, and conversion rate over time.</p>
+          </article>
+          <article class="goal">
+            <h3>Evaluate marketing effectiveness</h3>
+            <p>Compare traffic sources, campaigns, devices, and new versus repeat visitors by volume and conversion outcomes.</p>
+          </article>
+          <article class="goal">
+            <h3>Improve product decisions</h3>
+            <p>Identify the products that drive units sold, revenue, gross profit, and refund risk.</p>
+          </article>
+          <article class="goal">
+            <h3>Optimise the customer journey</h3>
+            <p>Compare landing pages by traffic, bounce rate, conversion rate, order volume, and revenue.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Data Source</h2>
+        <div class="source">
+          <h3>Maven Analytics — Toy Store E-Commerce Database</h3>
+          <p>
+            The project uses the Maven Fuzzy Factory sample dataset provided by Maven Analytics. It is a
+            multi-table e-commerce dataset containing website session and pageview activity, orders, products,
+            order items, and refunds.
+          </p>
+          <p>
+            Source: <a href="https://mavenanalytics.io/data-playground/toy-store-e-commerce-database" target="_blank" rel="noreferrer">Maven Analytics Toy Store E-Commerce Database</a>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Data Description</h2>
+        <p>
+          This is a relational e-commerce dataset that follows the customer journey from website acquisition to
+          post-purchase refunds. It contains <strong>1,735,070 data records</strong> across six business tables
+          (excluding CSV headers). The data can be used to connect marketing activity and on-site behaviour to
+          orders, product sales, margin, and refund outcomes.
+        </p>
+        <p>
+          A visitor starts in <em>website_sessions</em>, may view one or more pages in
+          <em>website_pageviews</em>, and may place an order recorded in <em>orders</em>. That order can contain
+          one or more records in <em>order_items</em>; each item is linked to a product. If an item is refunded,
+          the event is captured in <em>order_item_refunds</em>. This structure enables session-to-order conversion,
+          product profitability, marketing-channel, and landing-page analysis.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Table</th>
+                <th>Records</th>
+                <th>Grain</th>
+                <th>What the table is about</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>website_sessions</td>
+                <td>472,871</td>
+                <td>One row per website visit</td>
+                <td>
+                  The traffic-acquisition table. It records when a visitor started a session, whether the person
+                  had visited before, the marketing source/campaign/content, device type, and referring URL.
+                  <em>website_session_id</em> links each session to pageviews and any resulting order.
+                </td>
+              </tr>
+              <tr>
+                <td>website_pageviews</td>
+                <td>1,188,124</td>
+                <td>One row per page viewed</td>
+                <td>
+                  The on-site browsing table. Each record represents one URL viewed during a session. Ordering
+                  pageviews by timestamp identifies the landing page; counting pageviews per session supports
+                  bounce-rate analysis, where a one-page session is treated as a bounce.
+                </td>
+              </tr>
+              <tr>
+                <td>orders</td>
+                <td>32,313</td>
+                <td>One row per order</td>
+                <td>
+                  The order-level transaction table. It records the buying session and user, primary product,
+                  number of items purchased, total order revenue (<em>price_usd</em>), and cost of goods sold
+                  (<em>cogs_usd</em>). It is used to calculate revenue, gross profit, average order value, and
+                  session-to-order conversion rate.
+                </td>
+              </tr>
+              <tr>
+                <td>order_items</td>
+                <td>40,025</td>
+                <td>One row per item in an order</td>
+                <td>
+                  The line-item sales table. It breaks each order into individual products, including the product
+                  identifier, primary-item flag, selling price, and cost. It enables product-level units sold,
+                  revenue, and gross-profit analysis.
+                </td>
+              </tr>
+              <tr>
+                <td>products</td>
+                <td>4</td>
+                <td>One row per product</td>
+                <td>
+                  The product reference table. It provides the product name and product launch timestamp used to
+                  make order-item analysis understandable and to compare performance across the four toy products.
+                </td>
+              </tr>
+              <tr>
+                <td>order_item_refunds</td>
+                <td>1,731</td>
+                <td>One row per refunded order item</td>
+                <td>
+                  The post-purchase refund table. It records refunded item and order identifiers, the refund date,
+                  and the refund amount. Joining it to order items enables refund count, refund value, and
+                  product-level refund-rate analysis.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>SQL Engineering &amp; Analytics Workflow</h2>
+        <p>
+          PostgreSQL was used as the project’s data-engineering and analytical layer. Instead of analysing
+          disconnected CSV files, the source data was structured into a reusable database, quality-checked, and
+          transformed into reporting-ready views. This made the Power BI layer simpler and ensured that the
+          dashboard measures were based on defined, repeatable SQL logic.
+        </p>
+
+        <h3>Database structure and type design</h3>
+        <p>
+          A dedicated <em>maven_fuzzy_factory</em> database was created with separate <em>raw</em> and
+          <em>analytics</em> schemas. The raw schema contains the six imported source tables; the analytics schema
+          contains reusable summary views for dashboard consumption.
+        </p>
+        <ul>
+          <li>Defined primary keys for all source entities, including sessions, pageviews, orders, order items, products, and refunds.</li>
+          <li>Assigned appropriate PostgreSQL types: <em>INTEGER</em> for identifiers and flags, <em>TIMESTAMP</em> for event times, <em>NUMERIC(10,2)</em> for monetary values, and <em>TEXT</em> for descriptive attributes.</li>
+          <li>Separated raw ingestion data from analytical outputs to preserve source fidelity while supporting clean reporting logic.</li>
+        </ul>
+
+        <h3>Data quality validation</h3>
+        <p>
+          Before building metrics, SQL validation queries confirmed successful ingestion and checked that the
+          relational model was usable for analysis. Validation included row counts, date boundaries, key-field
+          null checks, and relationship checks using <em>LEFT JOIN</em> anti-joins.
+        </p>
+        <ul>
+          <li>Confirmed the expected record volume for each imported table.</li>
+          <li>Checked minimum and maximum <em>created_at</em> timestamps to verify chronological coverage.</li>
+          <li>Tested essential session and order fields for missing identifiers, dates, users, revenue, and cost values.</li>
+          <li>Verified that orders map to sessions, pageviews map to sessions, order items map to orders and products, and refunds map to order items. The completed checks returned no unmatched records.</li>
+        </ul>
+
+        <h3>Validation evidence and results</h3>
+        <p>
+          Query outputs were saved in <em>sql/sql_validation_step_outputs</em> to document the checks performed
+          and preserve evidence of the final data-quality status before analytical views were created.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Validation check</th>
+                <th>Saved SQL output</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Raw-table row counts</td>
+                <td>3_1_row_counts.csv</td>
+                <td>
+                  Imported <strong>472,871 website sessions</strong>, <strong>1,188,124 pageviews</strong>,
+                  <strong>32,313 orders</strong>, <strong>40,025 order items</strong>,
+                  <strong>1,731 refunds</strong>, and <strong>4 products</strong>.
+                </td>
+              </tr>
+              <tr>
+                <td>Event-date range</td>
+                <td>3_2_date_range_check.csv</td>
+                <td>
+                  Sessions and pageviews run from <strong>19 March 2012</strong> to <strong>19 March 2015</strong>;
+                  orders and order items use the same transaction range. Refund events extend to
+                  <strong>1 April 2015</strong>, which is consistent with refunds occurring after purchase.
+                </td>
+              </tr>
+              <tr>
+                <td>Key-field completeness</td>
+                <td>3_3_missing_check_1.csv<br>3_3_missing_check_2.csv</td>
+                <td>
+                  <strong>0 missing values</strong> across the tested website-session fields
+                  (session ID, event timestamp, user ID) and order fields (order ID, timestamp, session ID,
+                  price, and cost of goods sold).
+                </td>
+              </tr>
+              <tr>
+                <td>Session relationship integrity</td>
+                <td>4_table_relationship_check_1.csv<br>4_table_relationship_check_2.csv</td>
+                <td>
+                  <strong>0 orders without a matching website session</strong> and
+                  <strong>0 pageviews without a matching website session</strong>.
+                </td>
+              </tr>
+              <tr>
+                <td>Transaction relationship integrity</td>
+                <td>4_table_relationship_check_3.csv<br>4_table_relationship_check_4.csv<br>4_table_relationship_check_5.csv</td>
+                <td>
+                  <strong>0 order items without matching orders</strong>,
+                  <strong>0 order items without matching products</strong>, and
+                  <strong>0 refunds without matching order items</strong>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Analytics Views Created for Reporting</h2>
+        <p>
+          Four PostgreSQL views were created and exported as CSV datasets for Power BI. Each view applies the
+          correct join logic, granularity, and business definitions before visualisation.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Analytics view</th>
+                <th>Reporting grain</th>
+                <th>SQL logic and business output</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>monthly_performance</td>
+                <td>One row per calendar month</td>
+                <td>
+                  Uses <em>DATE_TRUNC('month')</em> to aggregate session and order activity into monthly sessions,
+                  orders, revenue, cost of goods sold, gross profit, conversion rate, average order value, and
+                  revenue per session.
+                </td>
+              </tr>
+              <tr>
+                <td>marketing_performance</td>
+                <td>One row per source, campaign, content, device, and repeat-session combination</td>
+                <td>
+                  Analyses channel performance through UTM attributes, device type, and repeat status. Uses
+                  <em>COALESCE</em> to make missing attribution fields reportable as direct or none, and calculates
+                  sessions, orders, revenue, gross profit, conversion rate, and revenue per session.
+                </td>
+              </tr>
+              <tr>
+                <td>product_performance</td>
+                <td>One row per product</td>
+                <td>
+                  Joins product, order-item, and refund data to calculate units sold, revenue, cost, gross profit,
+                  refunded items, refund amount, and refund rate for each product.
+                </td>
+              </tr>
+              <tr>
+                <td>landing_page_performance</td>
+                <td>One row per landing-page URL</td>
+                <td>
+                  Uses CTEs and the <em>ROW_NUMBER()</em> window function to identify the first page in each session.
+                  A second CTE counts pageviews per session, allowing one-page sessions to be calculated as bounces.
+                  The view returns sessions, orders, bounced sessions, bounce rate, conversion rate, and revenue.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="callout">
+          <strong>Defensive metric design:</strong> revenue and profit aggregates use <em>COALESCE(..., 0)</em> so
+          non-converting segments remain visible as zero rather than null. Rate calculations use
+          <em>NULLIF(denominator, 0)</em> to prevent divide-by-zero errors, and <em>ROUND</em> to produce
+          presentation-ready values.
+        </aside>
+      </section>
+
+      <section>
+        <h2>How SQL Views Were Prepared for Power BI</h2>
+        <p>
+          The Power BI report uses four exported CSV files generated from the PostgreSQL analytics views. Each view
+          was designed at the same level of detail required by its dashboard page. This avoids duplicating complex
+          joins in Power BI and ensures the visualisations use consistent metric definitions.
+        </p>
+        <ol>
+          <li><strong>Join the raw tables:</strong> session, order, item, product, pageview, and refund tables were joined only where needed for the business question.</li>
+          <li><strong>Aggregate at the visual level:</strong> SQL groups data by month, marketing attributes, product, or landing page before it is exported.</li>
+          <li><strong>Calculate metrics once:</strong> revenue, gross profit, conversion rate, revenue per session, refund rate, and bounce rate are defined in the view logic.</li>
+          <li><strong>Export reporting datasets:</strong> the four resulting views were exported to <em>powerbi/exported_views_from_sql</em> and loaded as standalone reporting tables in Power BI.</li>
+        </ol>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Exported SQL view</th>
+                <th>Power BI dashboard use</th>
+                <th>Detailed output produced</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>monthly_performance.csv</td>
+                <td>Executive Overview</td>
+                <td>
+                  <strong>37 monthly records</strong>, covering March 2012 through March 2015. Each row contains
+                  <em>sessions, orders, revenue, cogs, gross_profit, conversion_rate, average_order_value</em>,
+                  and <em>revenue_per_session</em>. Across the full period, the output totals
+                  <strong>472,871 sessions</strong>, <strong>32,313 orders</strong>, <strong>$1,938,509.75 revenue</strong>,
+                  and <strong>$1,216,139.50 gross profit</strong>; overall conversion is <strong>6.83%</strong>.
+                  This output is used for KPI cards and monthly trend charts.
+                </td>
+              </tr>
+              <tr>
+                <td>marketing_performance.csv</td>
+                <td>Marketing Performance</td>
+                <td>
+                  <strong>19 acquisition cohorts</strong>, grouped by UTM source, campaign, content, device type,
+                  and repeat-session status. The output supplies <em>sessions, orders, revenue, cogs,
+                  gross_profit, conversion_rate</em>, and <em>revenue_per_session</em> for channel-level visuals.
+                  The largest cohort is <em>gsearch / nonbrand / g_ad_1 / desktop</em>, with
+                  <strong>195,155 sessions</strong>, <strong>16,037 orders</strong>, and
+                  <strong>$956,016.90 revenue</strong>. The highest conversion rate is
+                  <strong>11.03%</strong> for repeat desktop visitors from <em>gsearch / brand / g_ad_2</em>.
+                  The extract also retains an unattributed <em>NULL</em> segment for sessions without UTM values.
+                </td>
+              </tr>
+              <tr>
+                <td>product_performance.csv</td>
+                <td>Product Performance</td>
+                <td>
+                  <strong>4 product records</strong>, with <em>units_sold, revenue, cogs, gross_profit,
+                  refunded_items, refund_amount</em>, and <em>refund_rate</em>. The output reports
+                  <strong>40,025 units sold</strong>, <strong>1,731 refunded items</strong>, and
+                  <strong>$85,338.69 in refunds</strong>. The Original Mr. Fuzzy is the largest product, producing
+                  <strong>$1,211,057.74 revenue</strong> and <strong>$738,893.00 gross profit</strong>.
+                  The Birthday Sugar Panda has the highest product refund rate at <strong>6.04%</strong>.
+                </td>
+              </tr>
+              <tr>
+                <td>landing_page_performance.csv</td>
+                <td>Landing Page Performance</td>
+                <td>
+                  <strong>6 landing-page records</strong>, each containing <em>sessions, orders,
+                  bounced_sessions, bounce_rate, conversion_rate</em>, and <em>revenue</em>. The view identifies
+                  <strong>211,640 bounced sessions</strong>, equivalent to a <strong>44.76% overall bounce rate</strong>.
+                  <em>/lander-5</em> is the strongest conversion page at <strong>10.17%</strong> with the lowest
+                  bounce rate of <strong>36.87%</strong>; <em>/lander-3</em> requires attention with a
+                  <strong>50.29% bounce rate</strong> and <strong>3.39% conversion rate</strong>. This output
+                  supports bar, column, table, and bounce-versus-conversion bubble visuals.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="callout">
+          <strong>Power BI modelling note:</strong> these are pre-aggregated reporting tables, so they do not
+          require relationships to each other in the Power BI model. Each exported view supports a separate
+          dashboard page and is filtered only by fields within that table.
+        </aside>
+      </section>
+
+      <section>
+        <h2>Power BI Dashboard: Visual Analysis &amp; Interpretation</h2>
+        <p>
+          The Power BI dashboard contains four pages built from the exported SQL view outputs. KPI cards provide
+          the headline result; charts then explain how performance varies over time, by marketing channel, by
+          product, and by landing page. The interpretations below are based on the values in the exported
+          view datasets and the dashboard screenshots.
+        </p>
+
+        <article class="dashboard-page">
+          <h3>1. Executive Overview</h3>
+          <figure>
+            <img src="../powerbi/dashboard_screenshots/overview.png" alt="Executive Overview Power BI dashboard showing KPI cards and revenue, order, session, and conversion trends">
+            <figcaption>Figure 1. Executive Overview — business-wide KPI cards and performance trends from <em>monthly_performance.csv</em>.</figcaption>
+          </figure>
+          <p>
+            The overview page reports <strong>$1.94M total revenue</strong>, <strong>$1.22M gross profit</strong>,
+            <strong>32.3K orders</strong>, <strong>472.9K sessions</strong>, a <strong>6.83% conversion rate</strong>,
+            and a <strong>$59.99 average order value</strong>. Gross profit represents approximately
+            <strong>62.7%</strong> of revenue before refund adjustments.
+          </p>
+          <ul>
+            <li><strong>Growth trajectory:</strong> monthly revenue rose from $3.0K in March 2012 to a peak of <strong>$144.8K in December 2014</strong>, alongside the highest monthly traffic volume of <strong>29,722 sessions</strong> and <strong>2,314 orders</strong>.</li>
+            <li><strong>Conversion improvement:</strong> the monthly conversion rate increased from 3.19% at the beginning of the dataset to a high of <strong>8.69% in February 2015</strong>. This indicates that business growth was supported by improved purchase efficiency, not traffic growth alone.</li>
+            <li><strong>Latest-period caution:</strong> March 2015 contains data only through 19 March, so its lower totals should not be interpreted as a full-month decline.</li>
+          </ul>
+        </article>
+
+        <article class="dashboard-page">
+          <h3>2. Marketing Performance</h3>
+          <figure>
+            <img src="../powerbi/dashboard_screenshots/marketing_perfomance.png" alt="Marketing Performance Power BI dashboard showing source revenue, campaign orders, device performance, and session type">
+            <figcaption>Figure 2. Marketing Performance — acquisition-channel, campaign, device, and visitor-type analysis from <em>marketing_performance.csv</em>.</figcaption>
+          </figure>
+          <p>
+            The page evaluates the same full-period total of <strong>$1.94M revenue</strong>,
+            <strong>472.9K sessions</strong>, and <strong>32.3K orders</strong>, then divides those results into
+            19 marketing cohorts defined by source, campaign, content, device type, and repeat-session status.
+          </p>
+          <ul>
+            <li><strong>Primary revenue engine:</strong> <em>gsearch</em> generated <strong>$1.28M revenue</strong> from <strong>316,035 sessions</strong> and <strong>21,333 orders</strong>—approximately 66% of all revenue. Its non-brand desktop campaign alone contributed <strong>$956.0K revenue</strong> and <strong>16,037 orders</strong>.</li>
+            <li><strong>Campaign priority:</strong> non-brand campaigns drive the largest order volume, led by the <em>gsearch / nonbrand / g_ad_1 / desktop</em> cohort. This is the strongest acquisition segment by scale.</li>
+            <li><strong>Device gap:</strong> when calculated as weighted rates, desktop visitors converted at about <strong>8.50%</strong> (27,805 orders / 327,027 sessions), versus <strong>3.09%</strong> for mobile visitors (4,508 / 145,844). This is a material mobile conversion opportunity.</li>
+            <li><strong>High-intent visitors:</strong> repeat desktop visitors from <em>gsearch / brand / g_ad_2</em> achieved the strongest cohort conversion rate at <strong>11.03%</strong>.</li>
+          </ul>
+          <aside class="callout">
+            <strong>Interpretation note:</strong> the device chart in the screenshot is labelled “Sum of conversion rate.”
+            Summing cohort-level percentages is not a valid device-level conversion calculation. The weighted device
+            rates above use total orders divided by total sessions and should be used for decision-making.
+          </aside>
+        </article>
+
+        <article class="dashboard-page">
+          <h3>3. Product Performance</h3>
+          <figure>
+            <img src="../powerbi/dashboard_screenshots/product_performance.png" alt="Product Performance Power BI dashboard showing revenue, gross profit, refund amount, and refund rate by product">
+            <figcaption>Figure 3. Product Performance — product sales, profitability, and refund-risk analysis from <em>product_performance.csv</em>.</figcaption>
+          </figure>
+          <p>
+            The product page summarises <strong>40,025 units sold</strong>, <strong>$1.94M revenue</strong>,
+            <strong>$1.22M gross profit</strong>, and <strong>$85.3K refunded value</strong> across four products.
+            It makes clear that the product portfolio is concentrated in one flagship product.
+          </p>
+          <ul>
+            <li><strong>Flagship concentration:</strong> The Original Mr. Fuzzy sold <strong>24,226 units</strong> and generated <strong>$1.21M revenue</strong> and <strong>$738.9K gross profit</strong>—about 63% of total revenue. It is the business’s largest commercial dependency.</li>
+            <li><strong>Best secondary product:</strong> The Forever Love Bear generated <strong>$347.7K revenue</strong> and <strong>$217.4K gross profit</strong> with a relatively low <strong>2.23% refund rate</strong>.</li>
+            <li><strong>Refund-risk priority:</strong> The Birthday Sugar Panda has the highest refund rate at <strong>6.04%</strong> and $13.8K in refunds. Product quality, product-page expectations, or fulfilment experience should be investigated before scaling demand.</li>
+            <li><strong>Lowest refund risk:</strong> The Hudson River Mini bear has the lowest refund rate at <strong>1.28%</strong>, although it also delivers the smallest revenue contribution at $150.5K.</li>
+          </ul>
+          <p>
+            The screenshot contains two refund-rate charts with the same measure. One can be treated as a repeated
+            view of the same risk result; it does not provide an additional independent product metric.
+          </p>
+        </article>
+
+        <article class="dashboard-page">
+          <h3>4. Landing Page Performance</h3>
+          <figure>
+            <img src="../powerbi/dashboard_screenshots/landing_page_performance.png" alt="Landing Page Performance Power BI dashboard showing a bounce rate versus conversion rate bubble chart and landing page comparisons">
+            <figcaption>Figure 4. Landing Page Performance — traffic, revenue, bounce rate, and conversion analysis from <em>landing_page_performance.csv</em>. Bubble size represents sessions.</figcaption>
+          </figure>
+          <p>
+            The landing-page page compares six entry pages. The bubble chart is particularly useful because it
+            combines bounce rate on the horizontal axis, conversion rate on the vertical axis, and session volume
+            as bubble size. Strong pages appear toward the upper-left: low bounce rate and high conversion rate.
+          </p>
+          <ul>
+            <li><strong>Best page to learn from:</strong> <em>/lander-5</em> has the highest conversion rate at <strong>10.17%</strong>, the lowest bounce rate at <strong>36.87%</strong>, and generated <strong>$438.5K revenue</strong> from 68,166 sessions. Its design and offer should be evaluated as a potential template.</li>
+            <li><strong>Largest revenue contributors:</strong> <em>/lander-2</em> produced the most revenue at <strong>$594.8K</strong> from 131,170 sessions, narrowly ahead of <em>/home</em> at <strong>$585.3K</strong> from 137,576 sessions.</li>
+            <li><strong>Primary optimisation target:</strong> <em>/lander-3</em> received a substantial <strong>79,000 sessions</strong> but converted only <strong>3.39%</strong> with a <strong>50.29% bounce rate</strong>. Because of its large traffic volume, improving this page offers the largest conversion upside.</li>
+            <li><strong>High bounce warning:</strong> <em>/lander-1</em> has the highest bounce rate at <strong>53.24%</strong> and converts at only <strong>4.53%</strong>. Its message match, page speed, user experience, and call-to-action should be reviewed.</li>
+          </ul>
+        </article>
+
+        <aside class="callout">
+          <strong>Overall recommendation:</strong> sustain the scale of high-performing non-brand desktop search
+          campaigns, prioritise mobile conversion improvements, protect the profitability of the flagship product,
+          investigate Birthday Sugar Panda refunds, and use <em>/lander-5</em> as a benchmark when redesigning
+          high-traffic underperformers such as <em>/lander-3</em>.
+        </aside>
+      </section>
+    </div>
+
+    <footer>
+      Prepared for the Maven Fuzzy Factory SQL and Power BI portfolio project.
+    </footer>
+  </main>
+</body>
+</html>
