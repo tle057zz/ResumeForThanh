@@ -14,6 +14,7 @@ from dash import dash_table
 BASE_DIR = Path(__file__).resolve().parent
 RAW_DATA_CANDIDATES = [BASE_DIR / "Teen_Mental_Health_Dataset.csv"]
 CHART_DECIMAL_FORMAT = ".5f"
+POWER_BI_URL = "https://app.powerbi.com/view?r=eyJrIjoiNTAxMDY3MTUtMDg4Ni00M2IzLThhN2ItMmMzZGVmNzBmMGQ1IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
 
 AGE_ORDER = ["Early Teen", "Middle Teen", "Late Teen"]
 PLATFORM_ORDER = ["Instagram", "TikTok", "Both"]
@@ -505,6 +506,32 @@ def register_dash(server) -> None:
     app.layout = html.Div(
         style={"padding": "16px"},
         children=[
+            # CTA to open the Power BI report (requested to be at the beginning)
+            html.Div(
+                style={
+                    "display": "flex",
+                    "justifyContent": "flex-start",
+                    "marginBottom": "12px",
+                },
+                children=[
+                    html.A(
+                        "View the live Power BI dashboard",
+                        href=POWER_BI_URL,
+                        target="_blank",
+                        rel="noopener",
+                        style={
+                            "display": "inline-block",
+                            "padding": "10px 14px",
+                            "borderRadius": "10px",
+                            "border": "1px solid #0ea5e9",
+                            "background": "#0ea5e9",
+                            "color": "#ffffff",
+                            "textDecoration": "none",
+                            "fontWeight": "600",
+                        },
+                    )
+                ],
+            ),
             html.H2("Teen Mental Health Analytics"),
             # Project context (from original Streamlit)
             html.Div(
