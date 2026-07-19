@@ -604,6 +604,43 @@
     .resume-item[data-kind="cert"] .resume-badge { background: linear-gradient(135deg,#f59e0b,#ef4444); }
     .resume .meta i { color: rgba(var(--accent1,139,92,246),1); margin-right:6px; }
     .resume .col-lg-6:last-child .meta i { color: rgba(6,182,212,1); }
+
+    /* Portfolio - card style grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+    @media (max-width: 991.98px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 575.98px) { .projects-grid { grid-template-columns: 1fr; } }
+    .project-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+      height: 100%;
+      display: flex; flex-direction: column;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .project-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+    .project-thumb { width: 100%; height: 170px; object-fit: cover; }
+    .project-body { padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+    .project-title { margin: 0; font-size: 1.05rem; font-weight: 700; color: #0f172a; }
+    .project-desc { margin: 0; color: #475569; font-size: .95rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .project-tag {
+      display: inline-block; padding: 6px 10px; border-radius: 999px;
+      background: #f1f5f9; color: #334155; font-size: .78rem; border: 1px solid #e2e8f0;
+    }
+    .project-actions { margin-top: 12px; display:flex; gap:10px; }
+    .project-btn {
+      display:inline-block; padding:8px 12px; border-radius:10px; font-weight:650; text-decoration:none;
+      border:1px solid #cbd5e1; color:#0f172a; background:#ffffff;
+    }
+    .project-btn:hover { background:#f8fafc; }
+    .project-btn.primary { background:#0ea5e9; color:#fff; border-color:#0ea5e9; }
+    .project-btn.primary:hover { background:#0284c7; border-color:#0284c7; }
   </style>
 
   <!-- Vendor CSS Files -->
@@ -991,72 +1028,68 @@
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Portfolio</h2>
-        <p>Showcasing my projects in data science, analytics, and engineering, demonstrating practical applications of technical skills and problem-solving abilities.</p>
-        <div class="alert alert-warning" role="alert" style="margin-top: 10px;">
-          This portfolio is <strong>actively being updated</strong>. A few projects are already live and more will be added regularly as I finalize artifacts to match my latest CV.
-        </div>
-        <div id="portfolio-react-banner"></div>
+        <h2>Projects</h2>
+        <p>Here are some of my recent projects. I'm always working on something new, so check back often!</p>
       </div><!-- End Section Title -->
 
       <div class="container">
-
-        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
-
-          <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
-            <li data-filter="*" class="filter-active">All</li>
-            <li data-filter=".filter-data-science">Data Science</li>
-            <li data-filter=".filter-data-analytics">Data Analytics</li>
-            <li data-filter=".filter-web-dev">Web Development</li>
-          </ul><!-- End Portfolio Filters -->
-
-          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-
-            <!-- Data Science items removed by request -->
-
-            <!-- Data Analytics: replaced with a single Streamlit project link -->
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-data-analytics">
-              <img src="img/masonry-portfolio/masonry-portfolio-5.jpg" class="img-fluid" alt="Mental Health Analytics" loading="lazy" decoding="async">
-              <div class="portfolio-info">
-                <h4>Mental Health Analytics Dashboard</h4>
-                <p>Interactive Streamlit application</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-5.jpg" title="Preview" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="/mental-health" title="Open App" class="details-link" target="_blank" rel="noopener"><i class="bi bi-link-45deg"></i></a>
+        <div class="projects-grid" data-aos="fade-up" data-aos-delay="150">
+          <!-- Project 1 -->
+          <article class="project-card">
+            <img class="project-thumb" src="img/masonry-portfolio/masonry-portfolio-5.jpg" alt="Mental Health Analytics">
+            <div class="project-body">
+              <h3 class="project-title">Mental Health Analytics Dashboard</h3>
+              <p class="project-desc">Interactive analytics app for teen mental health patterns with filters, KPIs, and narratives.</p>
+              <div class="project-tags">
+                <span class="project-tag">Streamlit</span>
+                <span class="project-tag">Python</span>
+                <span class="project-tag">Plotly</span>
+                <span class="project-tag">Pandas</span>
+                <span class="project-tag">Data Modeling</span>
               </div>
-            </div><!-- End Portfolio Item -->
-
-            <!-- Data Science: Clinical AI Assistance System -->
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-data-science">
-              <img src="img/masonry-portfolio/masonry-portfolio-1.jpg" class="img-fluid" alt="Clinical AI Assistance System" loading="lazy" decoding="async">
-              <div class="portfolio-info">
-                <h4>Clinical AI Assistance System</h4>
-                <p>Python, Flask, PostgreSQL, AWS RDS, LangChain</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-1.jpg" title="Clinical AI Assistance System" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="clinical-ai.html" title="View Demo Page" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              <div class="project-actions">
+                <a href="/mental-health" target="_blank" rel="noopener" class="project-btn primary">Open App</a>
               </div>
-            </div><!-- End Portfolio Item -->
-
-            <!-- Web Development items removed by request -->
-
-            <!-- Data Analytics: Maven Fuzzy Factory SQL + Power BI -->
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-data-analytics">
-              <img src="img/masonry-portfolio/masonry-portfolio-4.jpg" class="img-fluid" alt="Maven Fuzzy Factory SQL + Power BI" loading="lazy" decoding="async">
-              <div class="portfolio-info">
-                <h4>Maven Fuzzy Factory — SQL + Power BI</h4>
-                <p>End-to-end SQL analysis with interactive report</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-4.jpg" title="Maven Fuzzy Factory" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="/toy-projects/Maven%20Fuzzy%20Factory%20SQL%20Power%20BI%20Project/reports_and_demonstrations/project_report.html" title="Open Report" class="details-link" target="_blank" rel="noopener"><i class="bi bi-link-45deg"></i></a>
+            </div>
+          </article>
+          <!-- Project 2 -->
+          <article class="project-card">
+            <img class="project-thumb" src="img/masonry-portfolio/masonry-portfolio-1.jpg" alt="Clinical AI Assistance System">
+            <div class="project-body">
+              <h3 class="project-title">Clinical AI Assistance System</h3>
+              <p class="project-desc">8‑stage document analysis pipeline with transparent LLM explanations and governance checks.</p>
+              <div class="project-tags">
+                <span class="project-tag">Flask</span>
+                <span class="project-tag">PostgreSQL</span>
+                <span class="project-tag">LangChain</span>
+                <span class="project-tag">AWS RDS</span>
               </div>
-            </div><!-- End Portfolio Item -->
-
-            <!-- Removed additional Data Analytics items per request -->
-
-            <!-- Web Development items removed by request -->
-
-          </div><!-- End Portfolio Container -->
-
+              <div class="project-actions">
+                <a href="clinical-ai.html" class="project-btn primary">View Demo</a>
+                <a href="https://github.com/tle057zz/5620medai" class="project-btn" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </article>
+          <!-- Project 3 -->
+          <article class="project-card">
+            <img class="project-thumb" src="img/masonry-portfolio/masonry-portfolio-4.jpg" alt="Maven Fuzzy Factory SQL + Power BI">
+            <div class="project-body">
+              <h3 class="project-title">Maven Fuzzy Factory — SQL + Power BI</h3>
+              <p class="project-desc">End‑to‑end SQL engineering with exported views powering a multi‑page Power BI report.</p>
+              <div class="project-tags">
+                <span class="project-tag">SQL</span>
+                <span class="project-tag">PostgreSQL</span>
+                <span class="project-tag">Power BI</span>
+                <span class="project-tag">ETL</span>
+                <span class="project-tag">E‑commerce</span>
+              </div>
+              <div class="project-actions">
+                <a href="/toy-projects/Maven%20Fuzzy%20Factory%20SQL%20Power%20BI%20Project/reports_and_demonstrations/project_report.html" class="project-btn primary" target="_blank" rel="noopener">Open Report</a>
+                <a href="https://github.com/tle057zz/ResumeForThanh/tree/main/projects/toy_projects" class="project-btn" target="_blank" rel="noopener">Repo</a>
+              </div>
+            </div>
+          </article>
         </div>
-
       </div>
 
     </section><!-- /Portfolio Section -->
