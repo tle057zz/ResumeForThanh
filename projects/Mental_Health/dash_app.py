@@ -14,6 +14,12 @@ from dash import dash_table
 BASE_DIR = Path(__file__).resolve().parent
 RAW_DATA_CANDIDATES = [BASE_DIR / "Teen_Mental_Health_Dataset.csv"]
 CHART_DECIMAL_FORMAT = ".5f"
+INSIGHT_TEXT_STYLE = {
+    "whiteSpace": "pre-wrap",
+    "fontSize": "0.95rem",
+    "color": "#334155",
+    "lineHeight": "1.5",
+}
 POWER_BI_URL = "https://app.powerbi.com/view?r=eyJrIjoiNTAxMDY3MTUtMDg4Ni00M2IzLThhN2ItMmMzZGVmNzBmMGQ1IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
 
 AGE_ORDER = ["Early Teen", "Middle Teen", "Late Teen"]
@@ -507,11 +513,18 @@ def register_dash(server) -> None:
         style={"padding": "16px"},
         children=[
             # CTA to open the Power BI report (requested to be at the beginning)
+            html.H2("Teen Mental Health Analytics"),
             html.Div(
                 style={
                     "display": "flex",
-                    "justifyContent": "flex-start",
-                    "marginBottom": "12px",
+                    "alignItems": "center",
+                    "gap": "12px",
+                    "margin": "10px 0 16px 0",
+                    "padding": "10px 12px",
+                    "borderRadius": "12px",
+                    "border": "1px solid #bae6fd",
+                    "background": "#e0f2fe",
+                    "flexWrap": "wrap",
                 },
                 children=[
                     html.A(
@@ -523,16 +536,20 @@ def register_dash(server) -> None:
                             "display": "inline-block",
                             "padding": "10px 14px",
                             "borderRadius": "10px",
-                            "border": "1px solid #0ea5e9",
-                            "background": "#0ea5e9",
+                            "border": "1px solid #0284c7",
+                            "background": "#0284c7",
                             "color": "#ffffff",
                             "textDecoration": "none",
-                            "fontWeight": "600",
+                            "fontWeight": "700",
                         },
-                    )
+                    ),
+                    html.Span(
+                        "Below are interactive dashboards built with Python (Dash + Plotly). "
+                        "Note: On the free/low‑resource cloud service, these may respond more slowly to interactions.",
+                        style={"color": "#0c4a6e", "fontSize": "0.96rem", "fontWeight": "600"},
+                    ),
                 ],
             ),
-            html.H2("Teen Mental Health Analytics"),
             # Project context (from original Streamlit)
             html.Div(
                 style={
@@ -691,7 +708,7 @@ def register_dash(server) -> None:
             f"By gender, the highest rate is {highest_gender} at {fmt_percent(highest_gender_rate)} "
             f"(Female {fmt_percent(female_rate)}, Male {fmt_percent(male_rate)})."
         )
-        ov_insights = dcc.Markdown(ov_text, style={"whiteSpace": "pre-wrap"})
+        ov_insights = dcc.Markdown(ov_text, style=INSIGHT_TEXT_STYLE)
         return kpis, fig_gender, fig_age, fig_age_gender, ov_insights
 
     # ---------- Social Media Impact callbacks ----------
@@ -850,7 +867,7 @@ def register_dash(server) -> None:
             f"Overall, {top_platform} shows the highest depression rate at {fmt_percent(top_platform_rate)}, "
             f"and the average daily social‑media time is {fmt_decimal(m['Average Social Media Hours'])} hours."
         )
-        sm_insights = dcc.Markdown(sm_text, style={"whiteSpace": "pre-wrap"})
+        sm_insights = dcc.Markdown(sm_text, style=INSIGHT_TEXT_STYLE)
 
         return kpis, fig_usage_gender, fig_usage_platform, combo, table, new_selected_rows, sm_insights
 
@@ -953,7 +970,7 @@ def register_dash(server) -> None:
             f"Average sleep is {fmt_decimal(m['Average Sleep Hours'])} hours, and average social‑media use is "
             f"{fmt_decimal(m['Average Social Media Hours'])} hours."
         )
-        insights = dcc.Markdown(sa_text, style={"whiteSpace": "pre-wrap"})
+        insights = dcc.Markdown(sa_text, style=INSIGHT_TEXT_STYLE)
 
         # Rebuild selected_rows indices to match current matrix (prevents sticky selections)
         new_selected_rows = []
@@ -1114,7 +1131,7 @@ def register_dash(server) -> None:
             f"stress {top_gender_stress} ({fmt_decimal(top_gender_stress_value)}), and "
             f"addiction {top_gender_addiction} ({fmt_decimal(top_gender_addiction_value)})."
         )
-        insights = dcc.Markdown(dem_text, style={"whiteSpace": "pre-wrap"})
+        insights = dcc.Markdown(dem_text, style=INSIGHT_TEXT_STYLE)
 
         return kpis, fig_age_gender, fig_interaction_platform, fig_avg_by_gender, table, new_selected_rows, insights
 
