@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Healthcare Claims Data Platform — Project Report</title>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #5b6778;
+      --line: #dce3ea;
+      --surface: #f6f8fa;
+      --primary: #0f5b78;
+      --success: #166534;
+      --success-bg: #f0fdf4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 32px auto;
+      padding: 44px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+
+    h1, h2, h3 { line-height: 1.2; }
+    h1 { margin: 0 0 8px; color: var(--primary); font-size: 2rem; }
+    h2 { margin-top: 40px; padding-bottom: 8px; border-bottom: 2px solid var(--line); font-size: 1.35rem; }
+    h3 { margin-bottom: 6px; font-size: 1.05rem; }
+    p { margin: 8px 0; }
+    a { color: var(--primary); }
+
+    .subtitle { margin: 0; color: var(--muted); font-size: 1.05rem; }
+    .repository-link {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .repository-link a { font-weight: 700; }
+    .repository-link span { color: var(--muted); font-size: 0.9rem; }
+    .status {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 6px 10px;
+      color: var(--success);
+      background: var(--success-bg);
+      border: 1px solid #bbf7d0;
+      font-weight: 700;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .metric {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .metric strong { display: block; color: var(--primary); font-size: 1.65rem; }
+    .metric span { color: var(--muted); font-size: 0.85rem; }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 18px 0;
+    }
+
+    .flow-item {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      font-weight: 700;
+    }
+
+    .arrow { color: var(--primary); font-size: 1.25rem; }
+
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th { color: #ffffff; background: var(--primary); }
+    tbody tr:nth-child(even) { background: var(--surface); }
+    .number { text-align: right; font-variant-numeric: tabular-nums; }
+    .note { padding: 14px; border-left: 4px solid var(--primary); background: var(--surface); }
+    code { padding: 1px 4px; background: var(--surface); font-family: "SFMono-Regular", Consolas, monospace; }
+    figure { margin: 18px 0; }
+    figcaption { margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
+    .evidence-image { display: block; width: 100%; border: 1px solid var(--line); }
+
+    @media (max-width: 720px) {
+      main { width: 100%; margin: 0; padding: 24px; border: 0; }
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Healthcare Claims, Patient Outcomes and Hospital Utilisation Data Platform</h1>
+      <p class="subtitle">Data engineering project report — Synthea synthetic healthcare data</p>
+      <p class="repository-link">
+        <a href="https://github.com/tle057zz/ResumeForThanh/tree/main/projects/Health-data-pipeline" target="_blank" rel="noopener">Explore the complete project on GitHub</a><br>
+        <span>Python pipeline, dbt models, DuckDB warehouse design, Docker Airflow orchestration, and Power BI-ready exports.</span>
+      </p>
+      <div class="status">Current status: automated CSV-to-Power-BI export pipeline verified in Airflow</div>
+    </header>
+
+    <section>
+      <h2>Tech stack and tools</h2>
+      <div class="flow" aria-label="Tool list">
+        <span class="flow-item">Python 3.11+</span>
+        <span class="flow-item">DuckDB</span>
+        <span class="flow-item">dbt Core + dbt-duckdb</span>
+        <span class="flow-item">Apache Airflow</span>
+        <span class="flow-item">Docker / Docker Compose</span>
+        <span class="flow-item">Power BI (DAX, Power Query)</span>
+        <span class="flow-item">pytest</span>
+      </div>
+      <p class="note">Python handles ingestion and validation (DuckDB Python API). dbt builds typed staging models and tested marts. Airflow (in Docker) orchestrates validate → run → test → export.</p>
+    </section>
+
+    <section>
+      <h2>1. Project objective</h2>
+      <p>
+        The project builds an automated healthcare analytics platform that ingests multi-table
+        healthcare CSV data, validates it, stores it in DuckDB, transforms it with SQL and dbt,
+        and prepares curated dimensional data for Power BI.
+      </p>
+      <p>
+        The platform is designed to demonstrate analytical engineering practices. Because the
+        source is synthetic, all results are demonstrations and must not be interpreted as
+        real-world clinical findings.
+      </p>
+
+      <h3>Business questions the platform will answer</h3>
+      <ul>
+        <li>Which conditions have the highest prevalence?</li>
+        <li>Which patient groups have the greatest healthcare utilisation?</li>
+        <li>What is the average cost per encounter, and how much is covered by payers?</li>
+        <li>Which organisations, providers, procedures, and medications generate the most activity or cost?</li>
+        <li>What percentage of patients return within 30 days?</li>
+        <li>How do inpatient, emergency, and outpatient encounters differ over time?</li>
+        <li>Which patients have multiple chronic conditions?</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2. Platform architecture</h2>
+      <div class="flow" aria-label="Data pipeline flow">
+        <span class="flow-item">Synthea CSV files</span>
+        <span class="arrow">→</span>
+        <span class="flow-item">Python validation and ingestion</span>
+        <span class="arrow">→</span>
+        <span class="flow-item">DuckDB raw and audit schemas</span>
+        <span class="arrow">→</span>
+        <span class="flow-item">dbt SQL transformations</span>
+        <span class="arrow">→</span>
+        <span class="flow-item">Marts CSV export</span>
+        <span class="arrow">→</span>
+        <span class="flow-item">Power BI</span>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Source</td><td>Synthea CSV exports</td><td>Provides synthetic patient, encounter, clinical, provider, payer, and cost records.</td></tr>
+          <tr><td>Ingestion</td><td>Python + DuckDB (Python API)</td><td>Checks file structure, records counts, detects configured key duplicates, and loads unchanged source values.</td></tr>
+          <tr><td>Storage</td><td>DuckDB</td><td>Persists <code>raw</code>, <code>staging</code>, <code>intermediate</code>, <code>marts</code>, and <code>audit</code> schemas in one local database file.</td></tr>
+          <tr><td>Transformation</td><td>dbt Core + dbt-duckdb</td><td>Types and standardises all 16 source tables, then builds tested dimensions and analytical facts in the <code>marts</code> schema.</td></tr>
+          <tr><td>Orchestration</td><td>Apache Airflow (Docker)</td><td>Schedules validation, loading, dbt execution, testing, audit recording, and CSV export.</td></tr>
+          <tr><td>Reporting</td><td>Power BI (DAX, Power Query)</td><td>Imports curated mart CSV files from <code>data/csv_output/</code>.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>3. Data source</h2>
+      <p>
+        The data comes from <a href="https://synthetichealth.github.io/synthea/" target="_blank" rel="noopener">Synthea</a>,
+        an open-source synthetic patient generator. Synthea generates realistic-but-not-real
+        patient histories and can export CSV files covering healthcare encounters, diagnoses,
+        medications, allergies, payers, providers, and other clinical events.
+      </p>
+      <p class="note">
+        Source extract in this project: Synthea sample CSV export (April 2020). The supplied
+        <code>csv/</code> directory is retained as the immutable input source.
+      </p>
+    </section>
+
+    <section>
+      <h2>4. Data inventory</h2>
+      <div class="summary">
+        <div class="metric"><strong>16</strong><span>source CSV tables</span></div>
+        <div class="metric"><strong>1,171</strong><span>synthetic patients</span></div>
+        <div class="metric"><strong>53,346</strong><span>encounters</span></div>
+        <div class="metric"><strong>299,697</strong><span>observation events</span></div>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Source table</th><th>Business content</th><th class="number">Loaded rows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>allergies</td><td>Patient allergy records and associated encounters.</td><td class="number">597</td></tr>
+          <tr><td>careplans</td><td>Patient care plans, dates, and associated reasons.</td><td class="number">3,483</td></tr>
+          <tr><td>conditions</td><td>Diagnoses and condition periods for patients and encounters.</td><td class="number">8,376</td></tr>
+          <tr><td>devices</td><td>Medical devices associated with patient encounters.</td><td class="number">78</td></tr>
+          <tr><td>encounters</td><td>Central utilisation table: visits, class, provider, organisation, payer, and encounter costs.</td><td class="number">53,346</td></tr>
+          <tr><td>imaging_studies</td><td>Imaging orders, body site, modality, and procedure codes.</td><td class="number">855</td></tr>
+          <tr><td>immunizations</td><td>Immunization events and base costs.</td><td class="number">15,478</td></tr>
+          <tr><td>medications</td><td>Medication periods, dispensing, total cost, and payer coverage.</td><td class="number">42,989</td></tr>
+          <tr><td>observations</td><td>Clinical measurements, values, units, and observation types.</td><td class="number">299,697</td></tr>
+          <tr><td>organizations</td><td>Healthcare organisations, location, revenue, and utilisation.</td><td class="number">1,119</td></tr>
+          <tr><td>patients</td><td>Patient demographics, location, death date, expenses, and healthcare coverage.</td><td class="number">1,171</td></tr>
+          <tr><td>payer_transitions</td><td>Patient payer coverage history by year.</td><td class="number">3,801</td></tr>
+          <tr><td>payers</td><td>Payer details, coverage amounts, revenue, and utilisation measures.</td><td class="number">10</td></tr>
+          <tr><td>procedures</td><td>Clinical procedures, reasons, and base costs.</td><td class="number">34,981</td></tr>
+          <tr><td>providers</td><td>Healthcare providers, speciality, organisation, and utilisation.</td><td class="number">5,855</td></tr>
+          <tr><td>supplies</td><td>Medical supply events. This source is valid but contains no data rows in this extract.</td><td class="number">0</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>5. Data model and relationships</h2>
+      <ul>
+        <li><code>patients</code>, <code>organizations</code>, <code>providers</code>, and <code>payers</code> are reference entities that will become conformed dimensions.</li>
+        <li><code>encounters</code> is the central fact table for healthcare utilisation and claim cost analysis.</li>
+        <li>Clinical event tables such as conditions, medications, procedures, immunizations, and observations connect to patients and usually to encounters.</li>
+        <li><code>providers.ORGANIZATION</code> links providers to organisations; encounter records link to patient, organisation, provider, and payer IDs.</li>
+        <li>Financial analysis will use encounter claim cost, payer coverage, and calculated patient responsibility. Medication and procedure facts remain at their own grain to prevent double counting.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Work completed</h2>
+      <table>
+        <thead>
+          <tr><th>Completed item</th><th>Implementation detail</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Project folders</td><td>Created directories for data, Python source, SQL, dbt, Airflow, tests, and documentation.</td><td>Complete</td></tr>
+          <tr><td>Source contract</td><td>Defined expected headers and primary keys for all 16 Synthea CSV files in <code>src/config.py</code>.</td><td>Complete</td></tr>
+          <tr><td>Python validation</td><td>Checks file presence, exact header order, configured primary-key blanks, configured primary-key duplicates, and empty-file policy.</td><td>Complete</td></tr>
+          <tr><td>DuckDB ingestion</td><td>Loads unmodified source values as VARCHAR fields into the <code>raw</code> schema in <code>data/warehouse/healthcare.duckdb</code>.</td><td>Complete</td></tr>
+          <tr><td>Audit logging</td><td>Records pipeline status in <code>audit.pipeline_runs</code> and per-table counts in <code>audit.table_loads</code>.</td><td>Complete</td></tr>
+          <tr><td>Reconciliation SQL</td><td><code>sql/analysis/check_raw_load.sql</code> compares raw counts to the latest successful audit run.</td><td>16 of 16 tables matched</td></tr>
+          <tr><td>dbt configuration</td><td>Configured the local dbt-duckdb project, DuckDB profile, schema-naming macro, and all 16 raw sources.</td><td>Connection verified</td></tr>
+          <tr><td>Staging transformations</td><td>Created typed, snake_case staging models for all 16 source tables.</td><td>16 of 16 models built</td></tr>
+          <tr><td>dbt data-quality tests</td><td>Added tests for core identifiers, relationships, and non-negative financial, quantity, and utilisation fields.</td><td>All tests passed</td></tr>
+          <tr><td>Dimensional marts</td><td>Built patient, organisation, provider, payer, and date dimensions plus encounter, condition, procedure, medication, immunization, and readmission facts.</td><td>11 models built</td></tr>
+          <tr><td>Mart quality tests</td><td>Validated dimensional keys, fact relationships, and non-negative financial values.</td><td>All tests passed</td></tr>
+          <tr><td>Power BI export</td><td>Exported curated dimensions and facts with a row-count manifest to <code>data/csv_output/</code>.</td><td>11 CSV tables exported</td></tr>
+          <tr><td>Airflow orchestration</td><td>Built a Dockerised Airflow DAG for Python ingestion, dbt run, dbt test, and CSV export.</td><td>End-to-end run passed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>7. Ingestion reconciliation demonstration</h2>
+      <p>
+        After the Python ingestion completed, the following command ran the project's
+        reconciliation SQL against the persisted DuckDB database:
+      </p>
+      <p><code>.venv/bin/python src/run_sql.py sql/analysis/check_raw_load.sql</code></p>
+      <p>
+        The query compares three independent counts for each source table: the current
+        <code>raw</code> table count, the source CSV count captured in the audit log, and the
+        loaded count captured in the audit log. A table passes only when the current raw-table
+        count equals the audited loaded count.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Validation measure</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Source tables reconciled</td><td>16 of 16</td></tr>
+          <tr><td>Tables with matching source and loaded counts</td><td>16 of 16</td></tr>
+          <tr><td>Configured duplicate primary keys found</td><td>0</td></tr>
+          <tr><td>Largest loaded table</td><td>observations — 299,697 rows</td></tr>
+          <tr><td>Empty-file exception</td><td>supplies — 0 rows, explicitly allowed by the source contract</td></tr>
+          <tr><td>Reconciliation outcome</td><td>All tables returned <code>match</code></td></tr>
+        </tbody>
+      </table>
+      <p class="note">
+        This verification demonstrates that the CSV inputs were loaded without row loss and
+        that the audit log can be used to validate the raw data layer before dimensional modelling begins.
+      </p>
+    </section>
+
+    <section>
+      <h2>8. dbt staging and quality demonstration</h2>
+      <p>
+        dbt is configured to connect directly to the persisted DuckDB warehouse. The staging
+        layer standardises all 16 raw source tables, converting identifiers, dates, timestamps,
+        counts, and monetary values into analytics-ready types while retaining event grain.
+      </p>
+      <table>
+        <thead>
+          <tr><th>dbt verification</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>dbt adapter connection</td><td>dbt-duckdb connection verified</td></tr>
+          <tr><td>Registered raw sources</td><td>16 source tables</td></tr>
+          <tr><td>Built staging models</td><td>16 of 16 passed</td></tr>
+          <tr><td>Core dimensions staged</td><td>Patients, encounters, organisations, providers, and payers</td></tr>
+          <tr><td>Clinical event models staged</td><td>Conditions, procedures, medications, immunizations, observations, and related clinical events</td></tr>
+          <tr><td>Data-quality tests</td><td>All identifier, relationship, and non-negative value tests passed</td></tr>
+        </tbody>
+      </table>
+      <p class="note">
+        The completed staging layer feeds the dimensional Power BI marts described below.
+      </p>
+    </section>
+
+    <section>
+      <h2>9. Dimensional mart demonstration</h2>
+      <p>
+        The <code>marts</code> schema now contains a Power BI-ready star schema. The four
+        conformed dimensions provide population, organisation, provider, and payer attributes;
+        encounter and clinical facts retain their source event grain to avoid double counting.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Mart group</th><th>Completed models</th><th>Analytical purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Conformed dimensions</td><td><code>dim_patient</code>, <code>dim_organization</code>, <code>dim_provider</code>, <code>dim_payer</code>, <code>dim_date</code></td><td>Power BI slicers, descriptive attributes, and time analysis.</td></tr>
+          <tr><td>Utilisation and finance</td><td><code>fact_encounter</code></td><td>Encounter volume, class, cost, payer coverage, and patient responsibility.</td></tr>
+          <tr><td>Clinical events</td><td><code>fact_condition</code>, <code>fact_procedure</code>, <code>fact_medication</code>, <code>fact_immunization</code></td><td>Condition prevalence, clinical utilisation, and native-grain costs.</td></tr>
+          <tr><td>Readmissions</td><td><code>fact_readmission</code></td><td>Completed inpatient encounters with a later inpatient or emergency return within 30 days.</td></tr>
+          <tr><td>Mart validation</td><td>Key, relationship, accepted-value, and non-negative-value tests</td><td>All tests passed.</td></tr>
+        </tbody>
+      </table>
+      <p class="note">
+        The mart layer has been exported as CSV for Power BI. Supplementary dashboard
+        aggregates can be added later if a specific report measure needs them.
+      </p>
+    </section>
+
+    <section>
+      <h2>10. Airflow orchestration demonstration</h2>
+      <p>
+        Apache Airflow runs locally in Docker Desktop and automatically executes the four
+        pipeline stages in dependency order: Python validation/loading, dbt transformations,
+        dbt tests, and Power BI CSV export.
+      </p>
+      <figure>
+        <img class="evidence-image" src="docker_run_pipeline.png" alt="Airflow UI showing a successful healthcare_pipeline run with all four tasks complete">
+        <figcaption>Verified manual Airflow run: validate_and_load, dbt_run, dbt_test, and export_powerbi_csv all completed successfully.</figcaption>
+      </figure>
+      <p class="note">
+        This verified run demonstrates the complete automated pipeline from synthetic Synthea
+        CSV files to refreshed Power BI-ready CSV extracts.
+      </p>
+    </section>
+
+    <section>
+      <h2>11. Interview talking points</h2>
+
+      <h3>Why not use only SQL to export a CSV for Power BI?</h3>
+      <p>
+        SQL alone can create a CSV export, and that is appropriate for a one-off analysis.
+        A dashboard, however, is a recurring data product. This project uses Python validation,
+        DuckDB, dbt, and Airflow to make every refresh reliable, repeatable, and auditable.
+      </p>
+      <table>
+        <thead>
+          <tr><th>SQL-only export</th><th>Engineered pipeline</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Manual query execution</td><td>Automated Airflow refresh</td></tr>
+          <tr><td>One large query can be difficult to maintain</td><td>Layered raw, staging, and mart models</td></tr>
+          <tr><td>Limited validation</td><td>Source, relationship, and financial-value tests</td></tr>
+          <tr><td>Failures can go unnoticed</td><td>Task status, retries, logs, and audit records</td></tr>
+          <tr><td>Power BI receives mixed or raw data</td><td>Power BI receives tested dimensions and facts at the correct grain</td></tr>
+        </tbody>
+      </table>
+      <p class="note">
+        The extra engineering is not for the CSV itself; it makes each dashboard refresh
+        trustworthy, reproducible, and maintainable.
+      </p>
+
+      <h3>How is the dashboard updated when source data changes?</h3>
+      <ol>
+        <li>Replace or update the source files in <code>csv/</code>.</li>
+        <li>Trigger <code>healthcare_pipeline</code> in Airflow, or let its future schedule run.</li>
+        <li>Airflow validates and reloads raw data, rebuilds dbt models, runs tests, and refreshes <code>data/csv_output/</code>.</li>
+        <li>Refresh the Power BI Folder connector to load the updated dimensions and facts without rebuilding the report.</li>
+      </ol>
+      <p class="note">
+        If validation or dbt tests fail, Airflow does not run the CSV export task. Power BI
+        therefore keeps the previous successful export instead of receiving invalid data.
+      </p>
+    </section>
+
+    <section>
+      <h2>12. Next steps</h2>
+      <ol>
+        <li>Build Power BI dashboard pages for executive overview, patient population, utilisation, claims and costs, readmissions, and pipeline quality.</li>
+        <li>Add supplementary dashboard aggregate marts only when a report measure needs them.</li>
+        <li>Add Docker and dbt checks to GitHub Actions CI.</li>
+      </ol>
+    </section>
+
+    <footer>
+      <p class="subtitle">Report generated from the project’s validated first ingestion run.</p>
+    </footer>
+  </main>
+</body>
+</html>

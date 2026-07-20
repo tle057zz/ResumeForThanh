@@ -421,6 +421,13 @@ def serve_toy_projects(subpath: str):
     base_dir = os.path.join(app.root_path, 'projects', 'toy_projects')
     return send_from_directory(base_dir, subpath)
 
+@app.route('/health-data-pipeline/<path:subpath>')
+def serve_health_data_pipeline(subpath: str):
+    """Serve docs from projects/Health-data-pipeline/docs."""
+    record_visit('health-data-pipeline')
+    base_dir = os.path.join(app.root_path, 'projects', 'Health-data-pipeline', 'docs')
+    return send_from_directory(base_dir, subpath)
+
 @app.route('/<path:path>')
 def static_proxy(path):
     # Serve static files with aggressive caching headers in production
