@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Power BI Dashboard Reports</title>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #5b6778;
+      --line: #dce3ea;
+      --surface: #f6f8fa;
+      --primary: #0f5b78;
+      --success: #166534;
+      --success-bg: #f0fdf4;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 32px auto;
+      padding: 44px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+    h1, h2, h3 { line-height: 1.2; }
+    h1 { margin: 0 0 8px; color: var(--primary); font-size: 2rem; }
+    h2 { margin-top: 40px; padding-bottom: 8px; border-bottom: 2px solid var(--line); font-size: 1.35rem; }
+    h3 { margin-bottom: 6px; font-size: 1.05rem; }
+    p { margin: 8px 0; }
+    a { color: var(--primary); }
+    .subtitle { margin: 0; color: var(--muted); font-size: 1.05rem; }
+    .dashboard-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .dashboard-nav a {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .dashboard-nav a:hover,
+    .dashboard-nav a:focus {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .dashboard-nav .resource-link {
+      border-color: var(--primary);
+    }
+    .powerbi-embed {
+      margin-top: 28px;
+    }
+    .powerbi-embed iframe {
+      display: block;
+      width: 100%;
+      min-height: 640px;
+      border: 1px solid var(--line);
+    }
+    .status {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 6px 10px;
+      color: var(--success);
+      background: var(--success-bg);
+      border: 1px solid #bbf7d0;
+      font-weight: 700;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .metric {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+    .metric strong { display: block; color: var(--primary); font-size: 1.5rem; }
+    .metric span { color: var(--muted); font-size: 0.85rem; }
+    table {
+      width: 100%;
+      margin: 14px 0;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: #ffffff; background: var(--primary); }
+    tbody tr:nth-child(even) { background: var(--surface); }
+    .number { text-align: right; font-variant-numeric: tabular-nums; }
+    .note { padding: 14px; border-left: 4px solid var(--primary); background: var(--surface); }
+    code { padding: 1px 4px; background: var(--surface); font-family: "SFMono-Regular", Consolas, monospace; }
+    @media (max-width: 720px) {
+      main { width: 100%; margin: 0; padding: 24px; border: 0; }
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      table { display: block; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Power BI Dashboard Reports</h1>
+      <p class="subtitle">Healthcare Claims, Patient Outcomes and Hospital Utilisation Platform</p>
+      <nav class="dashboard-nav" aria-label="Dashboard and project navigation">
+        <a href="#dashboard-1">1. Executive Overview</a>
+        <a href="#dashboard-2">2. Patient Population</a>
+        <a href="#dashboard-3">3. Clinical Utilisation</a>
+        <a href="#dashboard-4">4. Claims and Costs</a>
+        <a href="#dashboard-5">5. 30-Day Returns</a>
+        <a class="resource-link" href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open Interactive Dashboard</a>
+        <a class="resource-link" href="project_report.html">← Back to Project Report</a>
+        <a class="resource-link" href="https://github.com/tle057zz/health_project" target="_blank" rel="noopener">GitHub Repository</a>
+      </nav>
+      <div class="status">Dashboards 1–5: semantic model, DAX measures, visual analysis, and published Power BI report prepared</div>
+    </header>
+
+    <section class="powerbi-embed">
+      <h2>Interactive Power BI dashboard</h2>
+      <iframe
+        title="health_dashboard"
+        src="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
+        allowfullscreen="true"
+        loading="lazy">
+      </iframe>
+      <p class="note">
+        If the embedded report does not load in your browser, use
+        <a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open Interactive Dashboard</a>.
+      </p>
+    </section>
+
+    <section id="dashboard-1">
+      <h2>Dashboard 1.1: Executive Overview</h2>
+      <p><a class="resource-link" href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open interactive dashboard</a></p>
+      <div class="powerbi-embed">
+        <iframe
+          title="health_dashboard_exec_overview"
+          src="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
+          allowfullscreen="true"
+          loading="lazy">
+        </iframe>
+      </div>
+      <p>
+        The Executive Overview dashboard provides a concise view of population scale, healthcare
+        utilisation, claims cost, payer contribution, patient responsibility, and 30-day returns.
+        It is designed for high-level operational monitoring before users drill into patient,
+        clinical, claims, or readmission pages.
+      </p>
+      <p class="note">
+        All figures use the synthetic Synthea export and are demonstrations of analytical
+        engineering. They are not real-world clinical findings.
+      </p>
+    </section>
+
+    <section>
+      <h2>Dashboard 1.2: Key Performance Indicators</h2>
+      <div class="summary">
+        <div class="metric"><strong>1,171</strong><span>Total synthetic patients</span></div>
+        <div class="metric"><strong>53,346</strong><span>Total encounters</span></div>
+        <div class="metric"><strong>$6.87M</strong><span>Total claim cost</span></div>
+        <div class="metric"><strong>$3.31M</strong><span>Payer coverage (48.15%)</span></div>
+        <div class="metric"><strong>$3.56M</strong><span>Patient responsibility (51.85%)</span></div>
+        <div class="metric"><strong>33.73%</strong><span>30-day return rate</span></div>
+      </div>
+      <p>
+        The return metric is based on 1,838 completed inpatient encounters, of which 620 had a
+        later inpatient or emergency encounter within 30 days.
+      </p>
+    </section>
+
+    <section>
+      <h2>Dashboard 1.3: Visuals</h2>
+      <table>
+        <thead>
+          <tr><th>Visual</th><th>Fields and measure</th><th>Business purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>KPI cards</td><td>Total Patients, Total Encounters, Total Claim Cost, Payer Coverage, Patient Responsibility, 30-Day Return Rate</td><td>Immediate summary of the population, utilisation, financial position, and return metric.</td></tr>
+          <tr><td>Line chart: Total Encounters by Year</td><td><code>dim_date[calendar_year]</code> and <code>Total Encounters</code></td><td>Shows the long-term encounter trend and helps identify changes in data volume over time.</td></tr>
+          <tr><td>Donut chart: Encounter Class</td><td><code>fact_encounter[encounter_class]</code> and <code>Total Encounters</code></td><td>Shows the mix of wellness, ambulatory, outpatient, urgent care, emergency, and inpatient utilisation.</td></tr>
+          <tr><td>Column chart: Total Claim Cost by Payer</td><td><code>dim_payer[payer_name]</code> and <code>Total Claim Cost</code></td><td>Highlights payers associated with the highest total claims.</td></tr>
+          <tr><td>Bar chart: Total Encounters by Organization</td><td><code>dim_organization[organization_name]</code> and <code>Total Encounters</code></td><td>Ranks the busiest healthcare organisations; display the top 10.</td></tr>
+          <tr><td>100% stacked column: Funding Mix by Payer</td><td><code>dim_payer[payer_name]</code>, <code>Payer Coverage</code>, and <code>Patient Responsibility</code></td><td>Compares the share of cost paid by payers versus patients.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h3>Key findings from the exported data</h3>
+
+      <h3>Encounter utilisation mix</h3>
+      <table>
+        <thead>
+          <tr><th>Encounter class</th><th class="number">Encounters</th><th class="number">Share of encounters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Wellness</td><td class="number">19,106</td><td class="number">35.82%</td></tr>
+          <tr><td>Ambulatory</td><td class="number">18,936</td><td class="number">35.50%</td></tr>
+          <tr><td>Outpatient</td><td class="number">9,003</td><td class="number">16.88%</td></tr>
+          <tr><td>Urgent care</td><td class="number">2,373</td><td class="number">4.45%</td></tr>
+          <tr><td>Emergency</td><td class="number">2,090</td><td class="number">3.92%</td></tr>
+          <tr><td>Inpatient</td><td class="number">1,838</td><td class="number">3.45%</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Wellness and ambulatory encounters account for 38,042 encounters, or 71.32% of all
+        recorded utilisation. Inpatient encounters are a much smaller portion of volume but form
+        the denominator for the 30-day return metric.
+      </p>
+
+      <h3>Highest-volume organisations</h3>
+      <table>
+        <thead>
+          <tr><th>Organization</th><th class="number">Encounters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>VA Boston Healthcare System Jamaica Plain Campus</td><td class="number">3,217</td></tr>
+          <tr><td>Worcester Outpatient Clinic</td><td class="number">1,972</td></tr>
+          <tr><td>HALLMARK HEALTH SYSTEM</td><td class="number">1,658</td></tr>
+          <tr><td>CAMBRIDGE HEALTH ALLIANCE</td><td class="number">1,028</td></tr>
+          <tr><td>NEWTON-WELLESLEY HOSPITAL</td><td class="number">955</td></tr>
+        </tbody>
+      </table>
+      <p>
+        VA Boston Healthcare System Jamaica Plain Campus is the highest-volume organisation with
+        3,217 encounters, representing approximately 6.03% of all encounters.
+      </p>
+
+      <h3>Claims and coverage pattern</h3>
+      <table>
+        <thead>
+          <tr><th>Payer</th><th class="number">Total claim cost</th><th class="number">Payer coverage</th><th class="number">Patient responsibility</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>NO_INSURANCE</td><td class="number">$1,310,431.09</td><td class="number">$0.00</td><td class="number">$1,310,431.09</td></tr>
+          <tr><td>Medicare</td><td class="number">$1,245,644.86</td><td class="number">$795,049.22</td><td class="number">$450,595.64</td></tr>
+          <tr><td>Medicaid</td><td class="number">$1,021,809.77</td><td class="number">$593,118.09</td><td class="number">$428,691.68</td></tr>
+          <tr><td>Blue Cross Blue Shield</td><td class="number">$850,699.16</td><td class="number">$435,626.60</td><td class="number">$415,072.56</td></tr>
+          <tr><td>UnitedHealthcare</td><td class="number">$598,630.48</td><td class="number">$352,213.96</td><td class="number">$246,416.52</td></tr>
+        </tbody>
+      </table>
+      <p>
+        NO_INSURANCE has the largest total claim cost and no payer contribution, so the complete
+        $1.31M is attributed to patient responsibility. Medicare has the second-highest claim
+        cost and covers 63.82% of its associated claims.
+      </p>
+    </section>
+
+    <section>
+      <h3>Data and refresh note</h3>
+      <p>
+        Figures were calculated from the curated CSV marts in <code>data/csv_output/</code>.
+        The current export manifest records a refresh timestamp of 2026-07-20 18:33 UTC. A
+        successful Airflow run refreshes the CSVs and manifest; refreshing Power BI then updates
+        the dashboard metrics and visualisations.
+      </p>
+    </section>
+
+    <section id="dashboard-2">
+      <h2>Dashboard 2.1: Patient Population</h2>
+      <p><a class="resource-link" href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open interactive dashboard</a></p>
+      <div class="powerbi-embed">
+        <iframe
+          title="health_dashboard_patient_population"
+          src="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
+          allowfullscreen="true"
+          loading="lazy">
+        </iframe>
+      </div>
+      <p>
+        The Patient Population dashboard describes the demographic composition, geographic
+        distribution, aggregate patient expense and coverage fields, and active-condition burden
+        of the synthetic population.
+      </p>
+      <div class="summary">
+        <div class="metric"><strong>1,171</strong><span>Total synthetic patients</span></div>
+        <div class="metric"><strong>$764.94K</strong><span>Average patient expense</span></div>
+        <div class="metric"><strong>$12.93K</strong><span>Average patient coverage</span></div>
+        <div class="metric"><strong>1</strong><span>State represented: Massachusetts</span></div>
+        <div class="metric"><strong>14</strong><span>Counties represented</span></div>
+        <div class="metric"><strong>449</strong><span>Patients with active obesity condition</span></div>
+      </div>
+      <p class="note">
+        Patient expense and coverage fields are synthetic source-generated values. They are used
+        to demonstrate aggregation and comparison techniques, not actual annual healthcare costs.
+      </p>
+    </section>
+
+    <section>
+      <h2>Dashboard 2.2: Visuals</h2>
+      <table>
+        <thead>
+          <tr><th>Visual</th><th>Fields and measure</th><th>Business purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>KPI cards</td><td>Total Patients, Average Patient Expense, Average Patient Coverage</td><td>Summarises the size and high-level financial fields of the patient population.</td></tr>
+          <tr><td>Stacked bar: Patients by Gender and Race</td><td><code>dim_patient[gender]</code>, <code>dim_patient[race]</code>, and Total Patients</td><td>Shows demographic composition across gender and race categories.</td></tr>
+          <tr><td>Bar chart: Patients by Ethnicity</td><td><code>dim_patient[ethnicity]</code> and Total Patients</td><td>Shows the ethnicity distribution of the synthetic population.</td></tr>
+          <tr><td>Map: Patients by State</td><td><code>dim_patient[state]</code> and Total Patients</td><td>Shows population geography; this extract contains one state, so use it as a contextual visual rather than a comparative analysis.</td></tr>
+          <tr><td>Bar chart: Active Conditions</td><td><code>fact_condition[condition_description]</code> and Patients With Active Condition</td><td>Ranks the top 10 active conditions by unique patient count.</td></tr>
+          <tr><td>Matrix: County Population and Expense</td><td><code>dim_patient[state]</code>, <code>dim_patient[county]</code>, Total Patients, and Average Patient Expense</td><td>Compares patient volume and source-generated expense values across counties.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Dashboard 2.3: Key Findings</h2>
+
+      <h3>Demographic composition</h3>
+      <p>
+        The population includes 609 female patients (52.01%) and 562 male patients (47.99%).
+        White patients account for 965 records (82.41%), followed by Black patients with 101
+        records (8.63%) and Asian patients with 90 records (7.69%).
+      </p>
+      <p>
+        The ethnicity visual shows 1,058 non-Hispanic patients (90.35%) and 113 Hispanic
+        patients (9.65%).
+      </p>
+
+      <h3>Geographic distribution</h3>
+      <table>
+        <thead>
+          <tr><th>County</th><th class="number">Patients</th><th class="number">Average patient expense</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Middlesex County</td><td class="number">255</td><td class="number">$735,233.49</td></tr>
+          <tr><td>Worcester County</td><td class="number">150</td><td class="number">$879,103.46</td></tr>
+          <tr><td>Suffolk County</td><td class="number">132</td><td class="number">$619,641.93</td></tr>
+          <tr><td>Norfolk County</td><td class="number">128</td><td class="number">$825,686.05</td></tr>
+          <tr><td>Essex County</td><td class="number">115</td><td class="number">$751,480.75</td></tr>
+        </tbody>
+      </table>
+      <p>
+        All patients are located in Massachusetts. Middlesex County has the largest population
+        with 255 patients (21.78% of the total), followed by Worcester County with 150 patients.
+      </p>
+
+      <h3>Active condition burden</h3>
+      <table>
+        <thead>
+          <tr><th>Active condition</th><th class="number">Unique patients</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Body mass index 30+ — obesity</td><td class="number">449</td></tr>
+          <tr><td>Prediabetes</td><td class="number">317</td></tr>
+          <tr><td>Hypertension</td><td class="number">302</td></tr>
+          <tr><td>Anemia</td><td class="number">276</td></tr>
+          <tr><td>Chronic sinusitis</td><td class="number">229</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Obesity is the most common active condition, associated with 449 patients (38.34% of the
+        population). Prediabetes and hypertension are also prominent, affecting 317 and 302
+        patients respectively. These are synthetic patterns intended only to demonstrate the
+        active-condition visual and patient-count measure.
+      </p>
+    </section>
+
+    <section id="dashboard-3">
+      <h2>Dashboard 3.1: Clinical Utilisation</h2>
+      <p><a class="resource-link" href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open interactive dashboard</a></p>
+      <div class="powerbi-embed">
+        <iframe
+          title="health_dashboard_clinical_utilisation"
+          src="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
+          allowfullscreen="true"
+          loading="lazy">
+        </iframe>
+      </div>
+      <p>
+        The Clinical Utilisation dashboard combines encounter volume, service type, organisation
+        activity, active-condition burden, procedure volume, and immunization volume. It supports
+        an operational view of how the synthetic population uses healthcare services.
+      </p>
+      <div class="summary">
+        <div class="metric"><strong>53,346</strong><span>Total encounters</span></div>
+        <div class="metric"><strong>1,171</strong><span>Unique patients</span></div>
+        <div class="metric"><strong>45.56</strong><span>Encounters per patient</span></div>
+        <div class="metric"><strong>1,104</strong><span>Distinct providers</span></div>
+        <div class="metric"><strong>1,103</strong><span>Distinct organisations used</span></div>
+        <div class="metric"><strong>34,981</strong><span>Total procedures</span></div>
+      </div>
+      <p>
+        The dashboard also contains 15,478 immunization events. Provider specialty is not used as
+        a slicer because the exported provider data contains only one specialty value:
+        <code>GENERAL PRACTICE</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Dashboard 3.2: Visuals</h2>
+      <table>
+        <thead>
+          <tr><th>Visual</th><th>Fields and measure</th><th>Business purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>KPI cards</td><td>Total Encounters, Unique Patients, Encounters per Patient, Distinct Providers, Distinct Organizations, Total Procedures</td><td>Provides a compact operational summary of service usage and clinical activity.</td></tr>
+          <tr><td>Line chart: Encounter Trend by Service Type</td><td><code>dim_date[calendar_year]</code>, <code>fact_encounter[encounter_class]</code>, and Total Encounters</td><td>Shows utilisation change over time for ambulatory, wellness, outpatient, urgent care, emergency, and inpatient activity.</td></tr>
+          <tr><td>Donut chart: Healthcare Utilisation by Encounter Class</td><td><code>fact_encounter[encounter_class]</code> and Total Encounters</td><td>Shows the relative mix of healthcare service types.</td></tr>
+          <tr><td>Bar chart: Top 10 Organisations</td><td><code>dim_organization[organization_name]</code> and Total Encounters</td><td>Ranks the organisations handling the highest encounter volume.</td></tr>
+          <tr><td>Bar chart: Top 10 Conditions by Unique Patients</td><td><code>fact_condition[condition_description]</code> and Patients With Active Condition</td><td>Shows the most common active conditions in the synthetic population.</td></tr>
+          <tr><td>Matrix: Clinical Activity by Year</td><td><code>dim_date[calendar_year]</code>, Total Procedures, Total Immunizations, and Total Encounters</td><td>Compares annual clinical activity across encounter, procedure, and immunization facts.</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Recommended filters are calendar year, month, state, and encounter class. Use an
+        encounter-class button slicer because it has only six easily comparable values.
+      </p>
+    </section>
+
+    <section>
+      <h2>Dashboard 3.3: Key Findings</h2>
+
+      <h3>Utilisation mix and time trend</h3>
+      <p>
+        Wellness encounters are the largest category with 19,106 events (35.82%), closely
+        followed by ambulatory encounters with 18,936 (35.50%). Together they account for
+        71.32% of all encounters. Outpatient encounters add 9,003 events (16.88%), while
+        inpatient and emergency encounters account for 1,838 and 2,090 events respectively.
+      </p>
+      <p>
+        The largest annual encounter volume is 3,178 in 2014, followed by 3,153 in 2017 and
+        3,148 in 2016. The lower 2020 value should be interpreted cautiously because the source
+        extract ends during 2020 and does not represent a full-year comparison.
+      </p>
+
+      <h3>Organisation and provider coverage</h3>
+      <p>
+        The encounter fact covers 1,104 providers and 1,103 organisations. VA Boston Healthcare
+        System Jamaica Plain Campus is the highest-volume organisation with 3,217 encounters,
+        followed by Worcester Outpatient Clinic with 1,972 and HALLMARK HEALTH SYSTEM with 1,658.
+      </p>
+
+      <h3>Clinical activity and procedures</h3>
+      <table>
+        <thead>
+          <tr><th>Procedure</th><th class="number">Events</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Medication Reconciliation</td><td class="number">5,632</td></tr>
+          <tr><td>Renal dialysis</td><td class="number">3,389</td></tr>
+          <tr><td>Auscultation of the fetal heart</td><td class="number">2,705</td></tr>
+          <tr><td>Evaluation of uterine fundal height</td><td class="number">2,705</td></tr>
+          <tr><td>Subcutaneous immunotherapy</td><td class="number">1,497</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The dashboard combines these procedure volumes with the active-condition visual. Obesity,
+        prediabetes, and hypertension are the three most common active conditions, associated
+        with 449, 317, and 302 unique patients respectively.
+      </p>
+      <p class="note">
+        These utilisation patterns are derived from synthetic data. They demonstrate the
+        dashboard's filtering and aggregation logic, not real clinical service demand.
+      </p>
+    </section>
+
+    <section id="dashboard-4">
+      <h2>Dashboard 4.1: Claims and Costs</h2>
+      <p><a class="resource-link" href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open interactive dashboard</a></p>
+      <div class="powerbi-embed">
+        <iframe
+          title="health_dashboard_claims_costs"
+          src="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
+          allowfullscreen="true"
+          loading="lazy">
+        </iframe>
+      </div>
+      <p>
+        The Claims and Costs dashboard presents encounter-level claims, payer coverage, patient
+        responsibility, and separate native-grain procedure and medication costs. Keeping these
+        facts separate avoids double counting procedure or medication costs inside encounter
+        claims.
+      </p>
+      <div class="summary">
+        <div class="metric"><strong>$6.87M</strong><span>Total encounter claim cost</span></div>
+        <div class="metric"><strong>$3.31M</strong><span>Payer coverage</span></div>
+        <div class="metric"><strong>$3.56M</strong><span>Patient responsibility</span></div>
+        <div class="metric"><strong>48.15%</strong><span>Overall payer coverage rate</span></div>
+        <div class="metric"><strong>$172.48M</strong><span>Total procedure cost</span></div>
+        <div class="metric"><strong>$100.11M</strong><span>Total medication cost</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Dashboard 4.2: Visuals</h2>
+      <table>
+        <thead>
+          <tr><th>Visual</th><th>Fields and measure</th><th>Business purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>KPI cards</td><td>Total Claim Cost, Payer Coverage, Patient Responsibility, Payer Coverage Rate, Procedure Cost, Medication Cost</td><td>Summarises the major financial measures without mixing different fact-table grains.</td></tr>
+          <tr><td>Line chart: Claims and Funding over Time</td><td><code>dim_date[calendar_year]</code>, Total Claim Cost, Payer Coverage, Patient Responsibility</td><td>Shows financial changes over the encounter timeline.</td></tr>
+          <tr><td>100% stacked bar: Funding Mix by Payer</td><td><code>dim_payer[payer_name]</code>, Payer Coverage, Patient Responsibility</td><td>Compares the percentage of cost funded by payers and patients.</td></tr>
+          <tr><td>Bar chart: Total Claim Cost by Payer</td><td><code>dim_payer[payer_name]</code> and Total Claim Cost</td><td>Ranks payers by encounter-level claim cost.</td></tr>
+          <tr><td>Bar chart: Top 10 Medications by Total Cost</td><td><code>fact_medication[medication_description]</code> and Medication Cost</td><td>Identifies medication records with the highest native-grain cost.</td></tr>
+          <tr><td>Bar chart: Top 10 Procedures by Total Cost</td><td><code>fact_procedure[procedure_description]</code> and Procedure Cost</td><td>Identifies the highest-cost procedures.</td></tr>
+          <tr><td>Matrix: Payer Financial Summary</td><td><code>dim_payer[payer_name]</code>, Total Claim Cost, Payer Coverage Rate, Patient Responsibility</td><td>Provides a detailed payer comparison with exact values.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Dashboard 4.3: Key Findings</h2>
+
+      <h3>Encounter claim funding</h3>
+      <p>
+        Total encounter claim cost is $6,868,312.95. Payers cover $3,307,391.57, or 48.15%, while
+        $3,560,921.38, or 51.85%, is assigned to patient responsibility. The largest annual claim
+        cost is $409,282.07 in 2014; the next highest years are 2017 ($406,208.08) and 2016
+        ($405,613.95).
+      </p>
+
+      <h3>Payer coverage pattern</h3>
+      <table>
+        <thead>
+          <tr><th>Payer</th><th class="number">Claim cost</th><th class="number">Coverage rate</th><th class="number">Patient responsibility</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>NO_INSURANCE</td><td class="number">$1,310,431.09</td><td class="number">0.00%</td><td class="number">$1,310,431.09</td></tr>
+          <tr><td>Medicare</td><td class="number">$1,245,644.86</td><td class="number">63.83%</td><td class="number">$450,595.64</td></tr>
+          <tr><td>Medicaid</td><td class="number">$1,021,809.77</td><td class="number">58.05%</td><td class="number">$428,691.68</td></tr>
+          <tr><td>Blue Cross Blue Shield</td><td class="number">$850,699.16</td><td class="number">51.21%</td><td class="number">$415,072.56</td></tr>
+          <tr><td>Anthem</td><td class="number">$293,580.68</td><td class="number">76.70%</td><td class="number">$68,406.04</td></tr>
+        </tbody>
+      </table>
+      <p>
+        NO_INSURANCE has the highest claim cost and no payer contribution, making it the largest
+        patient-responsibility category. Anthem has the highest coverage rate among named payers
+        at 76.70%, although its total claim cost is smaller than Medicare, Medicaid, and Blue
+        Cross Blue Shield.
+      </p>
+
+      <h3>Medication and procedure cost concentration</h3>
+      <table>
+        <thead>
+          <tr><th>Medication</th><th class="number">Total medication cost</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Simvastatin 10 MG Oral Tablet</td><td class="number">$13,390,825.29</td></tr>
+          <tr><td>Hydrochlorothiazide 25 MG Oral Tablet</td><td class="number">$9,682,467.03</td></tr>
+          <tr><td>Atenolol / Chlorthalidone Oral Tablet</td><td class="number">$8,586,612.12</td></tr>
+          <tr><td>Albuterol Metered Dose Inhaler</td><td class="number">$8,363,801.74</td></tr>
+          <tr><td>Epinephrine Auto-Injector</td><td class="number">$7,109,760.15</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Medication facts total $100,106,420.41. Only $6,306,231.73 is payer coverage, leaving
+        $93,800,188.68 as medication patient responsibility. These medication values should not
+        be added to encounter claims because they are stored at a different event grain.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Procedure</th><th class="number">Total procedure cost</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Electrical cardioversion</td><td class="number">$31,118,632.42</td></tr>
+          <tr><td>Subcutaneous immunotherapy</td><td class="number">$21,547,347.94</td></tr>
+          <tr><td>Auscultation of the fetal heart</td><td class="number">$17,236,237.41</td></tr>
+          <tr><td>Evaluation of uterine fundal height</td><td class="number">$17,046,983.41</td></tr>
+          <tr><td>Combined chemotherapy and radiation therapy</td><td class="number">$9,362,684.35</td></tr>
+        </tbody>
+      </table>
+      <p class="note">
+        Financial figures are synthetic and demonstrate how the dashboard separates encounter,
+        procedure, and medication cost grain for trustworthy analysis.
+      </p>
+    </section>
+
+    <section id="dashboard-5">
+      <h2>Dashboard 5.1: Readmissions / 30-Day Returns</h2>
+      <p><a class="resource-link" href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open interactive dashboard</a></p>
+      <div class="powerbi-embed">
+        <iframe
+          title="health_dashboard_readmissions"
+          src="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
+          allowfullscreen="true"
+          loading="lazy">
+        </iframe>
+      </div>
+      <p>
+        This dashboard uses the project’s synthetic-data operational return metric. A completed
+        inpatient encounter is flagged when a later inpatient or emergency encounter occurs within
+        30 days. It is not a clinical readmission measure and should not be interpreted as one.
+        The dashboard screenshot and figures below use the active <code>month_name = January</code>
+        filter.
+      </p>
+      <div class="summary">
+        <div class="metric"><strong>141</strong><span>Eligible inpatient encounters — January</span></div>
+        <div class="metric"><strong>41</strong><span>30-day returns — January</span></div>
+        <div class="metric"><strong>100</strong><span>No 30-day return — January</span></div>
+        <div class="metric"><strong>29.08%</strong><span>30-day return rate — January</span></div>
+        <div class="metric"><strong>22.76</strong><span>Average days to return — January</span></div>
+        <div class="metric"><strong>21</strong><span>Patients with a recorded return — January</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Dashboard 5.2: Visuals</h2>
+      <table>
+        <thead>
+          <tr><th>Visual</th><th>Fields and measure</th><th>Business purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>KPI cards</td><td>Eligible Inpatient Encounters, 30-Day Returns, No 30-Day Return, 30-Day Return Rate, Average Days to Return, Patients With 30-Day Return</td><td>Provides a compact view of the return-metric denominator, numerator, rate, and timing.</td></tr>
+          <tr><td>Line chart: 30-Day Return Rate by Year</td><td><code>dim_date[calendar_year]</code> and 30-Day Return Rate</td><td>Shows return-rate movement across the synthetic encounter timeline.</td></tr>
+          <tr><td>Bar chart: Return Rate by Gender</td><td><code>dim_patient[gender]</code> and 30-Day Return Rate</td><td>Compares the metric across gender groups.</td></tr>
+          <tr><td>Bar chart: Return Rate by Ethnicity</td><td><code>dim_patient[ethnicity]</code> and 30-Day Return Rate</td><td>Compares the metric across the available ethnicity categories.</td></tr>
+          <tr><td>Bar chart: Return Rate by County</td><td><code>dim_patient[county]</code> and 30-Day Return Rate</td><td>Ranks county-level metric values; the dashboard should display eligible encounter counts alongside rates.</td></tr>
+          <tr><td>Return-detail table</td><td>Index encounter, patient, demographics, discharge date, return date, and days to return</td><td>Allows drill-down into records with a 30-day return flag.</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The calendar year, month, gender, ethnicity, and county slicers filter this dashboard.
+        Payer, provider, organisation, and encounter-class slicers are excluded because the
+        readmission fact connects directly only to patient and date dimensions.
+      </p>
+    </section>
+
+    <section>
+      <h2>Dashboard 5.3: Key Findings — January Filter</h2>
+
+      <h3>Overall return metric</h3>
+      <p>
+        Of 141 January eligible inpatient encounters, 41 have a later inpatient or emergency
+        encounter within 30 days. This produces a 29.08% synthetic 30-day return rate. The
+        average time between the index discharge and return encounter is 22.76 days.
+      </p>
+      <p>
+        The 41 January return events are associated with 21 distinct patients. The dashboard
+        therefore reports both encounter-level and patient-level counts because the synthetic
+        source can contain repeated inpatient-return patterns for the same patient.
+      </p>
+
+      <h3>Demographic breakdown</h3>
+      <table>
+        <thead>
+          <tr><th>Group</th><th class="number">Eligible encounters</th><th class="number">Returns</th><th class="number">Return rate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Female</td><td class="number">74</td><td class="number">19</td><td class="number">25.68%</td></tr>
+          <tr><td>Male</td><td class="number">67</td><td class="number">22</td><td class="number">32.84%</td></tr>
+          <tr><td>Non-Hispanic</td><td class="number">129</td><td class="number">39</td><td class="number">30.23%</td></tr>
+          <tr><td>Hispanic</td><td class="number">12</td><td class="number">2</td><td class="number">16.67%</td></tr>
+        </tbody>
+      </table>
+      <p>
+        The January gender visual shows a higher synthetic return rate for male encounters than
+        female encounters. Ethnicity differences should be interpreted with caution because the
+        Hispanic denominator contains only 12 eligible encounters.
+      </p>
+
+      <h3>County comparison</h3>
+      <table>
+        <thead>
+          <tr><th>County</th><th class="number">Eligible encounters</th><th class="number">Returns</th><th class="number">Return rate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Hampshire County</td><td class="number">13</td><td class="number">7</td><td class="number">53.85%</td></tr>
+          <tr><td>Norfolk County</td><td class="number">2</td><td class="number">1</td><td class="number">50.00%</td></tr>
+          <tr><td>Plymouth County</td><td class="number">7</td><td class="number">3</td><td class="number">42.86%</td></tr>
+          <tr><td>Worcester County</td><td class="number">24</td><td class="number">9</td><td class="number">37.50%</td></tr>
+          <tr><td>Suffolk County</td><td class="number">20</td><td class="number">7</td><td class="number">35.00%</td></tr>
+        </tbody>
+      </table>
+      <p>
+        January county rates vary across small denominators. For example, Norfolk County has a
+        50.00% rate from only two eligible encounters, so the county visual should always display
+        eligible inpatient counts with the rate.
+      </p>
+
+      <h3>Trend interpretation</h3>
+      <p>
+        The line chart is currently filtered to January across all years. It shows a time-window
+        comparison rather than a full-year rate. Remove the month filter to return to the full
+        dataset view, which contains 1,838 eligible encounters, 620 return events, and a 33.73%
+        overall return rate.
+      </p>
+      <p class="note">
+        These are synthetic-data patterns used to demonstrate a time-window metric, demographic
+        filtering, denominator-aware rate analysis, and record-level drill-down.
+      </p>
+    </section>
+
+    <footer>
+      <p class="subtitle">Dashboard metrics are based on synthetic data and should be used only as a portfolio demonstration.</p>
+    </footer>
+  </main>
+</body>
+</html>

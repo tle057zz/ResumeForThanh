@@ -114,6 +114,16 @@
     figure { margin: 18px 0; }
     figcaption { margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
     .evidence-image { display: block; width: 100%; border: 1px solid var(--line); }
+    .dax-measure {
+      margin: 10px 0;
+      padding: 12px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+    }
 
     @media (max-width: 720px) {
       main { width: 100%; margin: 0; padding: 24px; border: 0; }
@@ -128,24 +138,26 @@
       <h1>Healthcare Claims, Patient Outcomes and Hospital Utilisation Data Platform</h1>
       <p class="subtitle">Data engineering project report — Synthea synthetic healthcare data</p>
       <p class="repository-link">
-        <a href="https://github.com/tle057zz/health_project/tree/main" target="_blank" rel="noopener">Explore the complete project on GitHub</a><br>
-        <span>Python pipeline, dbt models, DuckDB warehouse design, Docker Airflow orchestration, and Power BI-ready exports.</span>
+        <a href="dashboard_executive_overview.html">Read the Executive Overview dashboard report</a><br>
+        <a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open the interactive Power BI dashboard</a><br>
+        <a href="https://github.com/tle057zz/health_project" target="_blank" rel="noopener">Explore the complete project on GitHub</a><br>
+        <span>View the Python pipeline, dbt models, DuckDB warehouse design, Docker Airflow orchestration, and Power BI-ready exports.</span>
       </p>
       <div class="status">Current status: automated CSV-to-Power-BI export pipeline verified in Airflow</div>
     </header>
 
     <section>
-      <h2>Tech stack and tools</h2>
-      <div class="flow" aria-label="Tool list">
-        <span class="flow-item">Python 3.11+</span>
-        <span class="flow-item">DuckDB</span>
-        <span class="flow-item">dbt Core + dbt-duckdb</span>
-        <span class="flow-item">Apache Airflow</span>
-        <span class="flow-item">Docker / Docker Compose</span>
-        <span class="flow-item">Power BI (DAX, Power Query)</span>
-        <span class="flow-item">pytest</span>
-      </div>
-      <p class="note">Python handles ingestion and validation (DuckDB Python API). dbt builds typed staging models and tested marts. Airflow (in Docker) orchestrates validate → run → test → export.</p>
+      <h2>Interactive report pages</h2>
+      <p>Open the corresponding page in the interactive Power BI report:</p>
+      <ul>
+        <li><a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Executive overview</a></li>
+        <li><a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Patient population</a></li>
+        <li><a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Utilisation</a></li>
+        <li><a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Claims &amp; costs</a></li>
+        <li><a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Readmissions (30‑day return)</a></li>
+        <li><a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Pipeline quality</a></li>
+      </ul>
+      <p class="note">Links open the live report. Page navigation is available within Power BI; exact page anchors may vary by tenant.</p>
     </section>
 
     <section>
@@ -195,11 +207,11 @@
         </thead>
         <tbody>
           <tr><td>Source</td><td>Synthea CSV exports</td><td>Provides synthetic patient, encounter, clinical, provider, payer, and cost records.</td></tr>
-          <tr><td>Ingestion</td><td>Python + DuckDB (Python API)</td><td>Checks file structure, records counts, detects configured key duplicates, and loads unchanged source values.</td></tr>
+          <tr><td>Ingestion</td><td>Python + DuckDB</td><td>Checks file structure, records counts, detects configured key duplicates, and loads unchanged source values.</td></tr>
           <tr><td>Storage</td><td>DuckDB</td><td>Persists <code>raw</code>, <code>staging</code>, <code>intermediate</code>, <code>marts</code>, and <code>audit</code> schemas in one local database file.</td></tr>
-          <tr><td>Transformation</td><td>dbt Core + dbt-duckdb</td><td>Types and standardises all 16 source tables, then builds tested dimensions and analytical facts in the <code>marts</code> schema.</td></tr>
-          <tr><td>Orchestration</td><td>Apache Airflow (Docker)</td><td>Schedules validation, loading, dbt execution, testing, audit recording, and CSV export.</td></tr>
-          <tr><td>Reporting</td><td>Power BI (DAX, Power Query)</td><td>Imports curated mart CSV files from <code>data/csv_output/</code>.</td></tr>
+          <tr><td>Transformation</td><td>dbt-duckdb + SQL</td><td>Types and standardises all 16 source tables, then builds tested dimensions and analytical facts in the <code>marts</code> schema.</td></tr>
+          <tr><td>Orchestration</td><td>Apache Airflow</td><td>Will schedule validation, loading, dbt execution, testing, audit recording, and CSV export.</td></tr>
+          <tr><td>Reporting</td><td>Power BI</td><td>Will import curated mart CSV files from <code>data/csv_output/</code>.</td></tr>
         </tbody>
       </table>
     </section>
@@ -283,6 +295,8 @@
           <tr><td>Mart quality tests</td><td>Validated dimensional keys, fact relationships, and non-negative financial values.</td><td>All tests passed</td></tr>
           <tr><td>Power BI export</td><td>Exported curated dimensions and facts with a row-count manifest to <code>data/csv_output/</code>.</td><td>11 CSV tables exported</td></tr>
           <tr><td>Airflow orchestration</td><td>Built a Dockerised Airflow DAG for Python ingestion, dbt run, dbt test, and CSV export.</td><td>End-to-end run passed</td></tr>
+          <tr><td>Power Query preparation</td><td>Imported curated CSVs and set text keys, numeric measures, date/time fields, boolean fields, and date-only relationship columns.</td><td>Complete</td></tr>
+          <tr><td>Power BI DAX measures</td><td>Created core population, utilisation, cost, coverage, patient-responsibility, return-rate, and pipeline-monitoring measures.</td><td>Complete</td></tr>
         </tbody>
       </table>
     </section>
@@ -387,7 +401,66 @@
     </section>
 
     <section>
-      <h2>11. Interview talking points</h2>
+      <h2>11. Power BI semantic model preparation</h2>
+      <p>
+        The exported mart CSVs have been prepared in Power Query and are ready for report-page
+        visual design. Keys remain text to preserve UUIDs, financial measures use fixed decimal
+        numbers, count fields use whole numbers, and event timestamps were converted to date-only
+        fields where required for relationships with <code>dim_date</code>.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Power Query preparation</th><th>Completed work</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Keys and identifiers</td><td>UUID fields ending in <code>_id</code> are Text fields, preventing formatting and precision changes.</td></tr>
+          <tr><td>Measures</td><td>Costs, payer coverage, revenue, and responsibility are Fixed decimal numbers; counts and durations are Whole numbers.</td></tr>
+          <tr><td>Time fields</td><td>Calendar fields are Date; event fields ending in <code>_at</code> are Date/Time.</td></tr>
+          <tr><td>Date relationships</td><td>Date-only fields were derived from encounter, procedure, immunization, and readmission timestamps for use with <code>dim_date</code>.</td></tr>
+          <tr><td>Boolean fields</td><td>Active-condition, weekend, and 30-day return flags use True/False values.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Created DAX measures</h3>
+      <p>Population and utilisation:</p>
+      <pre class="dax-measure"><code>Total Patients = DISTINCTCOUNT(dim_patient[patient_id])
+Total Encounters = COUNTROWS(fact_encounter)
+Unique Patients = DISTINCTCOUNT(fact_encounter[patient_id])</code></pre>
+
+      <p>Claims and cost:</p>
+      <pre class="dax-measure"><code>Total Claim Cost = SUM(fact_encounter[total_claim_cost])
+Payer Coverage = SUM(fact_encounter[payer_coverage])
+Patient Responsibility = SUM(fact_encounter[patient_responsibility])
+Average Cost per Encounter = DIVIDE([Total Claim Cost], [Total Encounters])</code></pre>
+
+      <p>Clinical and medication cost:</p>
+      <pre class="dax-measure"><code>Total Procedures = COUNTROWS(fact_procedure)
+Procedure Cost = SUM(fact_procedure[base_cost])
+Medication Cost = SUM(fact_medication[total_cost])
+Medication Patient Responsibility =
+SUM(fact_medication[patient_responsibility])</code></pre>
+
+      <p>Readmissions and pipeline monitoring:</p>
+      <pre class="dax-measure"><code>30-Day Returns =
+CALCULATE(
+    COUNTROWS(fact_readmission),
+    fact_readmission[returned_within_30_days] = TRUE()
+)
+
+30-Day Return Rate =
+DIVIDE([30-Day Returns], COUNTROWS(fact_readmission))
+
+Latest Export Time = MAX(export_manifest[exported_at_utc])
+Exported Table Count = DISTINCTCOUNT(export_manifest[table_name])
+Total Exported Rows = SUM(export_manifest[row_count])</code></pre>
+      <p class="note">
+        The semantic model and measures are complete. The remaining Power BI work is to arrange
+        these measures and prepared fields into dashboard visuals, filters, and navigation.
+      </p>
+    </section>
+
+    <section>
+      <h2>12. Interview talking points</h2>
 
       <h3>Why not use only SQL to export a CSV for Power BI?</h3>
       <p>
@@ -426,9 +499,9 @@
     </section>
 
     <section>
-      <h2>12. Next steps</h2>
+      <h2>13. Next steps</h2>
       <ol>
-        <li>Build Power BI dashboard pages for executive overview, patient population, utilisation, claims and costs, readmissions, and pipeline quality.</li>
+        <li>Build Power BI dashboard visuals and pages for executive overview, patient population, utilisation, claims and costs, readmissions, and pipeline quality.</li>
         <li>Add supplementary dashboard aggregate marts only when a report measure needs them.</li>
         <li>Add Docker and dbt checks to GitHub Actions CI.</li>
       </ol>

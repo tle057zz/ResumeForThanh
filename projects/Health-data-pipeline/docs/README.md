@@ -1,12 +1,6 @@
 # Healthcare Claims, Patient Outcomes and Hospital Utilisation Data Platform
 
-An end‑to‑end analytical engineering project using synthetic Synthea healthcare data. The platform:
-
-- Validates 16 CSV source tables against a strict source contract (headers, keys)
-- Ingests unchanged records into a persisted DuckDB warehouse
-- Transforms with dbt (staging → tested dimensional marts)
-- Orchestrates the refresh in Dockerised Apache Airflow
-- Exports curated marts as CSV for a Power BI model
+An analytical engineering project using synthetic Synthea healthcare data. The platform validates multi-table CSV data, loads it into DuckDB, transforms it with dbt, and will export curated marts as CSV files for Power BI.
 
 Because the source data is synthetic, all metrics and findings are demonstrations only, not clinical findings.
 
@@ -39,7 +33,7 @@ The source files remain unchanged in `csv/`. The extract includes 16 tables:
 Synthea CSV files
         |
         v
-Python validation and ingestion (DuckDB Python API)
+Python validation and ingestion
         |
         v
 DuckDB: raw and audit schemas
@@ -55,16 +49,6 @@ Power BI
 ```
 
 Apache Airflow will orchestrate the full pipeline after the transformation and export layers are completed.
-
-## Tech stack and tools
-
-- Python 3.11+ (DuckDB Python API, standard library)
-- DuckDB (embedded columnar analytics database)
-- dbt Core with dbt‑duckdb adapter (SQL transformations and testing)
-- Apache Airflow (Docker Compose for local orchestration)
-- Power BI (DAX, Power Query, star‑schema modelling)
-- Testing: pytest
-- Packaging/runtime: `requirements.txt`, virtualenv
 
 ## Project structure
 
