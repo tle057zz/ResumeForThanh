@@ -641,6 +641,16 @@
     .project-btn:hover { background:#f8fafc; }
     .project-btn.primary { background:#0ea5e9; color:#fff; border-color:#0ea5e9; }
     .project-btn.primary:hover { background:#0284c7; border-color:#0284c7; }
+    .project-status {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      font-size: .86rem;
+      font-weight: 600;
+    }
   </style>
 
   <!-- Vendor CSS Files -->
@@ -1088,21 +1098,26 @@
           </article>
           <!-- Project 4 -->
           <article class="project-card">
-            <img class="project-thumb" src="/health-data-pipeline/docker_run_pipeline.png" alt="Health Data Pipeline">
+            <img class="project-thumb" src="/health-data-pipeline/docker_run_pipeline.png" alt="Healthcare Data Pipeline">
             <div class="project-body">
-              <h3 class="project-title">Health Data Pipeline</h3>
-              <p class="project-desc">Containerized data pipeline with docs and runbook covering setup, execution, and results.</p>
+              <h3 class="project-title">Healthcare Data Pipeline</h3>
+              <p class="project-desc">Containerized healthcare analytics pipeline with documentation and runbook covering setup, execution, validated transformations, and Power BI reporting.</p>
               <div class="project-tags">
-                <span class="project-tag">Docker</span>
                 <span class="project-tag">Python</span>
-                <span class="project-tag">ETL</span>
+                <span class="project-tag">DuckDB</span>
+                <span class="project-tag">dbt</span>
+                <span class="project-tag">Apache Airflow</span>
+                <span class="project-tag">Docker</span>
+                <span class="project-tag">Power BI</span>
+                <span class="project-tag">ELT</span>
                 <span class="project-tag">Data Pipeline</span>
               </div>
               <div class="project-actions">
                 <a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" class="project-btn primary" target="_blank" rel="noopener">View Power BI</a>
-                <a href="/health-data-pipeline/project_report.html" class="project-btn primary" target="_blank" rel="noopener">Open Docs</a>
-                <a href="https://github.com/tle057zz/health_project" class="project-btn" target="_blank" rel="noopener">Repo</a>
+                <a href="/health-data-pipeline/dashboard_executive_overview.html" class="project-btn primary" target="_blank" rel="noopener">Open Dashboard Docs</a>
+                <a href="https://github.com/tle057zz/health_project" class="project-btn" target="_blank" rel="noopener">Repository</a>
               </div>
+              <div class="project-status">Current status: automated CSV-to-Power-BI export pipeline verified in Airflow</div>
             </div>
           </article>
         </div>
