@@ -41,6 +41,70 @@
     a { color: var(--primary); }
 
     .subtitle { margin: 0; color: var(--muted); font-size: 1.05rem; }
+    .hero {
+      margin: -44px -44px 40px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+    }
+    .hero-image {
+      display: block;
+      width: 100%;
+      max-height: 350px;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-content { padding: 36px 44px 40px; }
+    .hero h1 {
+      margin-bottom: 14px;
+      color: var(--ink);
+      font-size: 2.35rem;
+    }
+    .hero .subtitle {
+      max-width: 760px;
+      font-size: 1.35rem;
+    }
+    .tool-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .tool-tag {
+      padding: 7px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--primary);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .hero-button {
+      padding: 12px 18px;
+      border: 1px solid var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .hero-button.secondary {
+      background: #ffffff;
+      color: var(--ink);
+      border-color: var(--line);
+    }
+    .hero-button:hover,
+    .hero-button:focus {
+      background: #0a4359;
+      color: #ffffff;
+    }
     .repository-link {
       margin-top: 16px;
       padding: 12px 14px;
@@ -127,6 +191,9 @@
 
     @media (max-width: 720px) {
       main { width: 100%; margin: 0; padding: 24px; border: 0; }
+      .hero { margin: -24px -24px 32px; }
+      .hero-content { padding: 28px 24px 32px; }
+      .hero h1 { font-size: 1.9rem; }
       .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       table { display: block; overflow-x: auto; }
     }
@@ -134,16 +201,28 @@
 </head>
 <body>
   <main>
-    <header>
-      <h1>Healthcare Claims, Patient Outcomes and Hospital Utilisation Data Platform</h1>
-      <p class="subtitle">Data engineering project report — Synthea synthetic healthcare data</p>
-      <p class="repository-link">
-        <a href="dashboard_executive_overview.html">Read the Executive Overview dashboard report</a><br>
-        <a href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open the interactive Power BI dashboard</a><br>
-        <a href="https://github.com/tle057zz/health_project" target="_blank" rel="noopener">Explore the complete project on GitHub</a><br>
-        <span>View the Python pipeline, dbt models, DuckDB warehouse design, Docker Airflow orchestration, and Power BI-ready exports.</span>
-      </p>
+    <header class="hero">
+      <img class="hero-image" src="docker_run_pipeline.png" alt="Successful Airflow healthcare pipeline run showing all four tasks completed">
+      <div class="hero-content">
+      <h1>Healthcare Data Pipeline</h1>
+      <p class="subtitle">Containerized healthcare analytics pipeline with documentation and runbook covering setup, execution, validated transformations, and Power BI reporting.</p>
+      <div class="tool-list" aria-label="Project technology stack">
+        <span class="tool-tag">Python</span>
+        <span class="tool-tag">DuckDB</span>
+        <span class="tool-tag">dbt</span>
+        <span class="tool-tag">Apache Airflow</span>
+        <span class="tool-tag">Docker</span>
+        <span class="tool-tag">Power BI</span>
+        <span class="tool-tag">ELT</span>
+        <span class="tool-tag">Data Pipeline</span>
+      </div>
+      <div class="hero-actions">
+        <a class="hero-button" href="https://app.powerbi.com/view?r=eyJrIjoiZWQ2NWE4YTEtNzdmYi00NzQ1LTg1OGYtYjhjYmQ5OGNjYTc3IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">View Power BI</a>
+        <a class="hero-button" href="dashboard_executive_overview.html">Open Dashboard Docs</a>
+        <a class="hero-button secondary" href="https://github.com/tle057zz/health_project" target="_blank" rel="noopener">Repository</a>
+      </div>
       <div class="status">Current status: automated CSV-to-Power-BI export pipeline verified in Airflow</div>
+      </div>
     </header>
 
     <section>

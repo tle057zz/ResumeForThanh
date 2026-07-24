@@ -603,16 +603,18 @@
         This dashboard uses the project’s synthetic-data operational return metric. A completed
         inpatient encounter is flagged when a later inpatient or emergency encounter occurs within
         30 days. It is not a clinical readmission measure and should not be interpreted as one.
-        The dashboard screenshot and figures below use the active <code>month_name = January</code>
-        filter.
+      </p>
+      <p class="note">
+        Figures below match the published page with <strong>no slicer selections applied</strong>
+        (calendar year full range; month, gender, ethnicity, and county all set to All).
       </p>
       <div class="summary">
-        <div class="metric"><strong>141</strong><span>Eligible inpatient encounters — January</span></div>
-        <div class="metric"><strong>41</strong><span>30-day returns — January</span></div>
-        <div class="metric"><strong>100</strong><span>No 30-day return — January</span></div>
-        <div class="metric"><strong>29.08%</strong><span>30-day return rate — January</span></div>
-        <div class="metric"><strong>22.76</strong><span>Average days to return — January</span></div>
-        <div class="metric"><strong>21</strong><span>Patients with a recorded return — January</span></div>
+        <div class="metric"><strong>1,838</strong><span>Eligible inpatient encounters</span></div>
+        <div class="metric"><strong>620</strong><span>30-day returns</span></div>
+        <div class="metric"><strong>1,218</strong><span>No 30-day return</span></div>
+        <div class="metric"><strong>33.73%</strong><span>30-day return rate</span></div>
+        <div class="metric"><strong>17.93</strong><span>Average days to return</span></div>
+        <div class="metric"><strong>33</strong><span>Patients with a 30-day return</span></div>
       </div>
     </section>
 
@@ -623,34 +625,37 @@
           <tr><th>Visual</th><th>Fields and measure</th><th>Business purpose</th></tr>
         </thead>
         <tbody>
-          <tr><td>KPI cards</td><td>Eligible Inpatient Encounters, 30-Day Returns, No 30-Day Return, 30-Day Return Rate, Average Days to Return, Patients With 30-Day Return</td><td>Provides a compact view of the return-metric denominator, numerator, rate, and timing.</td></tr>
+          <tr><td>KPI cards</td><td>Eligible Inpatient Encounters, 30-Day Returns, No 30-Day Return, 30-Day Return Rate, Average Days to Return, Patients With 30-Day Returns</td><td>Provides a compact view of the return-metric denominator, numerator, rate, timing, and distinct patients.</td></tr>
           <tr><td>Line chart: 30-Day Return Rate by Year</td><td><code>dim_date[calendar_year]</code> and 30-Day Return Rate</td><td>Shows return-rate movement across the synthetic encounter timeline.</td></tr>
+          <tr><td>Bar chart: Return Rate by County</td><td><code>dim_patient[county]</code> and 30-Day Return Rate</td><td>Ranks county-level return rates; interpret with eligible encounter counts because denominators vary.</td></tr>
           <tr><td>Bar chart: Return Rate by Gender</td><td><code>dim_patient[gender]</code> and 30-Day Return Rate</td><td>Compares the metric across gender groups.</td></tr>
           <tr><td>Bar chart: Return Rate by Ethnicity</td><td><code>dim_patient[ethnicity]</code> and 30-Day Return Rate</td><td>Compares the metric across the available ethnicity categories.</td></tr>
-          <tr><td>Bar chart: Return Rate by County</td><td><code>dim_patient[county]</code> and 30-Day Return Rate</td><td>Ranks county-level metric values; the dashboard should display eligible encounter counts alongside rates.</td></tr>
-          <tr><td>Return-detail table</td><td>Index encounter, patient, demographics, discharge date, return date, and days to return</td><td>Allows drill-down into records with a 30-day return flag.</td></tr>
+          <tr><td>Donut: Eligible encounters by return flag</td><td><code>fact_readmission[returned_within_30_days]</code></td><td>Shows the True/False split: 620 returns (33.73%) and 1,218 with no return (66.27%).</td></tr>
+          <tr><td>Return-detail table</td><td>Index encounter ID, patient name, gender, county, index date parts, return date parts, and days to return</td><td>Supports drill-down into return timing. The unfiltered sum of days to return is 11,114.</td></tr>
         </tbody>
       </table>
       <p>
-        The calendar year, month, gender, ethnicity, and county slicers filter this dashboard.
-        Payer, provider, organisation, and encounter-class slicers are excluded because the
+        Optional slicers are available for calendar year, month, gender, ethnicity, and county.
+        The findings in this report do not apply any of those filters. Payer, provider,
+        organisation, and encounter-class slicers are not used on this page because the
         readmission fact connects directly only to patient and date dimensions.
       </p>
     </section>
 
     <section>
-      <h2>Dashboard 5.3: Key Findings — January Filter</h2>
+      <h2>Dashboard 5.3: Key Findings — No Filter</h2>
 
       <h3>Overall return metric</h3>
       <p>
-        Of 141 January eligible inpatient encounters, 41 have a later inpatient or emergency
-        encounter within 30 days. This produces a 29.08% synthetic 30-day return rate. The
-        average time between the index discharge and return encounter is 22.76 days.
+        Of 1,838 eligible inpatient encounters, 620 have a later inpatient or emergency encounter
+        within 30 days. That produces a 33.73% synthetic 30-day return rate. The average time
+        between the index discharge and the return encounter is 17.93 days.
       </p>
       <p>
-        The 41 January return events are associated with 21 distinct patients. The dashboard
-        therefore reports both encounter-level and patient-level counts because the synthetic
-        source can contain repeated inpatient-return patterns for the same patient.
+        Those 620 return events are associated with only 33 distinct patients. The dashboard
+        therefore reports both encounter-level and patient-level counts: the synthetic source
+        contains repeated inpatient-return patterns for a small number of patients, so the
+        encounter numerator is much larger than the patient count.
       </p>
 
       <h3>Demographic breakdown</h3>
@@ -659,16 +664,16 @@
           <tr><th>Group</th><th class="number">Eligible encounters</th><th class="number">Returns</th><th class="number">Return rate</th></tr>
         </thead>
         <tbody>
-          <tr><td>Female</td><td class="number">74</td><td class="number">19</td><td class="number">25.68%</td></tr>
-          <tr><td>Male</td><td class="number">67</td><td class="number">22</td><td class="number">32.84%</td></tr>
-          <tr><td>Non-Hispanic</td><td class="number">129</td><td class="number">39</td><td class="number">30.23%</td></tr>
-          <tr><td>Hispanic</td><td class="number">12</td><td class="number">2</td><td class="number">16.67%</td></tr>
+          <tr><td>Male</td><td class="number">805</td><td class="number">302</td><td class="number">37.52%</td></tr>
+          <tr><td>Female</td><td class="number">1,033</td><td class="number">318</td><td class="number">30.78%</td></tr>
+          <tr><td>Non-Hispanic</td><td class="number">1,731</td><td class="number">610</td><td class="number">35.24%</td></tr>
+          <tr><td>Hispanic</td><td class="number">107</td><td class="number">10</td><td class="number">9.35%</td></tr>
         </tbody>
       </table>
       <p>
-        The January gender visual shows a higher synthetic return rate for male encounters than
-        female encounters. Ethnicity differences should be interpreted with caution because the
-        Hispanic denominator contains only 12 eligible encounters.
+        Male encounters show a higher synthetic return rate than female encounters. Ethnicity
+        differences should be read carefully: Hispanic patients contribute a much smaller
+        denominator (107 eligible encounters) than non-Hispanic patients.
       </p>
 
       <h3>County comparison</h3>
@@ -677,29 +682,34 @@
           <tr><th>County</th><th class="number">Eligible encounters</th><th class="number">Returns</th><th class="number">Return rate</th></tr>
         </thead>
         <tbody>
-          <tr><td>Hampshire County</td><td class="number">13</td><td class="number">7</td><td class="number">53.85%</td></tr>
-          <tr><td>Norfolk County</td><td class="number">2</td><td class="number">1</td><td class="number">50.00%</td></tr>
-          <tr><td>Plymouth County</td><td class="number">7</td><td class="number">3</td><td class="number">42.86%</td></tr>
-          <tr><td>Worcester County</td><td class="number">24</td><td class="number">9</td><td class="number">37.50%</td></tr>
-          <tr><td>Suffolk County</td><td class="number">20</td><td class="number">7</td><td class="number">35.00%</td></tr>
+          <tr><td>Hampshire County</td><td class="number">167</td><td class="number">90</td><td class="number">53.89%</td></tr>
+          <tr><td>Suffolk County</td><td class="number">253</td><td class="number">128</td><td class="number">50.59%</td></tr>
+          <tr><td>Plymouth County</td><td class="number">85</td><td class="number">40</td><td class="number">47.06%</td></tr>
+          <tr><td>Dukes County</td><td class="number">38</td><td class="number">16</td><td class="number">42.11%</td></tr>
+          <tr><td>Worcester County</td><td class="number">255</td><td class="number">95</td><td class="number">37.25%</td></tr>
+          <tr><td>Barnstable County</td><td class="number">154</td><td class="number">29</td><td class="number">18.83%</td></tr>
+          <tr><td>Bristol County</td><td class="number">155</td><td class="number">12</td><td class="number">7.74%</td></tr>
+          <tr><td>Berkshire County</td><td class="number">14</td><td class="number">0</td><td class="number">0.00%</td></tr>
         </tbody>
       </table>
       <p>
-        January county rates vary across small denominators. For example, Norfolk County has a
-        50.00% rate from only two eligible encounters, so the county visual should always display
-        eligible inpatient counts with the rate.
+        Hampshire and Suffolk counties lead the synthetic return-rate ranking among larger
+        denominators. Lower-rate counties such as Barnstable and Bristol still have meaningful
+        eligible volumes, so county ranking supports exploration rather than clinical ranking.
       </p>
 
       <h3>Trend interpretation</h3>
       <p>
-        The line chart is currently filtered to January across all years. It shows a time-window
-        comparison rather than a full-year rate. Remove the month filter to return to the full
-        dataset view, which contains 1,838 eligible encounters, 620 return events, and a 33.73%
-        overall return rate.
+        With no month or year filter applied, the calendar-year line chart uses the full
+        synthetic timeline. The trend is volatile because annual eligible volumes are uneven.
+        Peaks above 60% and sharp drops toward 0% reflect small yearly denominators more than a
+        stable operational pattern, and should not be treated as clinical signal.
       </p>
       <p class="note">
         These are synthetic-data patterns used to demonstrate a time-window metric, demographic
-        filtering, denominator-aware rate analysis, and record-level drill-down.
+        comparison, denominator-aware rate analysis, and record-level drill-down. Power BI may
+        display eligible and non-return counts as rounded thousands (for example 2K and 1K);
+        the exact mart values are 1,838 eligible and 1,218 with no 30-day return.
       </p>
     </section>
 
