@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive Conclusion | MIMIC Analytics</title>
+  <style>
+    :root {
+      --bg:#0f1419; --surface:#1a2332; --surface-2:#243044; --border:#2d3f5c;
+      --text:#e8edf4; --muted:#94a3b8; --accent:#3b82f6; --accent-hover:#2563eb;
+      --gold:#f59e0b; --success:#22c55e;
+      --font:"Segoe UI",system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
+    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    .container{max-width:1040px;margin:0 auto;padding:0 1.5rem}
+    header{background:linear-gradient(135deg,#1a3a6b,#0f1419 70%);border-bottom:1px solid var(--border);padding:2.5rem 0 2rem}
+    .badge{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:.2rem .8rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem}
+    header h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.4rem}
+    header .sub{color:var(--muted);font-size:.95rem;margin-bottom:1.2rem}
+    .nav-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+    .btn{display:inline-flex;align-items:center;padding:.6rem 1.1rem;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);text-decoration:none}
+    .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{text-decoration:none}
+    section{padding:2.25rem 0;border-bottom:1px solid var(--border)}
+    h2{font-size:1.3rem;margin-bottom:.9rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);display:inline-block}
+    h3{font-size:.95rem;color:var(--gold);margin:1.4rem 0 .5rem}
+    p,li{color:var(--muted);font-size:.92rem;margin-bottom:.5rem}
+    ul,ol{padding-left:1.2rem;margin-bottom:.75rem}
+    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.65rem;margin:1rem 0}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center}
+    .kpi .val{font-size:1.35rem;font-weight:700;color:var(--accent)}
+    .kpi .lbl{font-size:.72rem;color:var(--muted)}
+    .summary-box{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:1.1rem 1.3rem;margin:1rem 0}
+    .summary-box p{margin-bottom:.6rem}
+    .summary-box p:last-child{margin-bottom:0}
+    .insight{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:.85rem 1.1rem;margin:.65rem 0}
+    .insight strong{color:var(--text)}
+    .theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.75rem;margin:1rem 0}
+    .theme-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.15rem}
+    .theme-card .num{font-size:.72rem;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:.35rem}
+    .theme-card h4{font-size:.9rem;color:var(--text);margin-bottom:.4rem}
+    .theme-card p{font-size:.86rem;margin:0}
+    .rec-list{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin:.75rem 0}
+    .rec-list ol{margin:0;padding-left:1.2rem}
+    .rec-list li{margin-bottom:.5rem}
+    .rec-list li strong{color:var(--text)}
+    .table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
+    table{width:100%;border-collapse:collapse;font-size:.84rem}
+    th{background:var(--surface-2);text-align:left;padding:.5rem .8rem;border:1px solid var(--border)}
+    td{padding:.45rem .8rem;border:1px solid var(--border);color:var(--muted)}
+    tr:nth-child(even) td{background:var(--surface)}
+    td strong{color:var(--text)}
+    code{font-family:monospace;font-size:.8rem;background:var(--surface-2);padding:.1rem .35rem;border-radius:3px;color:var(--text)}
+    .hl{color:var(--gold);font-weight:600}
+    .limit-list li{margin-bottom:.35rem}
+    footer{padding:1.5rem 0;text-align:center;color:var(--muted);font-size:.8rem}
+    .site-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:.65rem 0;position:sticky;top:0;z-index:100}
+    .site-nav .container{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+    .site-nav .brand{font-weight:700;color:var(--text);margin-right:.5rem;font-size:.9rem;text-decoration:none}
+    .site-nav a{padding:.35rem .7rem;border-radius:6px;font-size:.84rem;color:var(--muted);text-decoration:none}
+    .site-nav a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}
+    .site-nav a.active{color:var(--accent);background:var(--surface-2);font-weight:600}
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a class="brand" href="index.html">MIMIC Analytics</a>
+    <a href="index.html">Home</a>
+    <a href="report.html">Project Report</a>
+    <a href="executive_conclusion.html" class="active">Conclusion</a>
+    <a href="dashboard_01_hospital_overview.html">Dashboard 1</a>
+    <a href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a>
+    <a href="dashboard_03_medication_analysis.html">Dashboard 3</a>
+    <a href="dashboard_04_hospital_operations.html">Dashboard 4</a>
+    <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Power BI ↗</a>
+  </div>
+</nav>
+
+<header>
+  <div class="container">
+    <span class="badge">Cross-domain analysis · All 5 Gold views</span>
+    <h1>Executive Conclusion</h1>
+    <p class="sub">
+      MIMIC-IV Clinical Database Demo v2.2 &nbsp;·&nbsp;
+      100 patients · 275 admissions &nbsp;·&nbsp;
+      Verified against five CSV exports + Databricks <code>07_business_analysis</code>
+    </p>
+    <div class="nav-links">
+      <a class="btn btn-primary" href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open Live Dashboard</a>
+      <a class="btn btn-ghost" href="../docs/executive_conclusion.md">Markdown</a>
+      <a class="btn btn-ghost" href="index.html">All Reports</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2>Summary</h2>
+    <div class="summary-box">
+      <p>This analysis integrates <strong>24,780 clinical records</strong> across admissions, diagnoses, prescriptions, transfers, and procedures from the MIMIC-IV demo cohort. The data describes a <span class="hl">high-acuity, older-adult inpatient population</span> with heavy emergency utilization, substantial comorbidity burden, intensive medication management, and active intra-hospital bed movement.</p>
+      <p>All 100 patients appear across transfer and medication domains; 92 received coded procedures. KPIs from the Databricks business analysis notebook align exactly with the five Gold-layer reporting views, confirming data integrity from lakehouse to Power BI dashboard.</p>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="val">24,780</div><div class="lbl">Total Records</div></div>
+      <div class="kpi"><div class="val">100</div><div class="lbl">Patients</div></div>
+      <div class="kpi"><div class="val">275</div><div class="lbl">Admissions</div></div>
+      <div class="kpi"><div class="val">19.3%</div><div class="lbl">Readmission Rate</div></div>
+      <div class="kpi"><div class="val">5.5%</div><div class="lbl">Mortality Rate</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>1. Population &amp; Utilization</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Patients</td><td>100</td></tr>
+          <tr><td>Admissions</td><td>275 (2.75 per patient)</td></tr>
+          <tr><td>Average LOS</td><td>6.88 days (median 4.85)</td></tr>
+          <tr><td>30-day readmissions</td><td>53 (19.3%)</td></tr>
+          <tr><td>In-hospital deaths</td><td>15 (5.5%)</td></tr>
+          <tr><td>Top admission type</td><td><strong>EW EMER.</strong> — 104 (37.8%)</td></tr>
+          <tr><td>Dominant age band</td><td><strong>50–79</strong> — 62% of patients</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight"><strong>Conclusion:</strong> Utilization is <span class="hl">repeat-visit driven</span> — high-utilizer patients account for a disproportionate share of admissions. The cohort is older, emergency-oriented, and clinically complex, with significant post-discharge and chronic-disease management needs.</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>2. Clinical Profile</h2>
+    <h3>Admitting conditions (primary diagnoses)</h3>
+    <p>Coronary atherosclerosis and acute kidney failure lead at 7 admissions each, followed by cerebral aneurysm, NSTEMI, aortic valve disorders, and postoperative infection (4 each). Admissions reflect <strong>diverse acute presentations</strong> — no single condition dominates.</p>
+    <h3>Comorbidity burden (all diagnoses)</h3>
+    <p>Secondary coding reveals <span class="hl">chronic cardiometabolic disease</span>: hypertension (68 records), hyperlipidemia variants (112 combined), hypothyroidism (47), obesity (43), insulin use (37). With <strong>16.4 ICD codes per admission</strong>, documentation reflects typical US inpatient coding density.</p>
+    <div class="insight"><strong>Conclusion:</strong> Patients present with <strong>acute cardiac/renal events</strong> on a background of <strong>chronic metabolic disease</strong>. Clinical strategy: dual focus on acute stabilization and long-term cardiometabolic management.</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>3. Medication &amp; Treatment Intensity</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Prescription records</td><td>18,087</td></tr>
+          <tr><td>Unique drugs</td><td>626</td></tr>
+          <tr><td>Avg prescriptions per admission</td><td>72.3</td></tr>
+          <tr><td>Avg prescription duration</td><td>2.71 days</td></tr>
+          <tr><td>IV route share</td><td>45.4% (51%+ incl. IV DRIP)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Top medications:</strong> Insulin (915) · 0.9% Sodium Chloride (810) · Potassium Chloride (610) · Furosemide (510) · Metoprolol (371)</p>
+    <div class="insight"><strong>Conclusion:</strong> Medication exposure is <span class="hl">universal and intensive</span> — all 100 patients medicated. Formulary profile confirms acute inpatient care with significant diabetes and cardiovascular management.</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>4. Hospital Operations</h2>
+    <h3>Patient movement</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Transfer events</td><td>1,190 (4.3 per admission)</td></tr>
+          <tr><td>Event mix</td><td>TRANSFER 34% · DISCHARGE 23% · ADMIT 23% · ED 20%</td></tr>
+          <tr><td>Avg transfer duration</td><td>51.22 hours</td></tr>
+          <tr><td>Busiest named unit</td><td><strong>EMERGENCY DEPARTMENT</strong> — 236 events</td></tr>
+          <tr><td>Longest unit stay</td><td>Medicine/Cardiology Intermediate (~332 hrs)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Procedures</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Procedure records</td><td>722</td></tr>
+          <tr><td>Patients with procedures</td><td>92 (92%)</td></tr>
+          <tr><td>Admissions with procedures</td><td>187 (68%)</td></tr>
+          <tr><td>Top age group</td><td>50–64 (286 procedures, 39.6%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Top procedure codes:</strong> Central venous access (02HV33Z, 3897) · enteral nutrition (966) · mechanical ventilation (9671)</p>
+    <div class="insight"><strong>Conclusion:</strong> Operations reflect a <span class="hl">high-intensity inpatient environment</span> — frequent transfers, ED throughput, and invasive support procedures concentrated in the 50–64 age band.</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>5. Cross-Domain Themes</h2>
+    <div class="theme-grid">
+      <div class="theme-card">
+        <div class="num">Theme 1</div>
+        <h4>Emergency-driven, older-adult cohort</h4>
+        <p>EW EMER. = 37.8% of admissions. Patients aged 50–79 = 62%. Insurance: OTHER 54%, Medicare 38%.</p>
+      </div>
+      <div class="theme-card">
+        <div class="num">Theme 2</div>
+        <h4>Acute on chronic</h4>
+        <p>Primary = cardiac/renal events. Secondary = hypertension, diabetes, hyperlipidemia. Medications = IV fluids + insulin + cardiovascular drugs.</p>
+      </div>
+      <div class="theme-card">
+        <div class="num">Theme 3</div>
+        <h4>High coding density</h4>
+        <p>~16 diagnoses, ~72 prescriptions, ~4 transfers per admission. Documentation-rich US hospital practice.</p>
+      </div>
+      <div class="theme-card">
+        <div class="num">Theme 4</div>
+        <h4>Readmission risk</h4>
+        <p>19.3% 30-day readmission. 27.6% discharged to home health. Significant post-acute care needs.</p>
+      </div>
+      <div class="theme-card">
+        <div class="num">Theme 5</div>
+        <h4>Volume ≠ intensity</h4>
+        <p>EW EMER. drives volume; URGENT/DIRECT EMER. drive longer LOS. Separate throughput from bed-day planning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>6. Data &amp; Analytics Validation</h2>
+    <p>Five Gold reporting views consumed by Power BI and <code>07_business_analysis</code>. Cross-validation confirms pipeline integrity:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>View</th><th>Records</th><th>Key KPI</th><th>Report</th></tr></thead>
+        <tbody>
+          <tr><td><code>vw_admission_overview</code></td><td>275</td><td>6.88 LOS · 19.3% readmission</td><td><a href="dashboard_01_hospital_overview.html">Dashboard 1</a></td></tr>
+          <tr><td><code>vw_diagnosis_analysis</code></td><td>4,506</td><td>16.4 dx/admission · hypertension leads</td><td><a href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a></td></tr>
+          <tr><td><code>vw_prescription_analysis</code></td><td>18,087</td><td>72 rx/admission · insulin leads</td><td><a href="dashboard_03_medication_analysis.html">Dashboard 3</a></td></tr>
+          <tr><td><code>vw_transfer_analysis</code></td><td>1,190</td><td>4.3 events/admission · ED busiest</td><td><a href="dashboard_04_hospital_operations.html">Dashboard 4</a></td></tr>
+          <tr><td><code>vw_procedure_analysis</code></td><td>722</td><td>92% patient coverage · 50–64 leads</td><td><a href="dashboard_04_hospital_operations.html">Dashboard 4</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="insight"><strong>Platform conclusion:</strong> The medallion pipeline is <span class="hl">fit for purpose</span> as an end-to-end clinical data engineering demonstration — from raw MIMIC-IV CSV through Databricks Gold to interactive dashboards.</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>7. Limitations</h2>
+    <ul class="limit-list">
+      <li><strong>Demo subset</strong> — 100 deidentified patients; not representative of full MIMIC-IV or real-world epidemiology.</li>
+      <li><strong>Deidentified dates</strong> — admission years (2110–2201) cannot be interpreted as calendar trends.</li>
+      <li><strong>Hospital tables only</strong> — no ICU charting, labs, or vitals; administrative, not physiological picture.</li>
+      <li><strong>Coverage gaps</strong> — 25 admissions lack pharmacy records; 8 patients lack procedures.</li>
+      <li><strong>US coding context</strong> — high diagnosis and prescription counts reflect billing practice, not necessarily distinct clinical events.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>8. Executive Recommendations</h2>
+    <div class="rec-list">
+      <ol>
+        <li><strong>Prioritize chronic disease management</strong> — hypertension, diabetes, and hyperlipidemia drive diagnoses and medications across the cohort.</li>
+        <li><strong>Focus readmission reduction on emergency and observation pathways</strong> — 19.3% rate concentrated in EW EMER. and observation admits.</li>
+        <li><strong>Plan capacity around ED throughput and transfer volume</strong> — 236 ED events and 404 intra-hospital transfers signal active bed management.</li>
+        <li><strong>Separate admission volume from bed-day intensity</strong> — high-utilizer patients and URGENT admissions drive LOS, not EW EMER. volume alone.</li>
+        <li><strong>Use the pipeline as a scalable template</strong> — extend medallion architecture, Gold views, and Power BI pattern to full MIMIC-IV or production hospital feeds.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Executive Conclusion — MIMIC Clinical Analytics</p>
+    <p style="margin-top:.4rem">
+      <a href="index.html">Home</a>
+      &nbsp;·&nbsp; <a href="report.html">Project Report</a>
+      &nbsp;·&nbsp; <a href="dashboard_01_hospital_overview.html">Dashboard 1</a>
+      &nbsp;·&nbsp; <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Live Dashboard</a>
+      &nbsp;·&nbsp; <a href="../docs/executive_conclusion.md">Markdown</a>
+    </p>
+    <p style="margin-top:.35rem;font-size:.75rem">Verified against <code>data/databricks_output/exports/</code> and Databricks notebook <code>07_business_analysis</code></p>
+  </div>
+</footer>
+</body>
+</html>

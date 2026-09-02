@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIMIC Clinical Analytics — Reports</title>
+  <style>
+    :root {
+      --bg:#0f1419; --surface:#1a2332; --surface-2:#243044; --border:#2d3f5c;
+      --text:#e8edf4; --muted:#94a3b8; --accent:#3b82f6; --accent-hover:#2563eb;
+      --gold:#f59e0b; --font:"Segoe UI",system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6}
+    a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+    .container{max-width:900px;margin:0 auto;padding:0 1.5rem}
+    .site-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:.65rem 0;position:sticky;top:0;z-index:100}
+    .site-nav .container{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+    .site-nav .brand{font-weight:700;color:var(--text);margin-right:.5rem;font-size:.9rem}
+    .site-nav a{padding:.35rem .7rem;border-radius:6px;font-size:.84rem;color:var(--muted);text-decoration:none}
+    .site-nav a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}
+    .site-nav a.active{color:var(--accent);background:var(--surface-2);font-weight:600}
+    .site-nav .disabled{color:#556;cursor:default;font-size:.84rem;padding:.35rem .7rem}
+    header{padding:3rem 0 2rem;text-align:center}
+    header h1{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:.5rem}
+    header p{color:var(--muted);max-width:560px;margin:0 auto 1.5rem}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;padding-bottom:3rem}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:border-color .15s,transform .1s}
+    .card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .card h2{font-size:1.05rem;margin-bottom:.4rem}
+    .card p{font-size:.88rem;color:var(--muted);margin-bottom:1rem}
+    .card .tag{font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem}
+    .card .btn{display:inline-block;padding:.55rem 1rem;background:var(--accent);color:#fff;border-radius:7px;font-weight:600;font-size:.85rem;text-decoration:none}
+    .card .btn:hover{background:var(--accent-hover);text-decoration:none}
+    .card.disabled-card{opacity:.55;pointer-events:none}
+    footer{padding:1.5rem 0;text-align:center;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border)}
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a class="brand" href="index.html">MIMIC Analytics</a>
+    <a href="index.html" class="active">Home</a>
+    <a href="report.html">Project Report</a>
+    <a href="executive_conclusion.html">Conclusion</a>
+    <a href="dashboard_01_hospital_overview.html">Dashboard 1</a>
+    <a href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a>
+    <a href="dashboard_03_medication_analysis.html">Dashboard 3</a>
+    <a href="dashboard_04_hospital_operations.html">Dashboard 4</a>
+    <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Power BI ↗</a>
+  </div>
+</nav>
+
+<header>
+  <div class="container">
+    <h1>MIMIC Clinical Analytics</h1>
+    <p>Project reports and dashboard analysis for the MIMIC-IV demo lakehouse pipeline on Databricks with Power BI.</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="cards">
+    <a class="card" href="report.html" style="text-decoration:none;color:inherit">
+      <div class="tag">Pipeline</div>
+      <h2>Project Report</h2>
+      <p>Medallion architecture, ETL pipeline, data source, Gold layer, DAX measures, and technologies.</p>
+      <span class="btn">Open report.html →</span>
+    </a>
+
+    <a class="card" href="executive_conclusion.html" style="text-decoration:none;color:inherit">
+      <div class="tag">Synthesis</div>
+      <h2>Executive Conclusion</h2>
+      <p>Cross-domain analysis of all five Gold views — population, clinical profile, medications, operations, and recommendations.</p>
+      <span class="btn">Open conclusion →</span>
+    </a>
+
+    <a class="card" href="dashboard_01_hospital_overview.html" style="text-decoration:none;color:inherit">
+      <div class="tag">Dashboard 1 of 4</div>
+      <h2>Hospital Overview</h2>
+      <p>Executive Overview page — KPIs, admissions, LOS, readmissions, insurance. Verified against <code>vw_admission_overview</code>.</p>
+      <span class="btn">Open dashboard report →</span>
+    </a>
+
+    <a class="card" href="dashboard_02_diagnosis_analysis.html" style="text-decoration:none;color:inherit">
+      <div class="tag">Dashboard 2 of 4</div>
+      <h2>Diagnosis Analysis</h2>
+      <p>Primary vs secondary ICD diagnoses, comorbidity patterns, demographics, and LOS by condition. Verified against <code>vw_diagnosis_analysis</code>.</p>
+      <span class="btn">Open dashboard report →</span>
+    </a>
+
+    <a class="card" href="dashboard_03_medication_analysis.html" style="text-decoration:none;color:inherit">
+      <div class="tag">Dashboard 3 of 4</div>
+      <h2>Medication Analysis</h2>
+      <p>Prescription volume, top drugs, administration routes, drug types, and duration. Verified against <code>vw_prescription_analysis</code>.</p>
+      <span class="btn">Open dashboard report →</span>
+    </a>
+
+    <a class="card" href="dashboard_04_hospital_operations.html" style="text-decoration:none;color:inherit">
+      <div class="tag">Dashboard 4 of 4</div>
+      <h2>Hospital Operations</h2>
+      <p>Patient transfers, care unit flow, event types, and procedure volumes. Verified against <code>vw_transfer_analysis</code> + <code>vw_procedure_analysis</code>.</p>
+      <span class="btn">Open dashboard report →</span>
+    </a>
+
+    <a class="card" href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+      <div class="tag">Live</div>
+      <h2>Power BI Dashboard</h2>
+      <p>Interactive published dashboard — 4 pages: Hospital Overview, Diagnosis, Medication, Operations.</p>
+      <span class="btn">Open Power BI ↗</span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>
+      <a href="report.html">Project Report</a> &nbsp;·&nbsp;
+      <a href="dashboard_01_hospital_overview.html">Dashboard 1</a> &nbsp;·&nbsp;
+      <a href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a> &nbsp;·&nbsp;
+      <a href="dashboard_03_medication_analysis.html">Dashboard 3</a> &nbsp;·&nbsp;
+      <a href="dashboard_04_hospital_operations.html">Dashboard 4</a> &nbsp;·&nbsp;
+      <a href="../README.md">README</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

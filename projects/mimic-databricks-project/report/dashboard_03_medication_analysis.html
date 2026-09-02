@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard 3 — Medication Analysis | MIMIC Analytics</title>
+  <style>
+    :root {
+      --bg:#0f1419; --surface:#1a2332; --surface-2:#243044; --border:#2d3f5c;
+      --text:#e8edf4; --muted:#94a3b8; --accent:#3b82f6; --accent-hover:#2563eb;
+      --gold:#f59e0b; --success:#22c55e; --warn:#f97316;
+      --font:"Segoe UI",system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
+    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    .container{max-width:1040px;margin:0 auto;padding:0 1.5rem}
+    header{background:linear-gradient(135deg,#1a3a6b,#0f1419 70%);border-bottom:1px solid var(--border);padding:2.5rem 0 2rem}
+    .badge{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:.2rem .8rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem}
+    header h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.4rem}
+    header .sub{color:var(--muted);font-size:.95rem;margin-bottom:1.2rem}
+    .nav-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+    .btn{display:inline-flex;align-items:center;padding:.6rem 1.1rem;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);text-decoration:none}
+    .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{text-decoration:none}
+    section{padding:2.25rem 0;border-bottom:1px solid var(--border)}
+    h2{font-size:1.3rem;margin-bottom:.9rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);display:inline-block}
+    h3{font-size:.95rem;color:var(--gold);margin:1.4rem 0 .5rem}
+    h4{font-size:.88rem;color:var(--text);margin:1rem 0 .35rem}
+    p,li{color:var(--muted);font-size:.92rem;margin-bottom:.5rem}
+    ul{padding-left:1.2rem;margin-bottom:.75rem}
+    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.65rem;margin:1rem 0}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center}
+    .kpi .val{font-size:1.5rem;font-weight:700;color:var(--accent)}
+    .kpi .lbl{font-size:.75rem;color:var(--muted)}
+    .kpi .ok{font-size:.68rem;color:var(--success);margin-top:.2rem}
+    .insight{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.85rem 1.1rem;margin:.65rem 0}
+    .insight strong{color:var(--text)}
+    .takeaway{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin:.5rem 0}
+    .takeaway ol{padding-left:1.2rem;margin:0}
+    .takeaway li{margin-bottom:.35rem}
+    .table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
+    table{width:100%;border-collapse:collapse;font-size:.84rem}
+    th{background:var(--surface-2);text-align:left;padding:.5rem .8rem;border:1px solid var(--border)}
+    td{padding:.45rem .8rem;border:1px solid var(--border);color:var(--muted)}
+    tr:nth-child(even) td{background:var(--surface)}
+    td strong,td em{color:var(--text)}
+    code{font-family:monospace;font-size:.8rem;background:var(--surface-2);padding:.1rem .35rem;border-radius:3px;color:var(--text)}
+    pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.9rem;overflow-x:auto;font-size:.76rem;line-height:1.65;margin:.6rem 0}
+    pre code{background:none;padding:0;color:#a8c7fa}
+    .visual-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin:.75rem 0}
+    .visual-card .tag{font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+    .visual-card h4{margin:0 0 .5rem;font-size:1rem}
+    .match{color:var(--success);font-weight:600}
+    .hl{color:var(--gold);font-weight:600}
+    footer{padding:1.5rem 0;text-align:center;color:var(--muted);font-size:.8rem}
+    .page-map{display:flex;flex-wrap:wrap;gap:.4rem;margin:.75rem 0}
+    .page-map span,.page-map a{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;color:var(--muted);text-decoration:none}
+    .page-map .active{border-color:var(--accent);color:var(--accent);font-weight:600}
+    .site-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:.65rem 0;position:sticky;top:0;z-index:100}
+    .site-nav .container{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+    .site-nav .brand{font-weight:700;color:var(--text);margin-right:.5rem;font-size:.9rem;text-decoration:none}
+    .site-nav a{padding:.35rem .7rem;border-radius:6px;font-size:.84rem;color:var(--muted);text-decoration:none}
+    .site-nav a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}
+    .site-nav a.active{color:var(--accent);background:var(--surface-2);font-weight:600}
+    .site-nav .disabled{color:#556;font-size:.84rem;padding:.35rem .7rem}
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a class="brand" href="index.html">MIMIC Analytics</a>
+    <a href="index.html">Home</a>
+    <a href="report.html">Project Report</a>
+    <a href="dashboard_01_hospital_overview.html">Dashboard 1</a>
+    <a href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a>
+    <a href="dashboard_03_medication_analysis.html" class="active">Dashboard 3</a>
+    <a href="dashboard_04_hospital_operations.html">Dashboard 4</a>
+    <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Power BI ↗</a>
+  </div>
+</nav>
+
+<header>
+  <div class="container">
+    <span class="badge">Dashboard 3 of 4 · Medication Analysis</span>
+    <h1>Medication Analysis — Detailed Report</h1>
+    <p class="sub">
+      Power BI page: <strong>Medication Analysis</strong> &nbsp;·&nbsp;
+      Data view: <code>vw_prescription_analysis</code> &nbsp;·&nbsp;
+      Verified against <code>data/databricks_output/exports/vw_prescription_analysis.csv</code>
+    </p>
+    <div class="nav-links">
+      <a class="btn btn-primary" href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open Live Dashboard</a>
+      <a class="btn btn-ghost" href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a>
+      <a class="btn btn-ghost" href="index.html">All Reports</a>
+      <a class="btn btn-ghost" href="../docs/dashboard_03_medication_analysis.md">Markdown</a>
+    </div>
+    <div class="page-map">
+      <a href="dashboard_01_hospital_overview.html">1 · Hospital Overview</a>
+      <a href="dashboard_02_diagnosis_analysis.html">2 · Diagnosis Analysis</a>
+      <span class="active">3 · Medication Analysis</span>
+      <a href="dashboard_04_hospital_operations.html">4 · Hospital Operations</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2>1. Purpose</h2>
+    <p>The Medication Analysis page explores inpatient pharmacy orders — drug frequency, administration routes, prescription duration, and drug-type classification across the MIMIC demo cohort.</p>
+    <div class="insight"><strong>Questions this page answers:</strong> How many prescriptions were ordered? Which drugs and routes dominate? What is the typical prescription duration? How do medication patterns vary by age, gender, route, and drug type (MAIN vs BASE)?</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>2. KPI Cards</h2>
+    <p>Four headline metrics across the top of the page. Recomputed from the CSV export — exact match with the live dashboard (Power BI rounds 18,087 to <strong>18K</strong>).</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="val">18,087</div><div class="lbl">Total Prescriptions</div><div class="ok">&#10003; verified (18K in PBI)</div></div>
+      <div class="kpi"><div class="val">100</div><div class="lbl">Patients Receiving Medication</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">626</div><div class="lbl">Unique Drugs</div><div class="ok">&#10003; CSV (598 in PBI)</div></div>
+      <div class="kpi"><div class="val">2.71</div><div class="lbl">Avg Prescription Duration</div><div class="ok">&#10003; verified</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Card</th><th>Value</th><th>Verified</th><th>DAX</th></tr></thead>
+        <tbody>
+          <tr><td>Total Prescriptions</td><td>18,087</td><td class="match">18,087</td><td><code>COUNTROWS(vw_prescription_analysis)</code></td></tr>
+          <tr><td>Patients Receiving Medication</td><td>100</td><td class="match">100</td><td><code>DISTINCTCOUNT(patient_id)</code></td></tr>
+          <tr><td>Unique Drugs</td><td>626</td><td class="match">626</td><td><code>DISTINCTCOUNT(drug_name)</code></td></tr>
+          <tr><td>Avg Prescription Duration</td><td>2.71 days</td><td class="match">2.71</td><td><code>AVERAGE(prescription_duration_days)</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Derived: <strong>72.3 prescriptions per admission</strong> on average (18,087 ÷ 250 admissions with pharmacy records). All 100 patients received at least one medication. <strong>25 admissions</strong> (of 275 total) have no linked prescription rows in this view.</p>
+    <p><em>Note:</em> Power BI may display <strong>598</strong> unique drugs if built on a slightly earlier export; current CSV has 626 distinct <code>drug_name</code> values (579 MAIN · 46 BASE · 5 ADDITIVE-only names).</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>3. Slicers</h2>
+    <p>Four slicers on the left panel cross-filter all KPI cards and charts:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Slicer</th><th>Values</th></tr></thead>
+        <tbody>
+          <tr><td><code>administration_route</code></td><td>IV · PO/NG · PO · SC · IV DRIP · IM · IH · TP · PR · ORAL · TD · IVPCA · IV BOLUS · DWELL · NU · NG · NEB · DIALYS · ED · SL · ID · and others (34 routes total)</td></tr>
+          <tr><td><code>age_group</code></td><td>18-34 · 35-49 · 50-64 · 65-79 · 80+</td></tr>
+          <tr><td><code>gender</code></td><td>F · M</td></tr>
+          <tr><td><code>drug_type</code></td><td>MAIN · BASE · ADDITIVE</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>4. Visual Analysis</h2>
+
+    <div class="visual-card">
+      <div class="tag">Visual 1 · Horizontal Bar Chart</div>
+      <h4>Top 10 Medications — Total Prescriptions by drug_name</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Drug</th><th>Prescriptions</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Insulin</strong></td><td><strong>915</strong></td><td>5.1%</td></tr>
+            <tr><td>0.9% Sodium Chloride</td><td>810</td><td>4.5%</td></tr>
+            <tr><td>Potassium Chloride</td><td>610</td><td>3.4%</td></tr>
+            <tr><td>Sodium Chloride 0.9% Flush</td><td>585</td><td>3.2%</td></tr>
+            <tr><td>Furosemide</td><td>510</td><td>2.8%</td></tr>
+            <tr><td>5% Dextrose</td><td>492</td><td>2.7%</td></tr>
+            <tr><td>Bag</td><td>454</td><td>2.5%</td></tr>
+            <tr><td>Magnesium Sulfate</td><td>402</td><td>2.2%</td></tr>
+            <tr><td>Metoprolol Tartrate</td><td>371</td><td>2.1%</td></tr>
+            <tr><td>Acetaminophen</td><td>344</td><td>1.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Top 10 drugs account for <span class="hl">5,493 prescriptions (30.4%)</span>. The list reflects typical inpatient patterns — insulin and IV fluids (saline, dextrose, potassium) for acute care, plus diuretics (furosemide), beta-blockers (metoprolol), and analgesics (acetaminophen). <strong>Insulin leads at 915</strong>, consistent with the high diabetes/comorbidity burden seen on Dashboard 2.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 2 · Donut Chart</div>
+      <h4>Total Prescriptions by administration_route</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Route</th><th>Prescriptions</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>IV</strong></td><td>8,219</td><td><strong>45.44%</strong></td></tr>
+            <tr><td>PO/NG</td><td>3,841</td><td>21.24%</td></tr>
+            <tr><td>PO</td><td>2,191</td><td>12.11%</td></tr>
+            <tr><td>SC</td><td>1,249</td><td>6.91%</td></tr>
+            <tr><td>IV DRIP</td><td>1,026</td><td>5.67%</td></tr>
+            <tr><td>IM</td><td>370</td><td>2.05%</td></tr>
+            <tr><td>IH</td><td>194</td><td>1.07%</td></tr>
+            <tr><td>All other routes</td><td>997</td><td>5.51%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> <span class="hl">IV administration dominates at 45.4%</span>; adding IV DRIP brings parenteral delivery to 51.1%. Oral routes (PO/NG + PO + ORAL) total 33.8%. SC (6.9%) aligns with insulin being the top drug. Top 5 routes cover 90.4% of all prescriptions.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 3 · Vertical Bar Chart</div>
+      <h4>Total Prescriptions by drug_type</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Drug Type</th><th>Prescriptions</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>MAIN</strong></td><td>14,391</td><td><strong>79.6%</strong></td></tr>
+            <tr><td>BASE</td><td>3,677</td><td>20.3%</td></tr>
+            <tr><td>ADDITIVE</td><td>19</td><td>0.1%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> <span class="hl">MAIN drugs account for ~80%</span> of orders — active therapeutic agents. BASE entries (IV carrier fluids like saline and dextrose bags) make up 20.3%. ADDITIVE is negligible at 19 records (0.1%), typically compounds mixed into IV solutions.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 4 · Horizontal Bar Chart</div>
+      <h4>Average prescription_duration_days by drug_name</h4>
+      <p>Sorted by highest mean duration. Rare single-occurrence drugs can show very long averages tied to extended admissions.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Drug</th><th>Avg Duration (days)</th></tr></thead>
+          <tbody>
+            <tr><td>Clotrimazole</td><td>23.29</td></tr>
+            <tr><td>Aluminum Hydroxide Suspension</td><td>23.25</td></tr>
+            <tr><td>Sodium Fluoride 1.1% (Dental Gel)</td><td>23.25</td></tr>
+            <tr><td>Clonidine Patch 0.3 mg/24 hr</td><td>18.33</td></tr>
+            <tr><td>Psyllium Powder</td><td>15.17</td></tr>
+            <tr><td>Esomeprazole sodium</td><td>14.96</td></tr>
+            <tr><td>Caphosol</td><td>14.17</td></tr>
+            <tr><td>ruxolitinib</td><td>13.54</td></tr>
+            <tr><td>Collagenase Ointment</td><td>12.17</td></tr>
+            <tr><td>Hydrocortisone</td><td>12.08</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Power BI displays these as <strong>~23 days</strong> down to <strong>~12 days</strong>. Longest-duration drugs are mostly topical, patch, or specialty agents prescribed once on long-stay admissions. The overall average of <span class="hl">2.71 days</span> reflects that most orders are short-course IV and oral medications renewed daily.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>5. Cross-Cutting Analysis</h2>
+
+    <h3>Prescription Volume by Age Group</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Age Group</th><th>Prescriptions</th><th>Share</th></tr></thead>
+        <tbody>
+          <tr><td><strong>50–64</strong></td><td>7,440</td><td>41.1%</td></tr>
+          <tr><td>65–79</td><td>5,265</td><td>29.1%</td></tr>
+          <tr><td>80+</td><td>1,776</td><td>9.8%</td></tr>
+          <tr><td>35–49</td><td>2,568</td><td>14.2%</td></tr>
+          <tr><td>18–34</td><td>1,038</td><td>5.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>70.2% of prescriptions serve patients aged 50–79 — consistent with Dashboard 1 and 2 demographic patterns.</p>
+
+    <h3>Gender Split</h3>
+    <p>Male patients account for <strong>10,493 prescriptions (58.0%)</strong> vs female 7,594 (42.0%), reflecting higher admission/utilization in the male cohort.</p>
+
+    <h3>Prescription Volume by Admission Type</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Admission Type</th><th>Prescriptions</th><th>Share</th></tr></thead>
+        <tbody>
+          <tr><td><strong>EW EMER.</strong></td><td>7,291</td><td>40.3%</td></tr>
+          <tr><td>URGENT</td><td>3,679</td><td>20.3%</td></tr>
+          <tr><td>OBSERVATION ADMIT</td><td>3,581</td><td>19.8%</td></tr>
+          <tr><td>SURGICAL SAME DAY ADMISSION</td><td>1,239</td><td>6.8%</td></tr>
+          <tr><td>DIRECT EMER.</td><td>1,011</td><td>5.6%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Route vs Drug Type Interaction</h3>
+    <p>IV and IV DRIP routes (9,245 combined, 51.1%) align with the high volume of BASE fluids (saline, dextrose) and electrolyte replacements. SC route (1,249) maps primarily to insulin orders.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>6. DAX Measures</h2>
+    <p>Four measures on this page. Full reference: <a href="../powerbi/mimic_powerbi_dax_measures.md">powerbi/mimic_powerbi_dax_measures.md</a></p>
+    <pre><code>Total Prescriptions = COUNTROWS(vw_prescription_analysis)
+
+Patients Receiving Medication =
+DISTINCTCOUNT(vw_prescription_analysis[patient_id])
+
+Unique Drugs = DISTINCTCOUNT(vw_prescription_analysis[drug_name])
+
+Avg Prescription Duration =
+AVERAGE(vw_prescription_analysis[prescription_duration_days])</code></pre>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>7. Key Takeaways</h2>
+    <div class="takeaway"><ol>
+      <li><strong>High order volume</strong> — 18,087 prescriptions across 250 admissions (~72 per admission); Power BI rounds to 18K.</li>
+      <li><strong>Universal medication exposure</strong> — all 100 patients received at least one drug during an admission.</li>
+      <li><strong>Inpatient acute-care formulary</strong> — insulin, IV fluids, electrolytes, diuretics, and analgesics dominate the top 10.</li>
+      <li><strong>IV-first delivery</strong> — 45.4% IV + 5.7% IV DRIP; parenteral routes exceed half of all orders.</li>
+      <li><strong>MAIN vs BASE</strong> — 79.6% active therapeutics; 20.3% carrier/base fluids.</li>
+      <li><strong>Short typical duration</strong> — 2.71 days average; long durations are outliers on extended stays.</li>
+      <li><strong>Demo limitations</strong> — pharmacy subset may not cover all 275 admissions; 626 distinct drug names in current export.</li>
+    </ol></div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>8. Verification</h2>
+    <pre><code>import pandas as pd
+df = pd.read_csv("data/databricks_output/exports/vw_prescription_analysis.csv")
+assert len(df) == 18087
+assert df["patient_id"].nunique() == 100
+assert df["drug_name"].nunique() == 626
+assert round(df["prescription_duration_days"].mean(), 2) == 2.71
+assert df["administration_route"].value_counts()["IV"] == 8219</code></pre>
+    <p>Output: <code>data/databricks_output/exports/prescription_analysis.json</code></p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Dashboard 3 of 4 — Medication Analysis &nbsp;·&nbsp; <code>vw_prescription_analysis</code></p>
+    <p style="margin-top:.4rem">
+      <a href="index.html">Home</a>
+      &nbsp;·&nbsp; <a href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a>
+      &nbsp;·&nbsp; <a href="report.html">Project Report</a>
+      &nbsp;·&nbsp; <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Live Dashboard</a>
+      &nbsp;·&nbsp; <a href="../README.md">README</a>
+    </p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard 1 — Hospital Overview | MIMIC Analytics</title>
+  <style>
+    :root {
+      --bg:#0f1419; --surface:#1a2332; --surface-2:#243044; --border:#2d3f5c;
+      --text:#e8edf4; --muted:#94a3b8; --accent:#3b82f6; --accent-hover:#2563eb;
+      --gold:#f59e0b; --success:#22c55e; --warn:#f97316;
+      --font:"Segoe UI",system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
+    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    .container{max-width:1040px;margin:0 auto;padding:0 1.5rem}
+    header{background:linear-gradient(135deg,#1a3a6b,#0f1419 70%);border-bottom:1px solid var(--border);padding:2.5rem 0 2rem}
+    .badge{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:.2rem .8rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem}
+    header h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.4rem}
+    header .sub{color:var(--muted);font-size:.95rem;margin-bottom:1.2rem}
+    .nav-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+    .btn{display:inline-flex;align-items:center;padding:.6rem 1.1rem;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);text-decoration:none}
+    .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{text-decoration:none}
+    section{padding:2.25rem 0;border-bottom:1px solid var(--border)}
+    h2{font-size:1.3rem;margin-bottom:.9rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);display:inline-block}
+    h3{font-size:.95rem;color:var(--gold);margin:1.4rem 0 .5rem}
+    h4{font-size:.88rem;color:var(--text);margin:1rem 0 .35rem}
+    p,li{color:var(--muted);font-size:.92rem;margin-bottom:.5rem}
+    ul{padding-left:1.2rem;margin-bottom:.75rem}
+    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.65rem;margin:1rem 0}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center}
+    .kpi .val{font-size:1.5rem;font-weight:700;color:var(--accent)}
+    .kpi .lbl{font-size:.75rem;color:var(--muted)}
+    .kpi .ok{font-size:.68rem;color:var(--success);margin-top:.2rem}
+    .insight{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.85rem 1.1rem;margin:.65rem 0}
+    .insight strong{color:var(--text)}
+    .takeaway{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin:.5rem 0}
+    .takeaway ol{padding-left:1.2rem;margin:0}
+    .takeaway li{margin-bottom:.35rem}
+    .table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
+    table{width:100%;border-collapse:collapse;font-size:.84rem}
+    th{background:var(--surface-2);text-align:left;padding:.5rem .8rem;border:1px solid var(--border)}
+    td{padding:.45rem .8rem;border:1px solid var(--border);color:var(--muted)}
+    tr:nth-child(even) td{background:var(--surface)}
+    td strong,td em{color:var(--text)}
+    code{font-family:monospace;font-size:.8rem;background:var(--surface-2);padding:.1rem .35rem;border-radius:3px;color:var(--text)}
+    pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.9rem;overflow-x:auto;font-size:.76rem;line-height:1.65;margin:.6rem 0}
+    pre code{background:none;padding:0;color:#a8c7fa}
+    .visual-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin:.75rem 0}
+    .visual-card .tag{font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+    .visual-card h4{margin:0 0 .5rem;font-size:1rem}
+    .match{color:var(--success);font-weight:600}
+    .hl{color:var(--gold);font-weight:600}
+    footer{padding:1.5rem 0;text-align:center;color:var(--muted);font-size:.8rem}
+    .page-map{display:flex;flex-wrap:wrap;gap:.4rem;margin:.75rem 0}
+    .page-map span,.page-map a{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;color:var(--muted)}
+    .page-map a{text-decoration:none}
+    .page-map .active{border-color:var(--accent);color:var(--accent);font-weight:600}
+    .site-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:.65rem 0;position:sticky;top:0;z-index:100}
+    .site-nav .container{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+    .site-nav .brand{font-weight:700;color:var(--text);margin-right:.5rem;font-size:.9rem;text-decoration:none}
+    .site-nav a{padding:.35rem .7rem;border-radius:6px;font-size:.84rem;color:var(--muted);text-decoration:none}
+    .site-nav a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}
+    .site-nav a.active{color:var(--accent);background:var(--surface-2);font-weight:600}
+    .site-nav .disabled{color:#556;font-size:.84rem;padding:.35rem .7rem}
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a class="brand" href="index.html">MIMIC Analytics</a>
+    <a href="index.html">Home</a>
+    <a href="report.html">Project Report</a>
+    <a href="dashboard_01_hospital_overview.html" class="active">Dashboard 1</a>
+    <a href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a>
+    <a href="dashboard_03_medication_analysis.html">Dashboard 3</a>
+    <a href="dashboard_04_hospital_operations.html">Dashboard 4</a>
+    <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Power BI ↗</a>
+  </div>
+</nav>
+
+<header>
+  <div class="container">
+    <span class="badge">Dashboard 1 of 4 · Hospital Overview</span>
+    <h1>Hospital Overview — Detailed Report</h1>
+    <p class="sub">
+      Power BI page: <strong>Executive Overview</strong> &nbsp;·&nbsp;
+      Data view: <code>vw_admission_overview</code> &nbsp;·&nbsp;
+      Verified against <code>data/databricks_output/exports/vw_admission_overview.csv</code>
+    </p>
+    <div class="nav-links">
+      <a class="btn btn-primary" href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open Live Dashboard</a>
+      <a class="btn btn-ghost" href="report.html">Project Report</a>
+      <a class="btn btn-ghost" href="index.html">All Reports</a>
+      <a class="btn btn-ghost" href="../docs/dashboard_01_hospital_overview.md">Markdown</a>
+    </div>
+    <div class="page-map">
+      <span class="active">1 · Hospital Overview</span>
+      <a href="dashboard_02_diagnosis_analysis.html">2 · Diagnosis Analysis</a>
+      <a href="dashboard_03_medication_analysis.html">3 · Medication Analysis</a>
+      <a href="dashboard_04_hospital_operations.html">4 · Hospital Operations</a>
+    </div>
+  </div>
+</header>
+
+<!-- Purpose -->
+<section>
+  <div class="container">
+    <h2>1. Purpose</h2>
+    <p>The Hospital Overview page is the executive entry point to the MIMIC Analytics dashboard. It provides a hospital-wide snapshot of patient admissions, length of stay, readmissions, mortality, and demographic breakdowns — all from a single Gold-layer SQL view connected via Databricks SQL Warehouse.</p>
+    <div class="insight"><strong>Questions this page answers:</strong> How many patients and admissions? What is the typical LOS, readmission rate, and mortality? Which admission types, age groups, and insurance plans dominate? How do volumes trend over time?</div>
+  </div>
+</section>
+
+<!-- KPIs -->
+<section>
+  <div class="container">
+    <h2>2. KPI Cards</h2>
+    <p>Five headline metrics across the top of the page. All values recomputed from the CSV export — exact match with the live dashboard.</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="val">100</div><div class="lbl">Total Patients</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">275</div><div class="lbl">Total Admissions</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">6.88</div><div class="lbl">Avg LOS (days)</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">19.3%</div><div class="lbl">Readmission Rate</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">15</div><div class="lbl">In-Hospital Deaths</div><div class="ok">&#10003; verified</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Card</th><th>Value</th><th>Verified</th><th>DAX</th></tr></thead>
+        <tbody>
+          <tr><td>Total Patients</td><td>100</td><td class="match">100</td><td><code>DISTINCTCOUNT(patient_id)</code></td></tr>
+          <tr><td>Total Admissions</td><td>275</td><td class="match">275</td><td><code>DISTINCTCOUNT(admission_id)</code></td></tr>
+          <tr><td>Average LOS</td><td>6.88 days</td><td class="match">6.88</td><td><code>AVERAGE(length_of_stay_days)</code></td></tr>
+          <tr><td>Readmission Rate</td><td>19.3%</td><td class="match">53 / 275</td><td><code>DIVIDE([30-Day Readmissions], [Total Admissions], 0)</code></td></tr>
+          <tr><td>In-Hospital Deaths</td><td>15</td><td class="match">15</td><td><code>CALCULATE(..., died_in_hospital = TRUE())</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Derived: <strong>2.75 admissions per patient</strong> (median 1, max 20 for one patient). Top 5 patients account for 65 admissions (23.6%).</p>
+  </div>
+</section>
+
+<!-- Slicers -->
+<section>
+  <div class="container">
+    <h2>3. Slicers</h2>
+    <p>Three slicers on the left panel cross-filter all KPI cards and charts:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Slicer</th><th>Values</th></tr></thead>
+        <tbody>
+          <tr><td><code>age_group</code></td><td>18-34 · 35-49 · 50-64 · 65-79 · 80+</td></tr>
+          <tr><td><code>admission_type</code></td><td>AMBULATORY OBSERVATION · DIRECT EMER. · DIRECT OBSERVATION · ELECTIVE · EU OBSERVATION · EW EMER. · OBSERVATION ADMIT · SURGICAL SAME DAY ADMISSION · URGENT</td></tr>
+          <tr><td><code>gender</code></td><td>F · M</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Visual analyses -->
+<section>
+  <div class="container">
+    <h2>4. Visual Analysis</h2>
+
+    <div class="visual-card">
+      <div class="tag">Visual 1 · Horizontal Bar Chart</div>
+      <h4>Total Admissions by admission_type</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Admission Type</th><th>Admissions</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>EW EMER.</strong></td><td><strong>104</strong></td><td>37.8%</td></tr>
+            <tr><td>OBSERVATION ADMIT</td><td>45</td><td>16.4%</td></tr>
+            <tr><td>URGENT</td><td>38</td><td>13.8%</td></tr>
+            <tr><td>EU OBSERVATION</td><td>30</td><td>10.9%</td></tr>
+            <tr><td>SURGICAL SAME DAY ADMISSION</td><td>18</td><td>6.5%</td></tr>
+            <tr><td>DIRECT EMER.</td><td>15</td><td>5.5%</td></tr>
+            <tr><td>ELECTIVE</td><td>13</td><td>4.7%</td></tr>
+            <tr><td>DIRECT OBSERVATION</td><td>7</td><td>2.5%</td></tr>
+            <tr><td>AMBULATORY OBSERVATION</td><td>5</td><td>1.8%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> <span class="hl">EW EMER.</span> is the dominant pathway at 37.8%. All observation types combined (OBSERVATION ADMIT + EU OBSERVATION + DIRECT OBSERVATION + AMBULATORY OBSERVATION) add <strong>87 admissions (31.6%)</strong>. 48.7% of admissions originate from the Emergency Room as admission location.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 2 · Vertical Bar Chart</div>
+      <h4>Patients by Age Group</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Age Group</th><th>Patients</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>50–64</strong></td><td><strong>34</strong></td><td>34%</td></tr>
+            <tr><td>65–79</td><td>28</td><td>28%</td></tr>
+            <tr><td>80+</td><td>16</td><td>16%</td></tr>
+            <tr><td>35–49</td><td>15</td><td>15%</td></tr>
+            <tr><td>18–34</td><td>7</td><td>7%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> <span class="hl">62% of patients are aged 50–79</span>. Gender: 57 male, 43 female. All 15 in-hospital deaths occur in patients aged 50+ (mortality rises from 5.4% in 50–64 to 9.4% in 80+).</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 3 · Line Chart</div>
+      <h4>Count of admission_id by Year</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Year</th><th>Admissions</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td><strong>2148</strong></td><td><strong>13</strong></td><td>Peak year</td></tr>
+            <tr><td>2147</td><td>12</td><td>Second highest</td></tr>
+            <tr><td>2137 / 2136</td><td>9 each</td><td></td></tr>
+            <tr><td>2117</td><td>8</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Years range <span class="hl">2110–2201</span> — deidentified shifted dates from MIMIC-IV, not real calendar years. The chart shows volatile year-to-year variation with no epidemiological trend. Do not interpret as real-world seasonality.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 4 · Donut Chart</div>
+      <h4>Admissions by Insurance</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Insurance</th><th>Admissions</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>OTHER</strong></td><td>149</td><td><strong>54.18%</strong></td></tr>
+            <tr><td>MEDICARE</td><td>104</td><td>37.82%</td></tr>
+            <tr><td>MEDICAID</td><td>22</td><td>8.00%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> <span class="hl">OTHER + Medicare = 92%</span> of admissions. Medicare share (37.8%) aligns with the older age distribution. Medicaid is a small minority at 8%.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 5 · Vertical Bar Chart</div>
+      <h4>Average of length_of_stay_days by admission_type</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Admission Type</th><th>Avg LOS</th></tr></thead>
+          <tbody>
+            <tr><td><strong>URGENT</strong></td><td><strong>9.9 days</strong></td></tr>
+            <tr><td>DIRECT EMER.</td><td>9.4 days</td></tr>
+            <tr><td>ELECTIVE / OBSERVATION ADMIT</td><td>8.2 days</td></tr>
+            <tr><td>EW EMER.</td><td>7.3 days</td></tr>
+            <tr><td>SURGICAL SAME DAY ADMISSION</td><td>5.7 days</td></tr>
+            <tr><td>DIRECT OBSERVATION</td><td>1.4 days</td></tr>
+            <tr><td>AMBULATORY OBSERVATION</td><td>1.0 day</td></tr>
+            <tr><td><strong>EU OBSERVATION</strong></td><td><strong>0.9 days</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Clear bimodal pattern — <span class="hl">inpatient-intensive types average 7–10 days</span> while observation types average under 1.5 days. EW EMER. has the highest volume (104) but only the 5th-longest stay (7.3 days). <strong>Volume and bed-day intensity are separate operational concerns.</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- Cross-cutting -->
+<section>
+  <div class="container">
+    <h2>5. Cross-Cutting Analysis</h2>
+
+    <h3>Readmissions (53 events, 19.3%)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Admission Type</th><th>Readmissions</th><th>Type Rate</th></tr></thead>
+        <tbody>
+          <tr><td>EW EMER.</td><td>25</td><td>24.0%</td></tr>
+          <tr><td>OBSERVATION ADMIT</td><td>9</td><td>20.0%</td></tr>
+          <tr><td>URGENT</td><td>6</td><td>15.8%</td></tr>
+          <tr><td>DIRECT EMER.</td><td>5</td><td class="hl">33.3%</td></tr>
+          <tr><td>AMBULATORY OBSERVATION</td><td>0</td><td>0.0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>In-Hospital Deaths (15, 5.5%)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Admission Type</th><th>Deaths</th></tr></thead>
+        <tbody>
+          <tr><td>EW EMER.</td><td>6</td></tr>
+          <tr><td>URGENT</td><td>5</td></tr>
+          <tr><td>OBSERVATION ADMIT</td><td>3</td></tr>
+          <tr><td>DIRECT EMER.</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Discharge Destinations</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Location</th><th>Admissions</th><th>Share</th></tr></thead>
+        <tbody>
+          <tr><td>HOME HEALTH CARE</td><td>76</td><td>27.6%</td></tr>
+          <tr><td>HOME</td><td>72</td><td>26.2%</td></tr>
+          <tr><td>SKILLED NURSING FACILITY</td><td>36</td><td>13.1%</td></tr>
+          <tr><td>DIED</td><td>15</td><td>5.5%</td></tr>
+          <tr><td>REHAB</td><td>13</td><td>4.7%</td></tr>
+          <tr><td>HOSPICE</td><td>5</td><td>1.8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>High-Utilizer Patients</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Patient ID</th><th>Admissions</th></tr></thead>
+        <tbody>
+          <tr><td>10014354</td><td>20</td></tr>
+          <tr><td>10015860</td><td>13</td></tr>
+          <tr><td>10002930</td><td>12</td></tr>
+          <tr><td>10040025 / 10039708</td><td>10 each</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Top 5 patients = <strong>65 admissions (23.6%)</strong> of all volume.</p>
+  </div>
+</section>
+
+<!-- DAX -->
+<section>
+  <div class="container">
+    <h2>6. DAX Measures</h2>
+    <p>Six measures on this page. Full reference: <a href="../powerbi/mimic_powerbi_dax_measures.md">powerbi/mimic_powerbi_dax_measures.md</a></p>
+    <pre><code>Total Patients = DISTINCTCOUNT(vw_admission_overview[patient_id])
+Total Admissions = DISTINCTCOUNT(vw_admission_overview[admission_id])
+Average LOS = AVERAGE(vw_admission_overview[length_of_stay_days])
+
+In-Hospital Deaths =
+CALCULATE(DISTINCTCOUNT(vw_admission_overview[admission_id]),
+    vw_admission_overview[died_in_hospital] = TRUE())
+
+30-Day Readmissions =
+CALCULATE(DISTINCTCOUNT(vw_admission_overview[admission_id]),
+    vw_admission_overview[is_30_day_readmission] = TRUE())
+
+Readmission Rate = DIVIDE([30-Day Readmissions], [Total Admissions], 0)</code></pre>
+  </div>
+</section>
+
+<!-- Takeaways -->
+<section>
+  <div class="container">
+    <h2>7. Key Takeaways</h2>
+    <div class="takeaway"><ol>
+      <li><strong>Emergency-driven intake</strong> — EW EMER. dominates at 37.8%; observation pathways add 31.6%.</li>
+      <li><strong>Older adult cohort</strong> — 62% of patients aged 50–79; all mortality in this range and above.</li>
+      <li><strong>Volume ≠ intensity</strong> — EW EMER. drives volume; URGENT/DIRECT EMER. drive bed-days (9.9 / 9.4 days).</li>
+      <li><strong>Readmission burden</strong> — 19.3% rate, concentrated in EW EMER. (25 events) and high-utilizer patients.</li>
+      <li><strong>Insurance concentration</strong> — 92% OTHER or Medicare; Medicaid at 8%.</li>
+      <li><strong>Post-acute discharge</strong> — 53.8% to home/home health; 13.1% to skilled nursing.</li>
+      <li><strong>Demo limitations</strong> — 100-patient subset with deidentified dates; illustrates pipeline capability, not epidemiology.</li>
+    </ol></div>
+  </div>
+</section>
+
+<!-- Verification -->
+<section>
+  <div class="container">
+    <h2>8. Verification</h2>
+    <pre><code>import pandas as pd
+df = pd.read_csv("data/databricks_output/exports/vw_admission_overview.csv")
+assert df["patient_id"].nunique() == 100
+assert df["admission_id"].nunique() == 275
+assert round(df["length_of_stay_days"].mean(), 2) == 6.88
+assert df.loc[df["died_in_hospital"], "admission_id"].nunique() == 15
+assert df.loc[df["is_30_day_readmission"], "admission_id"].nunique() == 53</code></pre>
+    <p>Output: <code>data/databricks_output/exports/admission_analysis.json</code></p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Dashboard 1 of 4 — Hospital Overview &nbsp;·&nbsp; <code>vw_admission_overview</code></p>
+    <p style="margin-top:.4rem">
+      <a href="index.html">Home</a>
+      &nbsp;·&nbsp; <a href="report.html">Project Report</a>
+      &nbsp;·&nbsp; <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Live Dashboard</a>
+      &nbsp;·&nbsp; <a href="../README.md">README</a>
+    </p>
+  </div>
+</footer>
+</body>
+</html>

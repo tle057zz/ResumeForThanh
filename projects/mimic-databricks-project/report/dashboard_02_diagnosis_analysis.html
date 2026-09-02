@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard 2 — Diagnosis Analysis | MIMIC Analytics</title>
+  <style>
+    :root {
+      --bg:#0f1419; --surface:#1a2332; --surface-2:#243044; --border:#2d3f5c;
+      --text:#e8edf4; --muted:#94a3b8; --accent:#3b82f6; --accent-hover:#2563eb;
+      --gold:#f59e0b; --success:#22c55e; --warn:#f97316;
+      --font:"Segoe UI",system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
+    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    .container{max-width:1040px;margin:0 auto;padding:0 1.5rem}
+    header{background:linear-gradient(135deg,#1a3a6b,#0f1419 70%);border-bottom:1px solid var(--border);padding:2.5rem 0 2rem}
+    .badge{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:.2rem .8rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem}
+    header h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.4rem}
+    header .sub{color:var(--muted);font-size:.95rem;margin-bottom:1.2rem}
+    .nav-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+    .btn{display:inline-flex;align-items:center;padding:.6rem 1.1rem;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);text-decoration:none}
+    .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{text-decoration:none}
+    section{padding:2.25rem 0;border-bottom:1px solid var(--border)}
+    h2{font-size:1.3rem;margin-bottom:.9rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);display:inline-block}
+    h3{font-size:.95rem;color:var(--gold);margin:1.4rem 0 .5rem}
+    h4{font-size:.88rem;color:var(--text);margin:1rem 0 .35rem}
+    p,li{color:var(--muted);font-size:.92rem;margin-bottom:.5rem}
+    ul{padding-left:1.2rem;margin-bottom:.75rem}
+    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.65rem;margin:1rem 0}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center}
+    .kpi .val{font-size:1.5rem;font-weight:700;color:var(--accent)}
+    .kpi .lbl{font-size:.75rem;color:var(--muted)}
+    .kpi .ok{font-size:.68rem;color:var(--success);margin-top:.2rem}
+    .insight{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.85rem 1.1rem;margin:.65rem 0}
+    .insight strong{color:var(--text)}
+    .takeaway{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin:.5rem 0}
+    .takeaway ol{padding-left:1.2rem;margin:0}
+    .takeaway li{margin-bottom:.35rem}
+    .table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
+    table{width:100%;border-collapse:collapse;font-size:.84rem}
+    th{background:var(--surface-2);text-align:left;padding:.5rem .8rem;border:1px solid var(--border)}
+    td{padding:.45rem .8rem;border:1px solid var(--border);color:var(--muted)}
+    tr:nth-child(even) td{background:var(--surface)}
+    td strong,td em{color:var(--text)}
+    code{font-family:monospace;font-size:.8rem;background:var(--surface-2);padding:.1rem .35rem;border-radius:3px;color:var(--text)}
+    pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.9rem;overflow-x:auto;font-size:.76rem;line-height:1.65;margin:.6rem 0}
+    pre code{background:none;padding:0;color:#a8c7fa}
+    .visual-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin:.75rem 0}
+    .visual-card .tag{font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+    .visual-card h4{margin:0 0 .5rem;font-size:1rem}
+    .match{color:var(--success);font-weight:600}
+    .hl{color:var(--gold);font-weight:600}
+    footer{padding:1.5rem 0;text-align:center;color:var(--muted);font-size:.8rem}
+    .page-map{display:flex;flex-wrap:wrap;gap:.4rem;margin:.75rem 0}
+    .page-map span,.page-map a{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;color:var(--muted);text-decoration:none}
+    .page-map .active{border-color:var(--accent);color:var(--accent);font-weight:600}
+    .site-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:.65rem 0;position:sticky;top:0;z-index:100}
+    .site-nav .container{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+    .site-nav .brand{font-weight:700;color:var(--text);margin-right:.5rem;font-size:.9rem;text-decoration:none}
+    .site-nav a{padding:.35rem .7rem;border-radius:6px;font-size:.84rem;color:var(--muted);text-decoration:none}
+    .site-nav a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}
+    .site-nav a.active{color:var(--accent);background:var(--surface-2);font-weight:600}
+    .site-nav .disabled{color:#556;font-size:.84rem;padding:.35rem .7rem}
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a class="brand" href="index.html">MIMIC Analytics</a>
+    <a href="index.html">Home</a>
+    <a href="report.html">Project Report</a>
+    <a href="dashboard_01_hospital_overview.html">Dashboard 1</a>
+    <a href="dashboard_02_diagnosis_analysis.html" class="active">Dashboard 2</a>
+    <a href="dashboard_03_medication_analysis.html">Dashboard 3</a>
+    <a href="dashboard_04_hospital_operations.html">Dashboard 4</a>
+    <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Power BI ↗</a>
+  </div>
+</nav>
+
+<header>
+  <div class="container">
+    <span class="badge">Dashboard 2 of 4 · Diagnosis Analysis</span>
+    <h1>Diagnosis Analysis — Detailed Report</h1>
+    <p class="sub">
+      Power BI page: <strong>Diagnosis Analysis</strong> &nbsp;·&nbsp;
+      Data view: <code>vw_diagnosis_analysis</code> &nbsp;·&nbsp;
+      Verified against <code>data/databricks_output/exports/vw_diagnosis_analysis.csv</code>
+    </p>
+    <div class="nav-links">
+      <a class="btn btn-primary" href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open Live Dashboard</a>
+      <a class="btn btn-ghost" href="dashboard_01_hospital_overview.html">Dashboard 1</a>
+      <a class="btn btn-ghost" href="index.html">All Reports</a>
+      <a class="btn btn-ghost" href="../docs/dashboard_02_diagnosis_analysis.md">Markdown</a>
+    </div>
+    <div class="page-map">
+      <a href="dashboard_01_hospital_overview.html">1 · Hospital Overview</a>
+      <span class="active">2 · Diagnosis Analysis</span>
+      <a href="dashboard_03_medication_analysis.html">3 · Medication Analysis</a>
+      <a href="dashboard_04_hospital_operations.html">4 · Hospital Operations</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2>1. Purpose</h2>
+    <p>The Diagnosis Analysis page explores ICD-coded clinical conditions across admissions — distinguishing primary admitting diagnoses from secondary comorbidities, and linking diagnosis patterns to patient demographics and length of stay.</p>
+    <div class="insight"><strong>Questions this page answers:</strong> How many diagnosis records exist per patient and admission? What are the most common primary and secondary diagnoses? How do diagnosis volumes vary by age and gender? Which conditions are associated with the longest hospital stays?</div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>2. KPI Cards</h2>
+    <p>Three headline metrics across the top of the page. All values recomputed from the CSV export — exact match with the live dashboard (Power BI rounds 4,506 records to <strong>5K</strong>).</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="val">100</div><div class="lbl">Diagnosed Patients</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">4,506</div><div class="lbl">Diagnosis Records</div><div class="ok">&#10003; verified (5K in PBI)</div></div>
+      <div class="kpi"><div class="val">275</div><div class="lbl">Primary Diagnoses</div><div class="ok">&#10003; verified</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Card</th><th>Value</th><th>Verified</th><th>DAX</th></tr></thead>
+        <tbody>
+          <tr><td>Diagnosed Patients</td><td>100</td><td class="match">100</td><td><code>DISTINCTCOUNT(patient_id)</code></td></tr>
+          <tr><td>Diagnosis Records</td><td>4,506</td><td class="match">4,506</td><td><code>COUNTROWS(vw_diagnosis_analysis)</code></td></tr>
+          <tr><td>Primary Diagnoses</td><td>275</td><td class="match">275</td><td><code>CALCULATE(COUNTROWS(...), is_primary_diagnosis = TRUE())</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Derived: <strong>16.4 diagnosis records per admission</strong> on average (4,506 ÷ 275 admissions). Exactly one primary diagnosis per admission (275 primary = 275 admissions). Secondary/comorbidity records account for <strong>93.9%</strong> of all diagnosis rows.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>3. Slicers</h2>
+    <p>Three slicers on the left panel cross-filter all KPI cards and charts:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Slicer</th><th>Values</th></tr></thead>
+        <tbody>
+          <tr><td><code>age_group</code></td><td>18-34 · 35-49 · 50-64 · 65-79 · 80+</td></tr>
+          <tr><td><code>gender</code></td><td>F · M</td></tr>
+          <tr><td><code>admission_type</code></td><td>AMBULATORY OBSERVATION · DIRECT EMER. · DIRECT OBSERVATION · ELECTIVE · EU OBSERVATION · EW EMER. · OBSERVATION ADMIT · SURGICAL SAME DAY ADMISSION · URGENT</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>4. Visual Analysis</h2>
+
+    <div class="visual-card">
+      <div class="tag">Visual 1 · Horizontal Bar Chart</div>
+      <h4>Top 10 Primary Diagnoses</h4>
+      <p>Count of rows where <code>is_primary_diagnosis = TRUE</code>, grouped by <code>diagnosis_title</code>.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Diagnosis</th><th>Count</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Coronary atherosclerosis of native coronary artery</strong></td><td><strong>7</strong></td></tr>
+            <tr><td><strong>Acute kidney failure, unspecified</strong></td><td><strong>7</strong></td></tr>
+            <tr><td>Cerebral aneurysm, nonruptured</td><td>4</td></tr>
+            <tr><td>Non-ST elevation (NSTEMI) myocardial infarction</td><td>4</td></tr>
+            <tr><td>Aortic valve disorders</td><td>4</td></tr>
+            <tr><td>Other postoperative infection</td><td>4</td></tr>
+            <tr><td>Abscess of liver</td><td>3</td></tr>
+            <tr><td>Acute on chronic systolic heart failure</td><td>3</td></tr>
+            <tr><td>Encounter for antineoplastic chemotherapy</td><td>3</td></tr>
+            <tr><td>Acute respiratory failure with hypoxia</td><td>3</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Primary admitting diagnoses are <span class="hl">cardiovascular and renal</span> — coronary artery disease and acute kidney failure tie at 7 each (2.5% of admissions). No single primary diagnosis dominates; the top 10 cover only 42 admissions (15.3%).</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 2 · Horizontal Bar Chart</div>
+      <h4>Top 10 Diagnoses (All Records)</h4>
+      <p>Total diagnosis record count by <code>diagnosis_title</code> — includes primary and secondary ICD codes.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Diagnosis</th><th>Records</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Unspecified essential hypertension</strong></td><td><strong>68</strong></td><td>1.5%</td></tr>
+            <tr><td>Hyperlipidemia, unspecified</td><td>57</td><td>1.3%</td></tr>
+            <tr><td>Acute kidney failure, unspecified</td><td>56</td><td>1.2%</td></tr>
+            <tr><td>Other and unspecified hyperlipidemia</td><td>55</td><td>1.2%</td></tr>
+            <tr><td>Hypothyroidism, unspecified</td><td>47</td><td>1.0%</td></tr>
+            <tr><td>Obesity, unspecified</td><td>43</td><td>1.0%</td></tr>
+            <tr><td>Anemia, unspecified</td><td>41</td><td>0.9%</td></tr>
+            <tr><td>Long term (current) use of insulin</td><td>37</td><td>0.8%</td></tr>
+            <tr><td>Urinary tract infection, site not specified</td><td>36</td><td>0.8%</td></tr>
+            <tr><td>Personal history of nicotine dependence</td><td>35</td><td>0.8%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Secondary comorbidities tell a different story than primary diagnoses. <span class="hl">Chronic cardiometabolic conditions</span> dominate — hypertension (68), hyperlipidemia variants (112 combined), hypothyroidism, obesity, and insulin use reflect a high-burden older adult population. Top 10 conditions account for 479 records (10.6%).</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 3 · Clustered Column Chart</div>
+      <h4>Diagnosis Records by age_group and gender</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Age Group</th><th>Female</th><th>Male</th><th>Total</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>50–64</strong></td><td>627</td><td><strong>1,286</strong></td><td><strong>1,913</strong></td><td>42.5%</td></tr>
+            <tr><td>65–79</td><td>658</td><td>615</td><td>1,273</td><td>28.3%</td></tr>
+            <tr><td>80+</td><td>357</td><td>214</td><td>571</td><td>12.7%</td></tr>
+            <tr><td>35–49</td><td>425</td><td>185</td><td>610</td><td>13.5%</td></tr>
+            <tr><td>18–34</td><td>115</td><td>24</td><td>139</td><td>3.1%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> <span class="hl">50–64 males account for 1,286 records (28.5% of all diagnoses)</span> — the single largest demographic segment. Overall gender split is nearly even (F: 2,182 · M: 2,324). The 50–64 male skew suggests higher admission frequency and/or more coded comorbidities per admission in that cohort.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 4 · Horizontal Bar Chart</div>
+      <h4>Average length_of_stay_days by diagnosis_title</h4>
+      <p>Mean LOS at the diagnosis-record level (admission LOS repeated per ICD row). Sorted by highest average stay.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Diagnosis</th><th>Avg LOS (days)</th></tr></thead>
+          <tbody>
+            <tr><td>Catatonic type schizophrenia, unspecified</td><td>44.93</td></tr>
+            <tr><td>Foreign body in larynx</td><td>44.93</td></tr>
+            <tr><td>Inhalation and ingestion of other object causing obstruction…</td><td>44.93</td></tr>
+            <tr><td>Other alteration of consciousness</td><td>44.93</td></tr>
+            <tr><td>Acute systolic (congestive) heart failure</td><td>34.08</td></tr>
+            <tr><td>Diverticulosis of large intestine without perforation…</td><td>34.08</td></tr>
+            <tr><td>Acute embolism and thrombosis of unspecified deep veins…</td><td>34.08</td></tr>
+            <tr><td>Takotsubo syndrome</td><td>34.08</td></tr>
+            <tr><td>Benign neoplasm of descending colon</td><td>34.08</td></tr>
+            <tr><td>Hypothermia, not associated with low environmental temperature</td><td>34.08</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Power BI displays these as <strong>~45 days</strong> and <strong>~34 days</strong> (rounded). Several rare diagnoses share identical LOS values because they co-occur on the same long-stay admissions. <span class="hl">High LOS is driven by complex inpatient episodes</span>, not by high-frequency chronic conditions like hypertension.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>5. Cross-Cutting Analysis</h2>
+
+    <h3>ICD Version Mix</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ICD Version</th><th>Records</th><th>Share</th></tr></thead>
+        <tbody>
+          <tr><td>ICD-10</td><td>2,313</td><td>51.3%</td></tr>
+          <tr><td>ICD-9</td><td>2,193</td><td>48.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>MIMIC-IV spans the ICD-9 to ICD-10 transition; both code sets appear in the demo subset.</p>
+
+    <h3>Diagnosis Volume by Admission Type</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Admission Type</th><th>Diagnosis Records</th><th>Share</th></tr></thead>
+        <tbody>
+          <tr><td><strong>EW EMER.</strong></td><td>1,853</td><td>41.1%</td></tr>
+          <tr><td>OBSERVATION ADMIT</td><td>926</td><td>20.6%</td></tr>
+          <tr><td>URGENT</td><td>708</td><td>15.7%</td></tr>
+          <tr><td>EU OBSERVATION</td><td>313</td><td>7.0%</td></tr>
+          <tr><td>DIRECT EMER.</td><td>227</td><td>5.0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Distribution mirrors admission volume from Dashboard 1 — EW EMER. drives the largest share of coded diagnoses.</p>
+
+    <h3>Primary vs Secondary Pattern</h3>
+    <p>Each admission carries exactly one primary diagnosis (sequence 1) plus an average of <strong>15.4 secondary codes</strong>. This reflects MIMIC's rich ICD coding practice where comorbidities, history codes, and status codes are recorded alongside the admitting condition.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>6. DAX Measures</h2>
+    <p>Three measures on this page. Full reference: <a href="../powerbi/mimic_powerbi_dax_measures.md">powerbi/mimic_powerbi_dax_measures.md</a></p>
+    <pre><code>Diagnosis Records = COUNTROWS(vw_diagnosis_analysis)
+
+Diagnosed Patients = DISTINCTCOUNT(vw_diagnosis_analysis[patient_id])
+
+Primary Diagnoses =
+CALCULATE(
+    COUNTROWS(vw_diagnosis_analysis),
+    vw_diagnosis_analysis[is_primary_diagnosis] = TRUE()
+)</code></pre>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>7. Key Takeaways</h2>
+    <div class="takeaway"><ol>
+      <li><strong>High coding density</strong> — 4,506 diagnosis records across 275 admissions (~16.4 per admission); Power BI rounds to 5K.</li>
+      <li><strong>Primary = acute/cardiac</strong> — coronary disease and acute kidney failure lead admitting diagnoses; no single condition dominates.</li>
+      <li><strong>Secondary = chronic metabolic</strong> — hypertension, hyperlipidemia, hypothyroidism, and obesity dominate comorbidity coding.</li>
+      <li><strong>50–64 male skew</strong> — largest diagnosis volume segment (1,286 records); likely reflects repeat admissions in high-utilizer patients.</li>
+      <li><strong>LOS ≠ frequency</strong> — longest stays tie to rare acute events (~45 days), not common chronic conditions.</li>
+      <li><strong>ICD-9/10 mix</strong> — nearly even split reflects MIMIC's transition-era admissions.</li>
+      <li><strong>Demo limitations</strong> — 100-patient subset; diagnosis titles resolved from ICD codes in the Gold layer.</li>
+    </ol></div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>8. Verification</h2>
+    <pre><code>import pandas as pd
+df = pd.read_csv("data/databricks_output/exports/vw_diagnosis_analysis.csv")
+assert df["patient_id"].nunique() == 100
+assert len(df) == 4506
+assert (df["is_primary_diagnosis"].astype(str).str.lower() == "true").sum() == 275
+assert df["admission_id"].nunique() == 275</code></pre>
+    <p>Output: <code>data/databricks_output/exports/diagnosis_analysis.json</code></p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Dashboard 2 of 4 — Diagnosis Analysis &nbsp;·&nbsp; <code>vw_diagnosis_analysis</code></p>
+    <p style="margin-top:.4rem">
+      <a href="index.html">Home</a>
+      &nbsp;·&nbsp; <a href="dashboard_01_hospital_overview.html">Dashboard 1</a>
+      &nbsp;·&nbsp; <a href="report.html">Project Report</a>
+      &nbsp;·&nbsp; <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Live Dashboard</a>
+      &nbsp;·&nbsp; <a href="../README.md">README</a>
+    </p>
+  </div>
+</footer>
+</body>
+</html>

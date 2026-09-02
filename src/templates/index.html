@@ -633,10 +633,24 @@
       display: inline-block; padding: 6px 10px; border-radius: 999px;
       background: #f1f5f9; color: #334155; font-size: .78rem; border: 1px solid #e2e8f0;
     }
-    .project-actions { margin-top: 12px; display:flex; gap:10px; }
+    .project-actions {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
     .project-btn {
-      display:inline-block; padding:8px 12px; border-radius:10px; font-weight:650; text-decoration:none;
-      border:1px solid #cbd5e1; color:#0f172a; background:#ffffff;
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 650;
+      text-decoration: none;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      background: #ffffff;
+      font-size: .85rem;
+      line-height: 1.2;
+      white-space: nowrap;
     }
     .project-btn:hover { background:#f8fafc; }
     .project-btn.primary { background:#0ea5e9; color:#fff; border-color:#0ea5e9; }
@@ -1121,6 +1135,29 @@
                 <a href="https://github.com/tle057zz/health_project" class="project-btn" target="_blank" rel="noopener">Repository</a>
               </div>
               <div class="project-status">Current status: automated CSV-to-Power-BI export pipeline verified in Airflow</div>
+            </div>
+          </article>
+          <!-- Project 5 -->
+          <article class="project-card">
+            <img class="project-thumb" src="/mimic-databricks-project/demo-data-engineering-with-lakeflow-video.png" alt="MIMIC Clinical Analytics">
+            <div class="project-body">
+              <h3 class="project-title">MIMIC Clinical Analytics — Databricks</h3>
+              <p class="project-desc">MIMIC-IV demo lakehouse pipeline on Databricks with medallion architecture, Gold-layer analytics views, and Power BI hospital reporting.</p>
+              <div class="project-tags">
+                <span class="project-tag">Databricks</span>
+                <span class="project-tag">Lakehouse</span>
+                <span class="project-tag">Medallion</span>
+                <span class="project-tag">SQL</span>
+                <span class="project-tag">Power BI</span>
+                <span class="project-tag">MIMIC-IV</span>
+                <span class="project-tag">ETL</span>
+              </div>
+              <div class="project-actions">
+                <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" class="project-btn primary" target="_blank" rel="noopener">View Power BI</a>
+                <a href="/mimic-databricks-project/index.html" class="project-btn primary" target="_blank" rel="noopener">Reports</a>
+                <a href="/mimic-databricks-project/report.html" class="project-btn primary" target="_blank" rel="noopener">Project Report</a>
+                <a href="https://github.com/tle057zz/mimic-databricks-project" class="project-btn" target="_blank" rel="noopener">Repository</a>
+              </div>
             </div>
           </article>
         </div>

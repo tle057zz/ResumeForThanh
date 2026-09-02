@@ -428,6 +428,13 @@ def serve_health_data_pipeline(subpath: str):
     base_dir = os.path.join(app.root_path, 'projects', 'Health-data-pipeline', 'docs')
     return send_from_directory(base_dir, subpath)
 
+@app.route('/mimic-databricks-project/<path:subpath>')
+def serve_mimic_databricks_project(subpath: str):
+    """Serve reports from projects/mimic-databricks-project/report."""
+    record_visit('mimic-databricks-project')
+    base_dir = os.path.join(app.root_path, 'projects', 'mimic-databricks-project', 'report')
+    return send_from_directory(base_dir, subpath)
+
 @app.route('/<path:path>')
 def static_proxy(path):
     # Serve static files with aggressive caching headers in production

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard 4 — Hospital Operations | MIMIC Analytics</title>
+  <style>
+    :root {
+      --bg:#0f1419; --surface:#1a2332; --surface-2:#243044; --border:#2d3f5c;
+      --text:#e8edf4; --muted:#94a3b8; --accent:#3b82f6; --accent-hover:#2563eb;
+      --gold:#f59e0b; --success:#22c55e; --warn:#f97316;
+      --font:"Segoe UI",system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
+    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+    .container{max-width:1040px;margin:0 auto;padding:0 1.5rem}
+    header{background:linear-gradient(135deg,#1a3a6b,#0f1419 70%);border-bottom:1px solid var(--border);padding:2.5rem 0 2rem}
+    .badge{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:.2rem .8rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem}
+    header h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.4rem}
+    header .sub{color:var(--muted);font-size:.95rem;margin-bottom:1.2rem}
+    .nav-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+    .btn{display:inline-flex;align-items:center;padding:.6rem 1.1rem;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none}
+    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);text-decoration:none}
+    .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{text-decoration:none}
+    section{padding:2.25rem 0;border-bottom:1px solid var(--border)}
+    h2{font-size:1.3rem;margin-bottom:.9rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);display:inline-block}
+    h3{font-size:.95rem;color:var(--gold);margin:1.4rem 0 .5rem}
+    h4{font-size:.88rem;color:var(--text);margin:1rem 0 .35rem}
+    p,li{color:var(--muted);font-size:.92rem;margin-bottom:.5rem}
+    ul{padding-left:1.2rem;margin-bottom:.75rem}
+    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.65rem;margin:1rem 0}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center}
+    .kpi .val{font-size:1.35rem;font-weight:700;color:var(--accent)}
+    .kpi .lbl{font-size:.72rem;color:var(--muted)}
+    .kpi .ok{font-size:.68rem;color:var(--success);margin-top:.2rem}
+    .insight{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.85rem 1.1rem;margin:.65rem 0}
+    .insight strong{color:var(--text)}
+    .takeaway{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin:.5rem 0}
+    .takeaway ol{padding-left:1.2rem;margin:0}
+    .takeaway li{margin-bottom:.35rem}
+    .table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
+    table{width:100%;border-collapse:collapse;font-size:.84rem}
+    th{background:var(--surface-2);text-align:left;padding:.5rem .8rem;border:1px solid var(--border)}
+    td{padding:.45rem .8rem;border:1px solid var(--border);color:var(--muted)}
+    tr:nth-child(even) td{background:var(--surface)}
+    td strong,td em{color:var(--text)}
+    code{font-family:monospace;font-size:.8rem;background:var(--surface-2);padding:.1rem .35rem;border-radius:3px;color:var(--text)}
+    pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.9rem;overflow-x:auto;font-size:.76rem;line-height:1.65;margin:.6rem 0}
+    pre code{background:none;padding:0;color:#a8c7fa}
+    .visual-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin:.75rem 0}
+    .visual-card .tag{font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+    .visual-card h4{margin:0 0 .5rem;font-size:1rem}
+    .match{color:var(--success);font-weight:600}
+    .hl{color:var(--gold);font-weight:600}
+    .dual-source{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.75rem;margin:1rem 0}
+    .source-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem}
+    .source-box .src{font-size:.72rem;color:var(--gold);text-transform:uppercase;margin-bottom:.35rem}
+    footer{padding:1.5rem 0;text-align:center;color:var(--muted);font-size:.8rem}
+    .page-map{display:flex;flex-wrap:wrap;gap:.4rem;margin:.75rem 0}
+    .page-map span,.page-map a{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;color:var(--muted);text-decoration:none}
+    .page-map .active{border-color:var(--accent);color:var(--accent);font-weight:600}
+    .site-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:.65rem 0;position:sticky;top:0;z-index:100}
+    .site-nav .container{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+    .site-nav .brand{font-weight:700;color:var(--text);margin-right:.5rem;font-size:.9rem;text-decoration:none}
+    .site-nav a{padding:.35rem .7rem;border-radius:6px;font-size:.84rem;color:var(--muted);text-decoration:none}
+    .site-nav a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}
+    .site-nav a.active{color:var(--accent);background:var(--surface-2);font-weight:600}
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a class="brand" href="index.html">MIMIC Analytics</a>
+    <a href="index.html">Home</a>
+    <a href="report.html">Project Report</a>
+    <a href="dashboard_01_hospital_overview.html">Dashboard 1</a>
+    <a href="dashboard_02_diagnosis_analysis.html">Dashboard 2</a>
+    <a href="dashboard_03_medication_analysis.html">Dashboard 3</a>
+    <a href="dashboard_04_hospital_operations.html" class="active">Dashboard 4</a>
+    <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Power BI ↗</a>
+  </div>
+</nav>
+
+<header>
+  <div class="container">
+    <span class="badge">Dashboard 4 of 4 · Hospital Operations</span>
+    <h1>Hospital Operations — Detailed Report</h1>
+    <p class="sub">
+      Power BI page: <strong>Hospital Operations</strong> &nbsp;·&nbsp;
+      Data views: <code>vw_transfer_analysis</code> + <code>vw_procedure_analysis</code> &nbsp;·&nbsp;
+      Verified against CSV exports in <code>data/databricks_output/exports/</code>
+    </p>
+    <div class="nav-links">
+      <a class="btn btn-primary" href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Open Live Dashboard</a>
+      <a class="btn btn-ghost" href="dashboard_03_medication_analysis.html">Dashboard 3</a>
+      <a class="btn btn-ghost" href="index.html">All Reports</a>
+      <a class="btn btn-ghost" href="../docs/dashboard_04_hospital_operations.md">Markdown</a>
+    </div>
+    <div class="page-map">
+      <a href="dashboard_01_hospital_overview.html">1 · Hospital Overview</a>
+      <a href="dashboard_02_diagnosis_analysis.html">2 · Diagnosis Analysis</a>
+      <a href="dashboard_03_medication_analysis.html">3 · Medication Analysis</a>
+      <span class="active">4 · Hospital Operations</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2>1. Purpose</h2>
+    <p>The Hospital Operations page combines patient movement and clinical procedure data — tracking transfers between care units, event types (admit, transfer, discharge, ED), transfer durations, and procedure volumes by age and ICD code.</p>
+    <div class="insight"><strong>Questions this page answers:</strong> How many transfer events occur and how long do patients stay in each unit? Which care units see the most traffic? What types of transfer events dominate? How many procedures are performed, and which codes and age groups lead?</div>
+    <div class="dual-source">
+      <div class="source-box">
+        <div class="src">Transfer data</div>
+        <p><code>vw_transfer_analysis</code> — 1,190 rows from <code>hosp/transfers</code> joined to admissions and patients. One row per transfer event with care unit, event type, and duration.</p>
+      </div>
+      <div class="source-box">
+        <div class="src">Procedure data</div>
+        <p><code>vw_procedure_analysis</code> — 722 rows from <code>hosp/procedures_icd</code> joined to admissions and patients. One row per ICD procedure code on an admission.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>2. KPI Cards</h2>
+    <p>Five headline metrics across the top — three from transfers, two from procedures. All recomputed from CSV exports; exact match with the live dashboard (Power BI rounds 1,190 transfers to <strong>1K</strong>).</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="val">1,190</div><div class="lbl">Total Transfers</div><div class="ok">&#10003; verified (1K in PBI)</div></div>
+      <div class="kpi"><div class="val">100</div><div class="lbl">Transferred Patients</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">51.22</div><div class="lbl">Avg Transfer Duration (hrs)</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">722</div><div class="lbl">Total Procedures</div><div class="ok">&#10003; verified</div></div>
+      <div class="kpi"><div class="val">92</div><div class="lbl">Procedure Patients</div><div class="ok">&#10003; verified</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Card</th><th>Value</th><th>Source View</th><th>DAX</th></tr></thead>
+        <tbody>
+          <tr><td>Total Transfers</td><td>1,190</td><td><code>vw_transfer_analysis</code></td><td><code>COUNTROWS(vw_transfer_analysis)</code></td></tr>
+          <tr><td>Transferred Patients</td><td>100</td><td><code>vw_transfer_analysis</code></td><td><code>DISTINCTCOUNT(patient_id)</code></td></tr>
+          <tr><td>Avg Transfer Duration</td><td>51.22 hrs</td><td><code>vw_transfer_analysis</code></td><td><code>AVERAGE(transfer_duration_hours)</code></td></tr>
+          <tr><td>Total Procedures</td><td>722</td><td><code>vw_procedure_analysis</code></td><td><code>COUNTROWS(vw_procedure_analysis)</code></td></tr>
+          <tr><td>Procedure Patients</td><td>92</td><td><code>vw_procedure_analysis</code></td><td><code>DISTINCTCOUNT(patient_id)</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Derived: <strong>4.3 transfer events per admission</strong> (1,190 ÷ 275). <strong>8 patients</strong> have no procedure records. <strong>187 admissions</strong> (68%) have at least one procedure; average <strong>3.9 procedures per procedural admission</strong>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>3. Transfer Analysis</h2>
+    <p>Three visuals powered by <code>vw_transfer_analysis</code>.</p>
+
+    <div class="visual-card">
+      <div class="tag">Visual 1 · Horizontal Bar Chart</div>
+      <h4>Total Transfers by care_unit</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Care Unit</th><th>Transfers</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>(Blank)</strong></td><td><strong>275</strong></td><td>23.1%</td></tr>
+            <tr><td>EMERGENCY DEPARTMENT</td><td>236</td><td>19.8%</td></tr>
+            <tr><td>MEDICINE</td><td>77</td><td>6.5%</td></tr>
+            <tr><td>MED/SURG</td><td>48</td><td>4.0%</td></tr>
+            <tr><td>NEUROLOGY</td><td>46</td><td>3.9%</td></tr>
+            <tr><td>MEDICINE/CARDIOLOGY</td><td>43</td><td>3.6%</td></tr>
+            <tr><td>CARDIAC SURGERY</td><td>39</td><td>3.3%</td></tr>
+            <tr><td>TRANSPLANT</td><td>39</td><td>3.3%</td></tr>
+            <tr><td>MEDICAL INTENSIVE CARE UNIT (MICU)</td><td>36</td><td>3.0%</td></tr>
+            <tr><td>DISCHARGE LOUNGE</td><td>36</td><td>3.0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> <span class="hl">(Blank) care_unit = 275</span> — these are DISCHARGE events with no assigned unit (one per admission). Excluding blanks, <strong>EMERGENCY DEPARTMENT leads at 236 (25.8% of named units)</strong>. ICU and specialty units (MICU, SICU, CVICU) each contribute 3–4% of named-unit transfers.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 2 · Horizontal Bar Chart</div>
+      <h4>Average transfer_duration_hours by care_unit</h4>
+      <p>Only rows with a non-null duration and named care unit. Sorted by highest average stay.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Care Unit</th><th>Avg Duration (hrs)</th><th>~Days</th></tr></thead>
+          <tbody>
+            <tr><td><strong>MEDICINE/CARDIOLOGY INTERMEDIATE</strong></td><td><strong>332.21</strong></td><td>~13.8</td></tr>
+            <tr><td>PSYCHIATRY</td><td>195.85</td><td>~8.2</td></tr>
+            <tr><td>HEMATOLOGY/ONCOLOGY</td><td>126.45</td><td>~5.3</td></tr>
+            <tr><td>VASCULAR</td><td>105.09</td><td>~4.4</td></tr>
+            <tr><td>CORONARY CARE UNIT (CCU)</td><td>96.00</td><td>~4.0</td></tr>
+            <tr><td>TRANSPLANT</td><td>95.70</td><td>~4.0</td></tr>
+            <tr><td>HEMATOLOGY/ONCOLOGY INTERMEDIATE</td><td>89.03</td><td>~3.7</td></tr>
+            <tr><td>MEDICAL/SURGICAL ICU (MICU/SICU)</td><td>84.69</td><td>~3.5</td></tr>
+            <tr><td>MEDICAL INTENSIVE CARE UNIT (MICU)</td><td>83.09</td><td>~3.5</td></tr>
+            <tr><td>TRAUMA SICU (TSICU)</td><td>80.10</td><td>~3.3</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Power BI displays <strong>332 hours</strong> for Medicine/Cardiology Intermediate — the longest unit stay. Psychiatry (~196 hrs) and Hematology/Oncology (~126 hrs) follow. ED visits average only <strong>3.4 hours</strong> (short-stay triage), while ICU-level units cluster around 80–96 hours.</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 3 · Donut Chart</div>
+      <h4>Total Transfers by event_type</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Event Type</th><th>Count</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>TRANSFER</strong></td><td>404</td><td><strong>33.95%</strong></td></tr>
+            <tr><td>DISCHARGE</td><td>275</td><td>23.11%</td></tr>
+            <tr><td>ADMIT</td><td>275</td><td>23.11%</td></tr>
+            <tr><td>ED</td><td>236</td><td>19.83%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Four event types partition the 1,190 records. <span class="hl">TRANSFER (34%)</span> is the largest — intra-hospital moves between units. ADMIT and DISCHARGE each equal <strong>275 (one per admission)</strong>. ED events (236) represent emergency department visits that may not result in full admission.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>4. Procedure Analysis</h2>
+    <p>Two visuals powered by <code>vw_procedure_analysis</code>.</p>
+
+    <div class="visual-card">
+      <div class="tag">Visual 4 · Vertical Bar Chart</div>
+      <h4>Total Procedures by age_group</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Age Group</th><th>Procedures</th><th>Share</th></tr></thead>
+          <tbody>
+            <tr><td><strong>50–64</strong></td><td><strong>286</strong></td><td>39.6%</td></tr>
+            <tr><td>65–79</td><td>208</td><td>28.8%</td></tr>
+            <tr><td>35–49</td><td>130</td><td>18.0%</td></tr>
+            <tr><td>80+</td><td>62</td><td>8.6%</td></tr>
+            <tr><td>18–34</td><td>36</td><td>5.0%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> <span class="hl">68.4% of procedures</span> occur in patients aged 50–79 — consistent with Dashboards 1–3. The 50–64 band alone accounts for 39.6%. Male patients have more procedures (425 vs 297 female, 58.9%).</div>
+    </div>
+
+    <div class="visual-card">
+      <div class="tag">Visual 5 · Horizontal Bar Chart</div>
+      <h4>Total Procedures by procedure_code</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Procedure Code</th><th>Count</th><th>ICD</th></tr></thead>
+          <tbody>
+            <tr><td><strong>02HV33Z</strong></td><td><strong>23</strong></td><td>ICD-10</td></tr>
+            <tr><td>3897</td><td>22</td><td>ICD-9</td></tr>
+            <tr><td>966</td><td>18</td><td>ICD-9</td></tr>
+            <tr><td>9671</td><td>15</td><td>ICD-9</td></tr>
+            <tr><td>3893</td><td>13</td><td>ICD-9</td></tr>
+            <tr><td>3961</td><td>13</td><td>ICD-9</td></tr>
+            <tr><td>5491</td><td>12</td><td>ICD-9</td></tr>
+            <tr><td>9604</td><td>11</td><td>ICD-9</td></tr>
+            <tr><td>3891</td><td>10</td><td>ICD-9</td></tr>
+            <tr><td>3E0G76Z</td><td>10</td><td>ICD-10</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="insight"><strong>Finding:</strong> Top code <strong>02HV33Z</strong> (ICD-10 — insertion of infusion device) leads at 23. ICD-9 codes dominate the top 10 (3897 = central venous catheter, 966 = enteral nutrition, 9671 = continuous invasive mechanical ventilation). Overall split: <strong>ICD-9: 401 (55.5%) · ICD-10: 321 (44.5%)</strong>. 187 primary procedures (one per procedural admission).</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>5. Cross-Cutting Analysis</h2>
+
+    <h3>Transfer Volume by Admission Type</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Admission Type</th><th>Transfer Events</th><th>Share</th></tr></thead>
+        <tbody>
+          <tr><td><strong>EW EMER.</strong></td><td>477</td><td>40.1%</td></tr>
+          <tr><td>OBSERVATION ADMIT</td><td>182</td><td>15.3%</td></tr>
+          <tr><td>URGENT</td><td>166</td><td>13.9%</td></tr>
+          <tr><td>EU OBSERVATION</td><td>97</td><td>8.2%</td></tr>
+          <tr><td>SURGICAL SAME DAY ADMISSION</td><td>80</td><td>6.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Patient Coverage</h3>
+    <p>All <strong>100 patients</strong> appear in transfer data. Only <strong>92 patients (92%)</strong> have procedure records — 8 patients had admissions with no coded procedures in this subset.</p>
+
+    <h3>Operational Flow</h3>
+    <p>The transfer event lifecycle per admission: <strong>ADMIT (275) → intra-hospital TRANSFERs (404 total, ~1.5 per admission) → DISCHARGE (275)</strong>, with ED visits (236) representing a parallel emergency pathway. High TRANSFER count relative to admissions indicates active bed management and specialty unit routing.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>6. DAX Measures</h2>
+    <p>Five measures on this page (two views). Full reference: <a href="../powerbi/mimic_powerbi_dax_measures.md">powerbi/mimic_powerbi_dax_measures.md</a></p>
+    <pre><code>Total Transfers = COUNTROWS(vw_transfer_analysis)
+
+Transferred Patients =
+DISTINCTCOUNT(vw_transfer_analysis[patient_id])
+
+Avg Transfer Duration =
+AVERAGE(vw_transfer_analysis[transfer_duration_hours])
+
+Total Procedures = COUNTROWS(vw_procedure_analysis)
+
+Procedure Patients =
+DISTINCTCOUNT(vw_procedure_analysis[patient_id])</code></pre>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>7. Key Takeaways</h2>
+    <div class="takeaway"><ol>
+      <li><strong>1,190 transfer events</strong> — 4.3 per admission; Power BI rounds to 1K. All 100 patients have transfer records.</li>
+      <li><strong>Event mix</strong> — TRANSFER (34%), DISCHARGE (23%), ADMIT (23%), ED (20%).</li>
+      <li><strong>ED dominates named units</strong> — 236 ED events; blank care_unit = discharge records.</li>
+      <li><strong>Longest unit stays</strong> — Medicine/Cardiology Intermediate (~332 hrs), Psychiatry (~196 hrs).</li>
+      <li><strong>722 procedures</strong> — 92 patients, 187 admissions; 8 patients without procedures.</li>
+      <li><strong>50–64 leads procedures</strong> — 286 (39.6%); aligns with older adult cohort from other dashboards.</li>
+      <li><strong>ICD-9/10 mix</strong> — catheter, ventilation, and nutrition codes dominate top 10.</li>
+    </ol></div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>8. Verification</h2>
+    <pre><code>import pandas as pd
+tx = pd.read_csv("data/databricks_output/exports/vw_transfer_analysis.csv")
+pr = pd.read_csv("data/databricks_output/exports/vw_procedure_analysis.csv")
+assert len(tx) == 1190
+assert tx["patient_id"].nunique() == 100
+assert round(tx["transfer_duration_hours"].mean(), 2) == 51.22
+assert len(pr) == 722
+assert pr["patient_id"].nunique() == 92</code></pre>
+    <p>Output: <code>data/databricks_output/exports/hospital_operations_analysis.json</code></p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Dashboard 4 of 4 — Hospital Operations &nbsp;·&nbsp; <code>vw_transfer_analysis</code> + <code>vw_procedure_analysis</code></p>
+    <p style="margin-top:.4rem">
+      <a href="index.html">Home</a>
+      &nbsp;·&nbsp; <a href="dashboard_03_medication_analysis.html">Dashboard 3</a>
+      &nbsp;·&nbsp; <a href="report.html">Project Report</a>
+      &nbsp;·&nbsp; <a href="https://app.powerbi.com/view?r=eyJrIjoiYWIwMDQ2MmItZTk2YS00NmRkLTlmNmUtMDljMjUwYTY1MWU0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">Live Dashboard</a>
+      &nbsp;·&nbsp; <a href="../README.md">README</a>
+    </p>
+  </div>
+</footer>
+</body>
+</html>
