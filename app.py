@@ -375,7 +375,7 @@ def ensure_streamlit_running():
 def index():
     # Direct visitors to the Resume section by default
     record_visit('resume')
-    return redirect('/index.html#resume', code=302)
+    return redirect('/index.html#portfolio', code=302)
 
 @app.route('/index.html')
 def index_html():
