@@ -572,6 +572,7 @@
     .skill-pill[data-theme="violet"] { background: linear-gradient(135deg, rgba(139,92,246,0.18), rgba(99,102,241,0.15)); }
     .skill-pill[data-theme="amber"] { background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(239,68,68,0.15)); }
     .skill-pill[data-theme="emerald"] { background: linear-gradient(135deg, rgba(16,185,129,0.18), rgba(5,150,105,0.15)); }
+    .skill-group { margin: 4px 0 14px; font-size: .95rem; font-weight: 700; color: #0f172a; letter-spacing: .01em; }
 
     /* Resume section enhancements */
     .resume .section-title h2 { position: relative; display: inline-block; }
@@ -827,7 +828,7 @@
         <div class="row justify-content-center">
           <div class="col-lg-9">
             <h2 style="color: #000; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">Thanh Le</h2>
-            <p style="color: #000; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">I'm <span class="typed" data-typed-items="Junior Data Analyst, postgraduate student, postgraduate student, Data Engineer, Student">Data Analyst</span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
+            <p style="color: #000; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">I'm <span class="typed" data-typed-items="Junior Data Analyst, Master's Graduate, Data Engineer">Data Analyst</span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
             <div class="alert alert-success" style="background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.3); backdrop-filter: blur(10px); margin-top: 20px;">
               <div style="display: flex; align-items: center; gap: 8px;">
                 <i class="bi bi-check-circle-fill" style="color: #22c55e; font-size: 18px;"></i>
@@ -852,11 +853,11 @@
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>About</h2>
-        <p>A postgraduate student with a foundation in data science, analytics, and engineering, seeking opportunities to apply and expand my skills in real-world projects.</p>
+        <p>A Master's graduate with a foundation in data science, analytics, and engineering, seeking opportunities to apply and expand my skills in real-world projects.</p>
         <p>I am also interested in coding. Therefore, I created this website to improve my coding skill alongwith demonstrating something related to my study as well as my future plan</p>
         <div class="alert alert-info mt-3">
           <h5><i class="bi bi-person-check text-info"></i> Open to Work & Collaboration</h5>
-          <p class="mb-0">Completed master degree, landing a first job, eager to learn more and more.....</p>
+          <p class="mb-0">Master's degree completed. Looking for a first role and eager to keep learning.</p>
         </div>
       </div><!-- End Section Title -->
 
@@ -867,9 +868,9 @@
             <img src="img/profile-img.jpg" class="img-fluid" alt="" loading="lazy" decoding="async">
           </div>
           <div class="col-lg-8 content">
-            <h2>Postgraduate Student in Data Management & Analytics</h2>
+            <h2>Master's Graduate in Data Management & Analytics</h2>
             <p class="fst-italic py-3">
-              Currently pursuing a Master's degree with a focus on data management and analytics. Experienced in building efficient data pipelines, optimizing queries, and developing data-driven solutions using PostgreSQL, Python, and Tableau. Having knowledge in ETL processes with Pentaho (PDI), database design, and performance tuning.
+              Completed a Master's degree with a focus on data management and analytics. Experienced in building efficient data pipelines, optimizing queries, and developing data-driven solutions using Databricks, Snowflake, PostgreSQL, Python, Tableau, and Power BI. Having knowledge in ETL processes with Pentaho (PDI), database design, and performance tuning.
             </p>
             <div class="row">
               <div class="col-lg-6">
@@ -950,31 +951,82 @@
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Skills</h2>
-        <p>I have a growing foundation in data science, analytics, and engineering, and continue to develop my technical skills and professional competencies through ongoing learning and practical experience.</p>
+        <p>Languages, platforms, libraries, and practices I use across data engineering and analytics projects.</p>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row">
           <div class="col-lg-6">
-            <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
-              <i class="bi bi-database-gear"></i><strong>SQL &amp; PostgreSQL</strong>
-            </div>
+            <h3 class="skill-group">Languages</h3>
             <div class="skill-pill" data-theme="emerald" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
               <i class="bi bi-filetype-py"></i><strong>Python</strong>
             </div>
+            <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-filetype-sql"></i><strong>SQL</strong>
+            </div>
+            <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-filetype-sql"></i><strong>Spark SQL</strong>
+            </div>
             <div class="skill-pill" data-theme="violet" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
-              <i class="bi bi-bar-chart-line"></i><strong>Data Visualization</strong>
+              <i class="bi bi-calculator"></i><strong>DAX</strong>
+            </div>
+
+            <h3 class="skill-group">Libraries</h3>
+            <div class="skill-pill" data-theme="emerald" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-table"></i><strong>Pandas</strong>
+            </div>
+            <div class="skill-pill" data-theme="amber" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-lightning"></i><strong>PySpark</strong>
+            </div>
+            <div class="skill-pill" data-theme="amber" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-lightning-charge"></i><strong>Apache Spark</strong>
+            </div>
+            <div class="skill-pill" data-theme="violet" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-layers"></i><strong>Delta Lake</strong>
             </div>
           </div>
           <div class="col-lg-6">
+            <h3 class="skill-group">Platforms and Tools</h3>
             <div class="skill-pill" data-theme="amber" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
-              <i class="bi bi-diagram-3"></i><strong>ETL &amp; Data Integration</strong>
+              <i class="bi bi-cloud-check"></i><strong>Databricks</strong>
             </div>
             <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
-              <i class="bi bi-code-slash"></i><strong>Web Development</strong>
+              <i class="bi bi-snow"></i><strong>Snowflake</strong>
             </div>
             <div class="skill-pill" data-theme="violet" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
-              <i class="bi bi-cpu"></i><strong>Machine Learning</strong>
+              <i class="bi bi-bar-chart-line"></i><strong>Tableau</strong>
+            </div>
+            <div class="skill-pill" data-theme="violet" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-bar-chart"></i><strong>Power BI</strong>
+            </div>
+            <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-database"></i><strong>PostgreSQL</strong>
+            </div>
+            <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-database-gear"></i><strong>DuckDB</strong>
+            </div>
+            <div class="skill-pill" data-theme="emerald" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-diagram-3"></i><strong>Apache Airflow</strong>
+            </div>
+            <div class="skill-pill" data-theme="emerald" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-arrow-repeat"></i><strong>dbt</strong>
+            </div>
+            <div class="skill-pill" data-theme="amber" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-box-seam"></i><strong>Docker</strong>
+            </div>
+            <div class="skill-pill" data-theme="violet" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-git"></i><strong>Git / GitHub</strong>
+            </div>
+
+            <h3 class="skill-group">Practices</h3>
+            <div class="skill-pill" data-theme="amber" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-diagram-2"></i><strong>ETL / ELT</strong>
+            </div>
+            <div class="skill-pill" data-theme="violet" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-layers-half"></i><strong>Medallion Architecture</strong>
+            </div>
+            <div class="skill-pill" data-theme="cyan" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
+              <i class="bi bi-grid-3x3"></i><strong>Data Modelling</strong>
             </div>
           </div>
         </div>
@@ -999,9 +1051,9 @@
             <div class="resume-item" data-kind="edu" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
               <div class="sheen"></div>
               <h4><span class="resume-badge"><i class="bi bi-award"></i></span>Master of Information Technology & Master of IT Management</h4>
-              <h5 class="meta"><i class="bi bi-calendar-event"></i>2023 - Present</h5>
+              <h5 class="meta"><i class="bi bi-calendar-event"></i>2023 - 2026</h5>
               <p class="meta"><i class="bi bi-geo-alt"></i><em>The University of Sydney, Sydney, NSW</em></p>
-              <p>Data Management & Analytics Major</p>
+              <p>Data Management & Analytics Major (Completed)</p>
               <p>Improved skills in PostgreSQL, Tableau, Pandas, Seaborn, Matplotlib, Web Applications, LaTeX, Pentaho Data Integration (PDI)</p>
             </div>
             <div class="resume-item" data-kind="edu" onmousemove="this.style.setProperty('--mx', ((event.offsetX/this.clientWidth)*100)+'%'); this.style.setProperty('--my', ((event.offsetY/this.clientHeight)*100)+'%');">
@@ -1519,7 +1571,7 @@
   <footer id="footer" class="footer position-relative light-background">
     <div class="container">
       <h3 class="sitename">Thanh Le</h3>
-      <p>Postgraduate Student | Seeking opportunities in Data Science, Analytics & Engineering</p>
+      <p>Master's Graduate | Seeking opportunities in Data Science, Analytics & Engineering</p>
       <div class="social-links d-flex justify-content-center">
         <a href="https://linkedin.com/in/tle057/" target="_blank"><i class="bi bi-linkedin"></i></a>
         <a href="mailto:lenhothanh.nsl@gmail.com"><i class="bi bi-envelope"></i></a>
