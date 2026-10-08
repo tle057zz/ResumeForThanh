@@ -348,6 +348,11 @@ a:hover {
   column-gap: 2rem;
 }
 
+.toc ol ol {
+  columns: 1;
+  margin-top: 0.35rem;
+}
+
 .toc a {
   text-decoration: none;
 }
@@ -481,7 +486,7 @@ li + li {
 .flow li {
   position: relative;
   margin: 0;
-  padding: 0.72rem 1rem 0.72rem 3.1rem;
+  padding: 0.72rem 1rem 0.72rem 3.5rem;
   border-left: 6px solid var(--steel);
   font-family: var(--sans);
   font-weight: 700;
@@ -494,11 +499,36 @@ li + li {
   content: counter(step, decimal-leading-zero);
   position: absolute;
   top: 50%;
-  left: 0.65rem;
+  left: 0.45rem;
   transform: translateY(-50%);
   color: var(--orange);
   font-size: 0.82rem;
   letter-spacing: 0.04em;
+}
+
+.flow li.prior {
+  counter-increment: none;
+}
+
+.flow li.prior::after {
+  content: attr(data-step);
+}
+
+.flow li.note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.75rem;
+  row-gap: 0.15rem;
+}
+
+.flow-note {
+  font-family: var(--text);
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
 }
 
 .flow li + li::before {

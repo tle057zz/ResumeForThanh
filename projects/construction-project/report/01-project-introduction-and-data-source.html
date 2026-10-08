@@ -45,7 +45,11 @@
     <nav class="toc" aria-label="Chapter contents">
       <h2>In this chapter</h2>
       <ol>
-        <li><a href="#introduction">Project introduction</a></li>
+        <li><a href="#introduction">Project introduction</a>
+          <ol>
+            <li><a href="#project-systems">Project systems before the workbook</a></li>
+          </ol>
+        </li>
         <li><a href="#business-context">Business context</a></li>
         <li><a href="#data-source">Data source</a></li>
         <li><a href="#source-file">Source file</a></li>
@@ -63,8 +67,30 @@
       <h2><span class="section-no">Section 1</span>Project introduction</h2>
       <p>This project develops a <strong>Digital Engineering RFI Analytics &amp; AI Platform</strong> using a real construction Request for Information (RFI) dataset from a U.S. Army Corps of Engineers infrastructure project.</p>
       <p>The goal is to show how project information stored in spreadsheets and other semi-structured sources can become a structured digital workflow for project reporting, engineering coordination, document control, automation, and AI-assisted analysis.</p>
-      <p>The project architecture moves from the raw register through cleaning, a database, reporting, and analytics, and then into models and an assistant:</p>
+      <h3 id="project-systems">Project systems before the workbook</h3>
+      <p>A project begins when the team sets it up in Autodesk Forma and establishes the common data environment. Site planning and design come next. An RFI starts only after drawings and specifications are published. The spreadsheet is the export of that controlled register. Two roles inside Forma sit in front of this platform:</p>
+      <ul>
+        <li><strong>Common data environment (CDE).</strong> Forma Data Management, formerly Autodesk Docs, is the CDE. It is the single place for models, drawings, and specifications. Design files are produced in Revit, Civil 3D, and AutoCAD, then published into the CDE.</li>
+        <li><strong>Electronic document management system (EDMS).</strong> Document control is the EDMS function of that same environment. It records the current revision, who approved it, and who it was issued to. Superseded revisions stay in the archive. The site builds from the published issue.</li>
+      </ul>
+      <p>Each file moves through four states in the CDE, following ISO 19650:</p>
+      <ol>
+        <li><strong>Work in progress.</strong> Only the authoring team can use the file.</li>
+        <li><strong>Shared.</strong> The file is coordinated and open for review and comment.</li>
+        <li><strong>Published.</strong> The file is the authorised revision.</li>
+        <li><strong>Archived.</strong> A superseded revision is kept as a record.</li>
+      </ol>
+      <p>A contractor then raises an RFI in Forma Build against the published information. The RFI moves from draft, to submitted, to open for review, to answered with one official response, then closed and distributed. The closed RFI can be saved back into the CDE. Submittals, forms, and issues follow the same pattern: each one hangs off the published documents.</p>
+      <p>The RFI register is exported from that system. The export is the raw Excel workbook. Steps −7 through 0 run from the start of the project to that export. Step 01 is where this platform picks up the register.</p>
       <ol class="flow">
+        <li class="prior" data-step="-7">Project and CDE set up in Forma</li>
+        <li class="prior" data-step="-6">Site planning in Forma</li>
+        <li class="prior note" data-step="-5">Design work in progress<span class="flow-note">BIM engineers place their Revit models here, in the CDE work-in-progress area.</span></li>
+        <li class="prior" data-step="-4">Shared for review in the CDE</li>
+        <li class="prior" data-step="-3">Models published to the Forma CDE</li>
+        <li class="prior" data-step="-2">EDMS revision and issue control</li>
+        <li class="prior" data-step="-1">RFI closed in Forma Build</li>
+        <li class="prior" data-step="0">RFI register exported</li>
         <li>Raw RFI Excel data</li>
         <li>Python cleaning and validation</li>
         <li>Structured SQL database</li>
