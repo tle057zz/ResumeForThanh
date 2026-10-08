@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>8. Python Scripts</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 8</p>
+      <h1>Python scripts</h1>
+      <p class="subtitle">Twenty scripts, numbered in the order they run.</p>
+      <div class="meta">
+        <span>Source: src/ and databricks/</span>
+        <span>01 through 20</span>
+        <span>4 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band workflow">
+    <img src="images/workflow.png" alt="An isometric view of site records moving through documents and a database into dashboards.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html" aria-current="page">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#sequence">Run order</a></li>
+        <li><a href="#local">Local pipeline</a></li>
+        <li><a href="#next">Next script</a></li>
+      </ol>
+    </nav>
+
+    <section id="sequence">
+      <h2><span class="section-no">Section 1</span>Run order</h2>
+      <p>Each script keeps its number. A later script reads the file written by the earlier one and does not overwrite it. <code>02_load_rfi_excel.py</code> calls <code>01_raw_data_profiling.py</code> by that filename, so those two names stay paired.</p>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr><th>File</th><th>Writes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>src/ingestion/01_raw_data_profiling.py</code></td><td><code>docs/data_profiling.md</code></td></tr>
+            <tr><td><code>src/ingestion/02_load_rfi_excel.py</code></td><td><code>data/processed/raw_rfi.csv</code></td></tr>
+            <tr><td><code>src/ingestion/03_raw_rfi_investigation.py</code></td><td><code>data/processed/profiling/</code></td></tr>
+            <tr><td><code>src/cleaning/04_clean_rfi.py</code></td><td><code>rfi_clean.csv</code> and <code>rfi_excluded.csv</code></td></tr>
+            <tr><td><code>src/validation/05_validate_rfi.py</code></td><td><code>validation/validation_results.csv</code></td></tr>
+            <tr><td><code>src/features/06_build_rfi_features.py</code></td><td><code>rfi_features.csv</code></td></tr>
+            <tr><td><code>src/database/07_load_rfi_duckdb.py</code></td><td><code>rfi.duckdb</code></td></tr>
+            <tr><td><code>src/database/08_preview_rfi_tables.py</code></td><td>Prints the five tables. Writes nothing.</td></tr>
+            <tr><td><code>databricks/09_classify_rfi_discipline.py</code></td><td>Baseline discipline classifier. Logged in MLflow.</td></tr>
+            <tr><td><code>databricks/10_compare_discipline_models.py</code></td><td>GTE embedding classifier. Accuracy 0.70, macro F1 0.50.</td></tr>
+            <tr><td><code>databricks/11_zero_shot_discipline.py</code></td><td>Zero-shot LLM. Accuracy 0.69, macro F1 0.69.</td></tr>
+            <tr><td><code>databricks/12_register_discipline_model.py</code></td><td>Registered <code>digital_engineering.ml.rfi_discipline_classifier</code> version 1.</td></tr>
+            <tr><td><code>databricks/13_classify_rfi_issue_type.py</code></td><td>Issue-type baseline. Accuracy 0.70, macro F1 0.34 on 105 RFIs.</td></tr>
+            <tr><td><code>databricks/14_compare_issue_type_models.py</code></td><td>GTE issue-type classifier. Accuracy 0.72, macro F1 0.47 on 105 RFIs.</td></tr>
+            <tr><td><code>databricks/15_zero_shot_issue_type.py</code></td><td>Zero-shot issue type. Accuracy 0.41, macro F1 0.11 on 105 RFIs.</td></tr>
+            <tr><td><code>databricks/16_register_issue_type_model.py</code></td><td>Registered <code>digital_engineering.ml.rfi_issue_type_classifier</code> version 1.</td></tr>
+            <tr><td><code>databricks/17_classify_document_impact.py</code></td><td>Document-impact baseline. Accuracy 0.81, Yes recall 0.42 on 70 RFIs.</td></tr>
+            <tr><td><code>databricks/18_compare_document_impact_models.py</code></td><td>GTE document-impact classifier. Accuracy 0.84, Yes recall 0.68 on 70 RFIs.</td></tr>
+            <tr><td><code>databricks/19_zero_shot_document_impact.py</code></td><td>Zero-shot document impact. Accuracy 0.44, Yes recall 1.00 on 70 RFIs.</td></tr>
+            <tr><td><code>databricks/20_register_document_impact_model.py</code></td><td>Registers the GTE document-impact classifier in Unity Catalog.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="local">
+      <h2><span class="section-no">Section 2</span>Local pipeline</h2>
+      <p>Scripts <code>01</code> through <code>19</code> have been run. The workbook stays in <code>data/raw/rfi_log.xlsx</code>. Raw dates stay as Excel serials. The clean table holds <code>RFI-001</code> through <code>RFI-107</code>. The DuckDB file holds <code>fact_rfi</code> and the four dimensions. Unity Catalog holds <code>digital_engineering.ml.rfi_discipline_classifier</code> version 1 and <code>digital_engineering.ml.rfi_issue_type_classifier</code> version 1. Both aliases are <code>champion</code>. Each model expects a GTE embedding vector. The document-impact runs are logged in <code>rfi_document_impact</code>. The GTE classifier is the one to keep: Yes recall 0.68 with 5 false Yes calls.</p>
+      <p><code>08_preview_rfi_tables.py</code> opens <code>rfi.duckdb</code> read-only and prints every table. Question, response, and notes are shortened in that printout.</p>
+    </section>
+
+    <section id="next">
+      <h2><span class="section-no">Section 3</span>Next script</h2>
+      <p><code>20_register_document_impact_model.py</code> registers the GTE document-impact classifier as <code>digital_engineering.ml.rfi_document_impact_classifier</code> and sets the alias <code>champion</code>. That model scored accuracy 0.84 and Yes recall 0.68 on 70 RFIs. Its input is the embedding vector from <code>databricks-gte-large-en</code>, built from the question. It does not take raw text, and it does not change the RFI tables.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="07-star-schema.html">Previous: 7. Star schema</a>
+      <a class="pager-next" href="09-powerbi-data.html">Next: 9. Power BI data</a>
+    </nav>
+    <p>Prepared from the Python files in <cite>src/</cite> and <cite>databricks/</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

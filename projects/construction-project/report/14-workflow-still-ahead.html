@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>14. Work still ahead</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 14</p>
+      <h1>Work still ahead</h1>
+      <p class="subtitle">The remaining Databricks steps. This page is updated when each notebook has been run.</p>
+      <div class="meta">
+        <span>In progress</span>
+        <span>Update as each step finishes</span>
+        <span>8 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band workflow">
+    <img src="images/workflow.png" alt="An isometric view of site records moving through documents and a database into dashboards.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html" aria-current="page">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#page">This page</a></li>
+        <li><a href="#done">Already in place</a></li>
+        <li><a href="#register">Register document impact</a></li>
+        <li><a href="#summary">Summarise each question</a></li>
+        <li><a href="#search">Search by meaning</a></li>
+        <li><a href="#copilot">RFI copilot</a></li>
+        <li><a href="#after">Check the answers</a></li>
+        <li><a href="#update">How this page will change</a></li>
+      </ol>
+    </nav>
+
+    <section id="page">
+      <h2><span class="section-no">Section 1</span>This page</h2>
+      <div class="callout">
+        <p>This chapter is the work still in progress. The steps below are the plan. When a notebook has been run, that section is replaced with the result from the export.</p>
+      </div>
+      <p>The local pipeline and the four Power BI pages are finished. Databricks already holds the RFI tables and two registered classifiers. What remains is one registration, then one notebook each for a short summary, a meaning search, and a copilot. Those notebooks read the Databricks tables. They do not rewrite the workbook, the local CSVs, or <code>rfi.duckdb</code>.</p>
+    </section>
+
+    <section id="done">
+      <h2><span class="section-no">Section 2</span>Already in place</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th>Piece</th><th>State</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Clean register and DuckDB star schema</td><td>107 RFIs, four dimensions, six SQL checks passed</td></tr>
+          <tr><td>Power BI report <cite>rif_vis</cite></td><td>Four pages: executive, document impact, coordination, register</td></tr>
+          <tr><td><code>bronze.rfi_raw</code></td><td>112 rows, the workbook as loaded</td></tr>
+          <tr><td><code>silver.rfi_clean</code> and <code>gold.rfi_analytics</code></td><td>107 rows each</td></tr>
+          <tr><td><code>digital_engineering.ml.rfi_discipline_classifier</code></td><td>Version 1, alias <code>champion</code>. Input is a GTE embedding of the question. Accuracy 0.70, macro F1 0.50 on 107 RFIs.</td></tr>
+          <tr><td><code>digital_engineering.ml.rfi_issue_type_classifier</code></td><td>Version 1, alias <code>champion</code>. Input is a GTE embedding of the question plus the notes. Accuracy 0.72, macro F1 0.47 on 105 RFIs.</td></tr>
+        </tbody>
+      </table>
+      <p>The document-impact comparison is also finished. On the 70 RFIs whose notes say Yes or No, the GTE classifier reached accuracy 0.84 and Yes recall 0.68, with 5 false Yes calls. The zero-shot run caught every Yes and also called 39 of the 51 No rows Yes, so the GTE classifier is the one to keep. Its logged model id is <code>m-9977de1f28c84f769c44b4a3c28aafcd</code>.</p>
+    </section>
+
+    <section id="register">
+      <h2><span class="section-no">Section 3</span>Register document impact</h2>
+      <p><code>databricks/20_register_document_impact_model.py</code> is written and has not yet been confirmed in a run export. It registers <code>digital_engineering.ml.rfi_document_impact_classifier</code> in Unity Catalog and sets the alias <code>champion</code>. The model scores one embedding vector from <code>databricks-gte-large-en</code>, built from the question. It does not take raw text.</p>
+      <p>The run to do: import the notebook, run all cells, and keep the printed lines. This page will then record the version number, the <code>champion</code> alias, and the catalog path. Until those lines are back, the classifier stays logged in the <code>rfi_document_impact</code> experiment and is not yet a registered model in this report.</p>
+    </section>
+
+    <section id="summary">
+      <h2><span class="section-no">Section 4</span>Summarise each question</h2>
+      <p>One notebook, after the registration. It reads the question from <code>gold.rfi_analytics</code> and writes a one- or two-sentence summary back beside that row in Databricks, in a field named <code>rfi_short_summary</code>. The summary is for the register preview and for the copilot. The full question stays in the table.</p>
+      <p>The summary uses only the words in that RFI. It keeps the technical point, says when the note is unclear, and leaves out cost, schedule, and any fact the row does not contain. A check on RFI-002 should come back close to this: the contractor asks which battery energy storage capacity governs, because the solicitation and the drawings disagree.</p>
+      <p>When the export is back, this section will show how many of the 107 summaries were written, two or three examples, and any row the model left blank.</p>
+    </section>
+
+    <section id="search">
+      <h2><span class="section-no">Section 5</span>Search by meaning</h2>
+      <p>One notebook. It embeds each question with <code>databricks-gte-large-en</code>, the same 1024-number vector used by the classifiers, and once the summaries exist it embeds those too. A search phrase is embedded the same way. The notebook ranks the 107 RFIs by closeness and returns the nearest ids. The ranking stays in the notebook. This workspace is not set up for a managed vector index.</p>
+      <p>The first searches to run, and the rows they should surface:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Search phrase</th><th>Rows that should appear</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>battery capacity discrepancy</td><td>RFI-002, Electrical, Drawing Conflict, document impact Both</td></tr>
+          <tr><td>SCADA integration</td><td>RFI-005, Controls / SCADA, Interface Coordination</td></tr>
+          <tr><td>cybersecurity requirement</td><td>RFI-006, Cybersecurity, Compliance Requirement</td></tr>
+          <tr><td>special inspections</td><td>RFI-009, Quality / Inspection, Inspection / Quality</td></tr>
+        </tbody>
+      </table>
+      <p>When the export is back, this section will show the top ids for each phrase and whether those four RFIs were among them.</p>
+    </section>
+
+    <section id="copilot">
+      <h2><span class="section-no">Section 6</span>RFI copilot</h2>
+      <p>One notebook, after the summary and the search exist. A question in ordinary language is answered from the 107 RFIs by calling a fixed set of tools:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Tool</th><th>What it is allowed to do</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>SQL counts</td><td>Read <code>gold.rfi_analytics</code> for a count, a rate, or a list of ids</td></tr>
+          <tr><td>Meaning search</td><td>Return the nearest RFIs from the notebook ranking</td></tr>
+          <tr><td>Summary</td><td>Return <code>rfi_short_summary</code> for the ids already retrieved</td></tr>
+          <tr><td>Classifiers</td><td>Call the three <code>champion</code> models on an embedding, for discipline, issue type, and document impact</td></tr>
+        </tbody>
+      </table>
+      <p>The first questions to run are ones the tables already answer: how many Electrical RFIs there are (40), which RFIs are still open (the eight tasked to CT), and which RFIs change both a drawing and a specification (the 16 Both rows). A question about project profit, or about any fact outside these 107 rows, is answered as out of scope. The reply names the ids or the count it used.</p>
+      <p>When the export is back, this section will show each question, the tool that ran, and the answer checked against the gold table.</p>
+    </section>
+
+    <section id="after">
+      <h2><span class="section-no">Section 7</span>Check the answers</h2>
+      <p>After the copilot notebook has a few answers, a short check list is scored by hand against the gold table. Each line has the question, the expected count or the expected RFI ids, and whether the question can be answered from this register. The scores to keep are: the count matches, the ids match, the wording stays inside the row, and an out-of-scope question is refused.</p>
+      <p>The same note records the model versions in use, that a person reviews the answer before it is treated as project direction, and that the classifiers and the summary support the team. They do not close an RFI or change a drawing.</p>
+    </section>
+
+    <section id="update">
+      <h2><span class="section-no">Section 8</span>How this page will change</h2>
+      <p>The order stays as it is: registration, summary, search, copilot, then the check list. A finished step keeps its heading and replaces the plan paragraph with the printed result. A step that has not been run stays written as the work still to do.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="13-powerbi-register.html">Previous: 13. RFI register</a>
+    </nav>
+    <p>Prepared from the project plan and the Databricks notebooks through <cite>20_register_document_impact_model.py</cite>. Later sections are filled in from the run exports.</p>
+  </footer>
+  </div>
+</body>
+</html>

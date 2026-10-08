@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>10. Executive Overview</title>
+  <link rel="stylesheet" href="styles.css?v=pager">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 10</p>
+      <h1>Executive overview</h1>
+      <p class="subtitle">The first Power BI page: workload, response rate, document impact, discipline, issue type, and submitter.</p>
+      <div class="meta">
+        <span>Page: Executive Overview</span>
+        <span>107 RFIs</span>
+        <span>8 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band field">
+    <img src="images/field-tablet.png" alt="An engineer reviewing a building model and charts on a tablet at the site.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html" aria-current="page">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#page">The page</a></li>
+        <li><a href="#live">Live report</a></li>
+        <li><a href="#kpis">KPI cards</a></li>
+        <li><a href="#filters">Filters</a></li>
+        <li><a href="#trend">Day and response rate</a></li>
+        <li><a href="#impact">Document impact</a></li>
+        <li><a href="#bars">Discipline, issue type, and submitter</a></li>
+        <li><a href="#reading">How to read it</a></li>
+      </ol>
+    </nav>
+
+    <section id="page">
+      <h2><span class="section-no">Section 1</span>The page</h2>
+      <p>The page title is Executive Overview, under the header Construction Project | Design Coordination &amp; RFI Control. It is the first page of the Power BI report. The counts below are the unfiltered page, and they match the 107 rows in <code>data/processed/powerbi</code>.</p>
+      <figure class="plate schema">
+        <img src="images/executive-overview.jpg" alt="Executive Overview dashboard with five KPI cards, discipline and issue-type slicers, a daily line chart, a document-impact donut, and bar charts for discipline, issue type, and submitter.">
+        <figcaption>Executive Overview, unfiltered: 107 RFIs, 8 open, 99 answered.</figcaption>
+      </figure>
+      <p>Slicers sit on the left. The five cards run across the top. The line chart and the document-impact donut sit in the middle. Discipline, issue type, and submitter are the three bars along the bottom. Selecting a slicer or a bar filters the cards and the other charts on this page.</p>
+    </section>
+
+    <section id="live">
+      <h2><span class="section-no">Section 2</span>Live report</h2>
+      <p>The published report is <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">rif_vis</a>. The bar under the frame switches pages: executive, Drawing &amp; Specification Change Analysis, COORDINATION &amp; RESPONSIBILITY, and RFI Register.</p>
+      <figure class="plate schema embed">
+        <iframe title="rif_vis" width="1024" height="1060" src="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" frameborder="0" allowfullscreen="true"></iframe>
+        <figcaption>Live <cite>rif_vis</cite> report. <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">Open the report</a>.</figcaption>
+      </figure>
+      <div class="callout">
+        <p>The frame opens on the executive dashboard, page 1 of 4. Use the arrows beside <strong>1 of 4</strong> to select the dashboard to view. Page 2 is Drawing &amp; Specification Change Analysis. Page 3 is COORDINATION &amp; RESPONSIBILITY. Page 4 is RFI Register.</p>
+      </div>
+      <figure class="plate hint">
+        <img src="images/report-pager.png" alt="A red circle around the report page control that reads 1 of 4, with a previous arrow and a next arrow.">
+        <figcaption>The page control at the bottom of the executive dashboard.</figcaption>
+      </figure>
+    </section>
+
+    <section id="kpis">
+      <h2><span class="section-no">Section 3</span>KPI cards</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th>Card</th><th class="num">Value</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Total RFIs</td><td class="num">107</td><td>One row per RFI, RFI-001 through RFI-107</td></tr>
+          <tr><td>Open RFIs</td><td class="num">8</td><td>Response text is blank</td></tr>
+          <tr><td>Answered RFIs</td><td class="num">99</td><td>Response text is present</td></tr>
+          <tr><td>Response Rate</td><td class="num">92.52%</td><td>99 divided by 107</td></tr>
+          <tr><td>Document Update RFIs</td><td class="num">19</td><td>Drawing update, specification update, or both</td></tr>
+        </tbody>
+      </table>
+      <p>Status is Answered when the response has text, and Open when it is blank. The eight open IDs are <code>RFI-086</code>, <code>RFI-092</code>, <code>RFI-093</code>, <code>RFI-095</code>, <code>RFI-096</code>, <code>RFI-100</code>, <code>RFI-106</code>, and <code>RFI-107</code>.</p>
+    </section>
+
+    <section id="filters">
+      <h2><span class="section-no">Section 4</span>Filters</h2>
+      <p>Three slicers filter the page. Discipline lists the ten names from <code>dim_discipline</code>. Issue type lists the ten names from <code>dim_issue_type</code>. Status lists Answered and Open. On the unfiltered page every box is clear, so the charts show all 107 RFIs.</p>
+    </section>
+
+    <section id="trend">
+      <h2><span class="section-no">Section 5</span>Day and response rate</h2>
+      <p>The line chart is titled Total RFIs and Response Rate. One line is the count of RFIs received that day. The other is the response rate, on a second axis from about 50% to 100%. The axis subtitle still says year, quarter, month, and day. In this extract every date is a day in September 2026, so the chart is a day chart.</p>
+      <p>The count peaks at 67 on 4 September. The other eight days hold between 1 and 11 RFIs. The line connects those nine dates, so the slope between 4 September and 10 September is the drop from 67 to 11, not a steady daily decline. Every RFI received through 10 September is answered, so the response rate stays at 100% until then. The eight open RFIs fall on three later days: 1 of 2 on 14 September (50%), 4 of 8 on 16 September (50%), and 3 of 8 on 21 September (62.5%).</p>
+    </section>
+
+    <section id="impact">
+      <h2><span class="section-no">Section 6</span>Document impact</h2>
+      <p>The donut is titled Total RFIs by Document Impact. The centre reads 107. Unknown is its own slice. The 19 on the Document Update card are the three Yes slices added together: 16 + 2 + 1.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Slice</th><th class="num">RFIs</th><th class="num">Share</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>No update</td><td class="num">51</td><td class="num">47.66%</td></tr>
+          <tr><td>Unknown</td><td class="num">37</td><td class="num">34.58%</td></tr>
+          <tr><td>Both</td><td class="num">16</td><td class="num">14.95%</td></tr>
+          <tr><td>Drawing only</td><td class="num">2</td><td class="num">1.87%</td></tr>
+          <tr><td>Specification only</td><td class="num">1</td><td class="num">0.93%</td></tr>
+        </tbody>
+      </table>
+      <p>Unknown means the note is blank or only says an attachment was sent. It is 37 of 107 RFIs, so a reading that treats Unknown as No update would hide about a third of the register.</p>
+    </section>
+
+    <section id="bars">
+      <h2><span class="section-no">Section 7</span>Discipline, issue type, and submitter</h2>
+      <p>RFIs by Discipline is sorted from Electrical, 40, down to Controls / SCADA and Cybersecurity, 2 each. Electrical is 40 of 107.</p>
+      <p>Total RFIs by issue type is led by Specification Clarification, 62, which is 58% of the register. Compliance Requirement and Missing Information are 11 each. Constructability and Scope Gap are one RFI each, <code>RFI-023</code> and <code>RFI-096</code>.</p>
+      <p>Total RFIs by party uses the submitter relationship, <code>from_party_key</code>. DAVID BOLAND, INC submitted 71, which is 66% of the register. Carbon Recall Chattanooga submitted 11. Dobco, Inc., Richard Group LCC, and Willdan submitted 8 each. Schweitzer Engineering Laboratories, Inc. submitted 1. The ten tasked parties, led by AE with 66, are not on this page.</p>
+    </section>
+
+    <section id="reading">
+      <h2><span class="section-no">Section 8</span>How to read it</h2>
+      <p>Unfiltered, the project has 107 RFIs, 99 answered and 8 open, a response rate of 92.52%. Electrical is the largest discipline. Specification Clarification is the largest issue type. Nineteen RFIs record a drawing update, a specification update, or both, and 37 still have an unknown document impact. DAVID BOLAND, INC is the main submitter.</p>
+      <p>This page is the overview. The next page splits those 19 document updates by discipline and issue type. Tasked parties are on the coordination page. The live report above includes the RFI Register.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="09-powerbi-data.html">Previous: 9. Power BI data</a>
+      <a class="pager-next" href="11-powerbi-document-impact.html">Next: 11. Document impact</a>
+    </nav>
+    <p>Prepared from the Executive Overview page and the tables in <cite>data/processed/powerbi</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

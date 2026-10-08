@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>1. Project Introduction and Data Source</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 1</p>
+      <h1>Project introduction and data source</h1>
+      <p class="subtitle">How a public U.S. Army Corps of Engineers RFI register becomes the foundation of a Digital Engineering analytics and AI platform.</p>
+      <div class="meta">
+        <span>Digital Engineering RFI Analytics &amp; AI Platform</span>
+        <span>3 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band crane">
+    <img src="images/site-desk.png" alt="A tower crane over a concrete building frame at sunset.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html" aria-current="page">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#introduction">Project introduction</a></li>
+        <li><a href="#business-context">Business context</a></li>
+        <li><a href="#data-source">Data source</a></li>
+        <li><a href="#source-file">Source file</a></li>
+        <li><a href="#explore">Explore the dataset</a></li>
+        <li><a href="#structure">Original dataset structure</a></li>
+        <li><a href="#suitability">Why this dataset is suitable</a></li>
+        <li><a href="#transformation">Planned transformation</a></li>
+        <li><a href="#limitations">Data limitations</a></li>
+        <li><a href="#use">Planned use of the dataset</a></li>
+        <li><a href="#value">Project value</a></li>
+      </ol>
+    </nav>
+
+    <section id="introduction">
+      <h2><span class="section-no">Section 1</span>Project introduction</h2>
+      <p>This project develops a <strong>Digital Engineering RFI Analytics &amp; AI Platform</strong> using a real construction Request for Information (RFI) dataset from a U.S. Army Corps of Engineers infrastructure project.</p>
+      <p>The goal is to show how project information stored in spreadsheets and other semi-structured sources can become a structured digital workflow for project reporting, engineering coordination, document control, automation, and AI-assisted analysis.</p>
+      <p>The project architecture moves from the raw register through cleaning, a database, reporting, and analytics, and then into models and an assistant:</p>
+      <ol class="flow">
+        <li>Raw RFI Excel data</li>
+        <li>Python cleaning and validation</li>
+        <li>Structured SQL database</li>
+        <li>Power BI reporting</li>
+        <li>Databricks analytics</li>
+        <li>Machine learning and NLP models</li>
+        <li>Semantic search and RFI AI Copilot</li>
+      </ol>
+      <p>The work is designed to demonstrate capability across:</p>
+      <ul class="chips">
+        <li>Digital Engineering</li>
+        <li>RFI workflow management</li>
+        <li>Project systems</li>
+        <li>Engineering information management</li>
+        <li>Python automation</li>
+        <li>SQL and data modelling</li>
+        <li>Power BI</li>
+        <li>Databricks</li>
+        <li>Machine learning</li>
+        <li>Natural language processing</li>
+        <li>Generative AI</li>
+        <li>AI evaluation and governance</li>
+      </ul>
+      <p>A major strength of the project is that it begins with a <strong>real publicly released construction RFI register</strong>, rather than a synthetic portfolio dataset.</p>
+    </section>
+
+    <section id="business-context">
+      <h2><span class="section-no">Section 2</span>Business context</h2>
+      <p>Construction and infrastructure projects generate large volumes of RFIs throughout design, procurement, and delivery.</p>
+      <figure class="plate site">
+        <img src="images/field-tablet.png" alt="An engineer on a construction site reviewing a building model, charts, and drawings on a tablet.">
+        <figcaption>Drawings, schedules, and site records reviewed together.</figcaption>
+      </figure>
+      <p>RFIs are used when project participants need clarification on issues such as:</p>
+      <ul>
+        <li>unclear drawings</li>
+        <li>conflicting specifications</li>
+        <li>missing information</li>
+        <li>constructability questions</li>
+        <li>scope gaps</li>
+        <li>coordination problems</li>
+        <li>compliance questions</li>
+        <li>material or equipment requirements</li>
+      </ul>
+      <p>Because much of this information is stored as free text, it can be difficult to identify recurring engineering issues, document impacts, technical themes, or common clarification categories.</p>
+      <p>This project turns the RFI register into a structured analytical and AI-enabled platform.</p>
+    </section>
+
+    <section id="data-source">
+      <h2><span class="section-no">Section 3</span>Data source</h2>
+      <p>The dataset comes from the U.S. Army Corps of Engineers solicitation <strong>Power Generation with Microgrid at Joint Base McGuire-Dix-Lakehurst (JBMDL), New Jersey</strong>.</p>
+      <p class="ref"><span>Solicitation reference</span>W912DS26BA032</p>
+      <p>The project involves power-generation and microgrid infrastructure at Joint Base McGuire-Dix-Lakehurst in New Jersey. The wider technical context includes:</p>
+      <ul>
+        <li>electrical generation</li>
+        <li>battery energy storage</li>
+        <li>solar photovoltaic systems</li>
+        <li>SCADA and control systems</li>
+        <li>cybersecurity</li>
+        <li>civil works</li>
+        <li>mechanical and utility systems</li>
+        <li>specifications</li>
+        <li>design drawings</li>
+        <li>inspection requirements</li>
+      </ul>
+    </section>
+
+    <section id="source-file">
+      <h2><span class="section-no">Section 4</span>Source file</h2>
+      <p>The main source used in this project is the workbook published with the public federal procurement opportunity.</p>
+      <p class="ref"><span>Workbook</span>RFI log for posting 9.23.26.xlsx</p>
+      <p>The workbook contains approximately <strong>111 RFI records</strong>. The original workbook will be preserved unchanged as the raw project source.</p>
+    </section>
+
+    <section id="explore">
+      <h2><span class="section-no">Section 5</span>Explore the dataset</h2>
+      <h3>Official SAM.gov opportunity</h3>
+      <p>The official federal procurement opportunity is published on SAM.gov. In the Attachments section, look for <code>RFI log for posting 9.23.26.xlsx</code>.</p>
+      <div class="links">
+        <a class="link-card" href="https://sam.gov/opp/2e4f861cc9dc4550bc3068d29d6363a9/view">
+          <strong>SAM.gov opportunity</strong>
+          <span>https://sam.gov/opp/2e4f861cc9dc4550bc3068d29d6363a9/view</span>
+        </a>
+      </div>
+
+      <h3>Public dataset preview</h3>
+      <p>A public indexed copy of the RFI workbook can also be explored on GovTribe.</p>
+      <div class="links">
+        <a class="link-card" href="https://govtribe.com/file/government-file/w912ds26ba032-rfi-log-for-posting-9-dot-23-dot-26-dot-xlsx">
+          <strong>GovTribe file mirror</strong>
+          <span>https://govtribe.com/file/government-file/w912ds26ba032-rfi-log-for-posting-9-dot-23-dot-26-dot-xlsx</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="structure">
+      <h2><span class="section-no">Section 6</span>Original dataset structure</h2>
+      <p>The source workbook contains these main fields:</p>
+      <ul class="mono-list">
+        <li>RFI #</li>
+        <li>FROM</li>
+        <li>TASKED</li>
+        <li>DATE RECEIVED</li>
+        <li>QUESTION</li>
+        <li>RESPONSE</li>
+        <li>NOTES</li>
+        <li>Status</li>
+      </ul>
+
+      <div class="fields">
+        <article class="field">
+          <h3>RFI #</h3>
+          <p>Identifier assigned to each Request for Information.</p>
+        </article>
+
+        <article class="field">
+          <h3>FROM</h3>
+          <p>Identifies the organisation or party that submitted the RFI. This field supports counts by submitting organisation, topics by organisation, and the most active submitting parties.</p>
+        </article>
+
+        <article class="field">
+          <h3>TASKED</h3>
+          <p>Identifies the party or engineering function responsible for reviewing or responding to the RFI.</p>
+        </article>
+
+        <article class="field">
+          <h3>DATE RECEIVED</h3>
+          <p>The date on which the RFI was received. This supports RFI volume over time, weekly trends, and peak clarification periods.</p>
+        </article>
+
+        <article class="field">
+          <h3>QUESTION</h3>
+          <p>The original engineering or technical question. This is one of the most valuable fields because it contains unstructured engineering text. Potential derived attributes include discipline, issue type, technical topic, drawing reference, specification reference, equipment reference, and a question summary.</p>
+        </article>
+
+        <article class="field">
+          <h3>RESPONSE</h3>
+          <p>The official answer or clarification associated with the RFI. This supports question-response analysis, technical resolution analysis, summarisation, and semantic search.</p>
+        </article>
+
+        <article class="field">
+          <h3>NOTES</h3>
+          <p>Supplementary information that can help identify whether an RFI caused a drawing update, a specification update, an attachment issue, a document revision, or no document change.</p>
+        </article>
+
+        <article class="field">
+          <h3>Status</h3>
+          <p>The source status where it is populated. The original source status will be preserved. If required, a separate derived status may be created, such as Answered, Open, or Unknown.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="suitability">
+      <h2><span class="section-no">Section 7</span>Why this dataset is suitable</h2>
+      <p>The dataset is suitable because it combines a real construction context, structured project fields, unstructured engineering text, genuine RFI questions and responses, and relevant Digital Engineering and document-control use cases.</p>
+      <p>The technical content supports classification across:</p>
+      <ul class="chips">
+        <li>Electrical</li>
+        <li>Mechanical</li>
+        <li>Civil</li>
+        <li>Structural</li>
+        <li>Controls / SCADA</li>
+        <li>Cybersecurity</li>
+        <li>Quality / Inspection</li>
+        <li>Specifications</li>
+        <li>Design coordination</li>
+      </ul>
+    </section>
+
+    <section id="transformation">
+      <h2><span class="section-no">Section 8</span>Planned transformation</h2>
+      <p>The project will maintain clear lineage between original source data and derived fields.</p>
+      <ol class="flow">
+        <li>Original Excel</li>
+        <li>raw_rfi</li>
+        <li>clean_rfi</li>
+        <li>enriched_rfi</li>
+        <li>SQL and Power BI</li>
+        <li>Databricks machine learning and AI</li>
+      </ol>
+
+      <div class="layers">
+        <article class="panel">
+          <h3>Raw layer</h3>
+          <p>The raw layer keeps the ingested record close to the source:</p>
+          <ul class="mono-list">
+            <li>rfi_number</li>
+            <li>from_party</li>
+            <li>tasked_to</li>
+            <li>date_received</li>
+            <li>question</li>
+            <li>response</li>
+            <li>notes</li>
+            <li>status_raw</li>
+            <li>source_file</li>
+            <li>ingestion_timestamp</li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <h3>Clean layer</h3>
+          <p>The clean layer standardises RFI identifiers, party names, dates, whitespace, null values, text encoding, status, and duplicates.</p>
+        </article>
+
+        <article class="panel">
+          <h3>Enriched layer</h3>
+          <p>The enriched layer adds derived analytical and AI attributes:</p>
+          <ul class="mono-list">
+            <li>discipline</li>
+            <li>issue_type</li>
+            <li>technical_topic</li>
+            <li>reference_type</li>
+            <li>reference_number</li>
+            <li>drawing_update_required</li>
+            <li>spec_update_required</li>
+            <li>document_update_required</li>
+            <li>question_summary</li>
+            <li>response_available</li>
+            <li>classification_confidence</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="limitations">
+      <h2><span class="section-no">Section 9</span>Data limitations</h2>
+      <p>The source contains approximately 111 RFIs, which is relatively small for supervised machine learning.</p>
+      <p>It also does not directly contain all fields expected in a mature RFI system, such as due date, response date, closed date, formal priority, cost impact, schedule impact, discipline, issue category, workflow history, and revision history.</p>
+      <div class="callout">
+        <p>Any additional fields derived using rules, manual labelling, or AI will be clearly marked as <strong>derived attributes</strong>. The project will not present inferred values as if they were present in the original source.</p>
+      </div>
+    </section>
+
+    <section id="use">
+      <h2><span class="section-no">Section 10</span>Planned use of the dataset</h2>
+      <div class="uses">
+        <article class="panel">
+          <h3>Python and SQL</h3>
+          <ul>
+            <li>Data ingestion</li>
+            <li>Data cleaning</li>
+            <li>Validation</li>
+            <li>Transformation</li>
+            <li>Data modelling</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Power BI</h3>
+          <ul>
+            <li>RFI overview</li>
+            <li>RFI trend analysis</li>
+            <li>RFI by discipline</li>
+            <li>RFI by issue type</li>
+            <li>Document impact analysis</li>
+            <li>Detailed RFI register</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Databricks and machine learning</h3>
+          <ul>
+            <li>Discipline classification</li>
+            <li>Issue-type classification</li>
+            <li>Document-impact prediction</li>
+            <li>MLflow experiment tracking</li>
+            <li>Model Registry</li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3>Generative AI</h3>
+          <ul>
+            <li>RFI summarisation</li>
+            <li>Semantic search</li>
+            <li>Retrieval-augmented generation</li>
+            <li>Natural-language RFI querying</li>
+            <li>RFI AI Copilot</li>
+            <li>AI evaluation</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="value">
+      <h2><span class="section-no">Section 11</span>Project value</h2>
+      <p>The final system demonstrates how a traditional RFI register can be converted into a modern Digital Engineering information platform.</p>
+      <blockquote class="quote">
+        A real USACE RFI workbook is ingested and cleaned using Python, modelled in SQL, visualised through Power BI, and extended in Databricks with NLP classification, document-impact prediction, semantic search, and an AI Copilot for engineering information retrieval.
+      </blockquote>
+      <ul class="stack" aria-label="Connected disciplines">
+        <li>Construction</li>
+        <li class="plus" aria-hidden="true">+</li>
+        <li>Digital Engineering</li>
+        <li class="plus" aria-hidden="true">+</li>
+        <li>Project systems</li>
+        <li class="plus" aria-hidden="true">+</li>
+        <li>Data analytics</li>
+        <li class="plus" aria-hidden="true">+</li>
+        <li>Automation</li>
+        <li class="plus" aria-hidden="true">+</li>
+        <li>AI</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="index.html">Previous: Contents</a>
+      <a class="pager-next" href="02-raw-data-profile.html">Next: 2. Profile</a>
+    </nav>
+    <p>Prepared from <cite>rfi_project_introduction_and_data_source.md</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

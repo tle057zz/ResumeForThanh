@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>9. Power BI Data</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 9</p>
+      <h1>Power BI data</h1>
+      <p class="subtitle">The star schema exported for drawing, and the counts each visual will show.</p>
+      <div class="meta">
+        <span>Source: data/processed/powerbi</span>
+        <span>107 RFIs</span>
+        <span>6 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band dusk">
+    <img src="images/site-dusk.png" alt="A construction site at dusk, with the structure lit against the sky.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html" aria-current="page">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#files">Files to load</a></li>
+        <li><a href="#dates">Dates</a></li>
+        <li><a href="#parties">Parties</a></li>
+        <li><a href="#labels">Discipline and issue type</a></li>
+        <li><a href="#status">Status, length, and documents</a></li>
+        <li><a href="#visuals">Fields for each visual</a></li>
+      </ol>
+    </nav>
+
+    <section id="files">
+      <h2><span class="section-no">Section 1</span>Files to load</h2>
+      <p><code>09_export_powerbi.py</code> reads <code>data/processed/rfi.duckdb</code> and does not change it. It writes <code>data/processed/powerbi/rfi_star_schema.xlsx</code>, with one sheet per table, and one CSV beside that workbook. A later run replaces those files.</p>
+      <p>Every chart is a count, a filter, or a text lookup of these 107 RFIs. <code>fact_rfi</code> is one row per RFI, <code>RFI-001</code> through <code>RFI-107</code>. No fact key is missing from a dimension, and every dimension row is used at least once.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Table</th><th class="num">Rows</th><th>What a visual shows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>dim_date</td><td class="num">9</td><td>Received date</td></tr>
+          <tr><td>dim_party</td><td class="num">16</td><td>Submitter or tasked party</td></tr>
+          <tr><td>dim_discipline</td><td class="num">10</td><td>Derived discipline</td></tr>
+          <tr><td>dim_issue_type</td><td class="num">10</td><td>Derived issue type</td></tr>
+          <tr><td>fact_rfi</td><td class="num">107</td><td>The RFI itself</td></tr>
+        </tbody>
+      </table>
+      <p><code>dim_party</code> is one list. <code>from_party_key</code> and <code>tasked_party_key</code> are two relationships to that list. In this extract the roles do not share a name.</p>
+      <p>Discipline, issue type, status, and the document flags come from <code>06_build_rfi_features.py</code>. They are the labels to draw. The workbook Status column is blank on every source row.</p>
+    </section>
+
+    <section id="dates">
+      <h2><span class="section-no">Section 2</span>Dates</h2>
+      <p>All nine received dates fall in September 2026. <code>calendar_year</code> is 2026 on every row and <code>calendar_month</code> is 9 on every row, so a month chart is one bar. A day chart is the date visual. <code>date_received</code> is a real date. <code>date_key</code> is the integer form, such as <code>20260901</code>.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Date</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2026-09-01</td><td class="num">1</td></tr>
+          <tr><td>2026-09-02</td><td class="num">6</td></tr>
+          <tr><td>2026-09-04</td><td class="num">67</td></tr>
+          <tr><td>2026-09-10</td><td class="num">11</td></tr>
+          <tr><td>2026-09-14</td><td class="num">2</td></tr>
+          <tr><td>2026-09-15</td><td class="num">1</td></tr>
+          <tr><td>2026-09-16</td><td class="num">8</td></tr>
+          <tr><td>2026-09-17</td><td class="num">3</td></tr>
+          <tr><td>2026-09-21</td><td class="num">8</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="parties">
+      <h2><span class="section-no">Section 3</span>Parties</h2>
+      <p>Six contractors submit the RFIs. Ten government or design parties are tasked to answer. A submitter chart and a tasked-party chart need both relationships to <code>dim_party</code>.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Submitter</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>DAVID BOLAND, INC</td><td class="num">71</td></tr>
+          <tr><td>Carbon Recall Chattanooga</td><td class="num">11</td></tr>
+          <tr><td>Willdan</td><td class="num">8</td></tr>
+          <tr><td>Dobco, Inc.</td><td class="num">8</td></tr>
+          <tr><td>Richard Group LCC</td><td class="num">8</td></tr>
+          <tr><td>Schweitzer Engineering Laboratories, Inc.</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+      <table class="data-table">
+        <thead>
+          <tr><th>Tasked party</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AE</td><td class="num">66</td></tr>
+          <tr><td>CT</td><td class="num">15</td></tr>
+          <tr><td>PM</td><td class="num">9</td></tr>
+          <tr><td>JBMDL</td><td class="num">8</td></tr>
+          <tr><td>AE/JBMDL</td><td class="num">4</td></tr>
+          <tr><td>CT/PM</td><td class="num">1</td></tr>
+          <tr><td>USACE DB</td><td class="num">1</td></tr>
+          <tr><td>AE/PM</td><td class="num">1</td></tr>
+          <tr><td>AE/JBMDL/PM</td><td class="num">1</td></tr>
+          <tr><td>JBMDL/AE</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="labels">
+      <h2><span class="section-no">Section 4</span>Discipline and issue type</h2>
+      <p>Electrical is 40 of 107 RFIs, so a discipline bar chart will be led by that one category. Other and General are labels from the feature rules.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Discipline</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Electrical</td><td class="num">40</td></tr>
+          <tr><td>Other</td><td class="num">24</td></tr>
+          <tr><td>General</td><td class="num">15</td></tr>
+          <tr><td>Civil</td><td class="num">9</td></tr>
+          <tr><td>Structural</td><td class="num">5</td></tr>
+          <tr><td>Mechanical</td><td class="num">4</td></tr>
+          <tr><td>Architectural</td><td class="num">3</td></tr>
+          <tr><td>Quality / Inspection</td><td class="num">3</td></tr>
+          <tr><td>Controls / SCADA</td><td class="num">2</td></tr>
+          <tr><td>Cybersecurity</td><td class="num">2</td></tr>
+        </tbody>
+      </table>
+      <p>Specification Clarification is 62 of 107. Constructability is <code>RFI-023</code>. Scope Gap is <code>RFI-096</code>.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Issue type</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Specification Clarification</td><td class="num">62</td></tr>
+          <tr><td>Compliance Requirement</td><td class="num">11</td></tr>
+          <tr><td>Missing Information</td><td class="num">11</td></tr>
+          <tr><td>Design Clarification</td><td class="num">6</td></tr>
+          <tr><td>Inspection / Quality</td><td class="num">6</td></tr>
+          <tr><td>Material Requirement</td><td class="num">4</td></tr>
+          <tr><td>Interface Coordination</td><td class="num">3</td></tr>
+          <tr><td>Drawing Conflict</td><td class="num">2</td></tr>
+          <tr><td>Constructability</td><td class="num">1</td></tr>
+          <tr><td>Scope Gap</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="status">
+      <h2><span class="section-no">Section 5</span>Status, length, and documents</h2>
+      <p>Status is Answered when the response has text, and Open when it is blank. <code>response_available</code> repeats that split as the text values <code>true</code> and <code>false</code>. The eight open IDs are <code>RFI-086</code>, <code>RFI-092</code>, <code>RFI-093</code>, <code>RFI-095</code>, <code>RFI-096</code>, <code>RFI-100</code>, <code>RFI-106</code>, and <code>RFI-107</code>.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Status</th><th class="num">RFIs</th><th>response_available</th><th>Response text</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Answered</td><td class="num">99</td><td>true</td><td>Present</td></tr>
+          <tr><td>Open</td><td class="num">8</td><td>false</td><td>Blank, word count 0</td></tr>
+        </tbody>
+      </table>
+      <p>Every question has text. Question length runs from 9 to 335 words, with a median of 69. Response length runs from 0 to 109 words, with a median of 16. The eight zeros are the open RFIs. Use the word-count columns for a length visual. Question and response text belong in a table or a tooltip.</p>
+      <p>The document flags are Yes, No, or Unknown, read from <code>notes</code>. Unknown means the note is blank or only says an attachment was sent. Document update is Yes when either drawing or spec is Yes. Those 19 Yes rows are 16 that update both, 2 that update a drawing only, and 1 that updates a specification only. The 51 No rows say no specification or drawing update is required.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Flag</th><th class="num">Yes</th><th class="num">No</th><th class="num">Unknown</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Drawing update required</td><td class="num">18</td><td class="num">51</td><td class="num">38</td></tr>
+          <tr><td>Spec update required</td><td class="num">17</td><td class="num">51</td><td class="num">39</td></tr>
+          <tr><td>Document update required</td><td class="num">19</td><td class="num">51</td><td class="num">37</td></tr>
+        </tbody>
+      </table>
+      <p><code>notes</code> has seven distinct phrases, so it is a label for a chart, not a long narrative. Fifty-one notes say no update is required, 35 are blank, and 15 say an updated specification or drawing was included. The other four notes record an attachment, a drawing update tied to RFI-47, a redundant update with RFI-08, or a specification-only update.</p>
+    </section>
+
+    <section id="visuals">
+      <h2><span class="section-no">Section 6</span>Fields for each visual</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th>Visual</th><th>Fields</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>RFI count</td><td>Count of <code>fact_rfi.rfi_id</code></td></tr>
+          <tr><td>Received by day</td><td><code>dim_date.date_received</code></td></tr>
+          <tr><td>Submitter</td><td><code>dim_party.party_name</code> through <code>from_party_key</code></td></tr>
+          <tr><td>Tasked party</td><td><code>dim_party.party_name</code> through <code>tasked_party_key</code></td></tr>
+          <tr><td>Discipline mix</td><td><code>dim_discipline.discipline_name</code></td></tr>
+          <tr><td>Issue-type mix</td><td><code>dim_issue_type.issue_type_name</code></td></tr>
+          <tr><td>Open against answered</td><td><code>fact_rfi.status</code></td></tr>
+          <tr><td>Document impact</td><td><code>document_update_required</code>, with Unknown kept as its own category</td></tr>
+          <tr><td>Question and response length</td><td><code>question_word_count</code>, <code>response_word_count</code></td></tr>
+          <tr><td>RFI detail</td><td><code>rfi_id</code>, <code>question</code>, <code>response</code>, <code>notes</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="08-python-scripts.html">Previous: 8. Python scripts</a>
+      <a class="pager-next" href="10-powerbi-executive-overview.html">Next: 10. Executive overview</a>
+    </nav>
+    <p>Prepared from the tables in <cite>data/processed/powerbi</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

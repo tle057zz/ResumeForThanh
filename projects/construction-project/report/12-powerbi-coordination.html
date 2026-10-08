@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>12. Coordination</title>
+  <link rel="stylesheet" href="styles.css?v=pager">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 12</p>
+      <h1>Coordination</h1>
+      <p class="subtitle">The third Power BI page: who submits the RFIs, who is tasked to answer, and where the eight open RFIs sit.</p>
+      <div class="meta">
+        <span>Page: Origin, assignment, and outstanding workload</span>
+        <span>8 open, all with CT</span>
+        <span>8 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band collage">
+    <img src="images/site-collage.png" alt="A collage of site photographs, drawings, and coordination notes.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html" aria-current="page">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#page">The page</a></li>
+        <li><a href="#live">Live report</a></li>
+        <li><a href="#roles">Two roles, one party list</a></li>
+        <li><a href="#submitters">Who submits</a></li>
+        <li><a href="#tasked">Who is tasked</a></li>
+        <li><a href="#open">The eight open RFIs</a></li>
+        <li><a href="#reading">How to read it</a></li>
+      </ol>
+    </nav>
+
+    <section id="page">
+      <h2><span class="section-no">Section 1</span>The page</h2>
+      <p>The page title is RFI Origin, Assignment &amp; Outstanding Workload. The question on the header is who is generating RFIs, who is responsible for responding, and where the unresolved workload is concentrated. The counts are the unfiltered page.</p>
+      <figure class="plate schema">
+        <img src="images/coordination.jpg" alt="Coordination dashboard with five KPI cards, submitter and tasked-party columns, open-RFI charts, a response-rate chart, a submitter table, and a discipline stack by tasked party.">
+        <figcaption>Origin, assignment, and outstanding workload: 6 submitters, 10 tasked parties, 8 open RFIs.</figcaption>
+      </figure>
+    </section>
+
+    <section id="live">
+      <h2><span class="section-no">Section 2</span>Live report</h2>
+      <p>The published report is <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">rif_vis</a>. The bar under the frame switches pages: executive, Drawing &amp; Specification Change Analysis, COORDINATION &amp; RESPONSIBILITY, and RFI Register.</p>
+      <figure class="plate schema embed">
+        <iframe title="rif_vis" width="1024" height="1060" src="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" frameborder="0" allowfullscreen="true"></iframe>
+        <figcaption>Live <cite>rif_vis</cite> report. <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">Open the report</a>.</figcaption>
+      </figure>
+      <div class="callout">
+        <p>This chapter is dashboard 3. Use the arrows beside <strong>3 of 4</strong> to open COORDINATION &amp; RESPONSIBILITY. Page 1 is the executive dashboard. Page 2 is Drawing &amp; Specification Change Analysis. Page 4 is RFI Register.</p>
+      </div>
+      <figure class="plate hint">
+        <img src="images/report-pager-3.png" alt="A red circle around the report page control that reads 3 of 4, with a previous arrow and a next arrow.">
+        <figcaption>The page control for COORDINATION &amp; RESPONSIBILITY.</figcaption>
+      </figure>
+    </section>
+
+    <section id="roles">
+      <h2><span class="section-no">Section 3</span>Two roles, one party list</h2>
+      <p><code>dim_party</code> is one list of 16 names. <code>from_party_key</code> is the active relationship, so a chart titled with <code>party_name</code> and no extra measure counts submitters. <code>tasked_party_key</code> is the inactive relationship. The responsible-party charts on this page turn that relationship on for the measure. The two roles do not share a name: six contractors submit, and ten government or design parties are tasked.</p>
+      <p>The received date is on every row. There is no answered date, so this page does not show days open or a response-time target.</p>
+    </section>
+
+    <section id="submitters">
+      <h2><span class="section-no">Section 4</span>Who submits</h2>
+      <p>The cards read 6 originating parties, 10 responsible parties, 8 open RFIs, a 92.52% response rate, and 107 RFIs. DAVID BOLAND, INC submitted 71 of the 107, about 66%. All 71 are answered. The eight open RFIs were submitted by Dobco, Inc. (4), Richard Group LCC (3), and Willdan (1).</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Submitter</th><th class="num">RFIs</th><th class="num">Answered</th><th class="num">Open</th><th class="num">Response rate</th><th class="num">Document update rate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>DAVID BOLAND, INC</td><td class="num">71</td><td class="num">71</td><td class="num">0</td><td class="num">100.00%</td><td class="num">21.13%</td></tr>
+          <tr><td>Carbon Recall Chattanooga</td><td class="num">11</td><td class="num">11</td><td class="num">0</td><td class="num">100.00%</td><td class="num">18.18%</td></tr>
+          <tr><td>Willdan</td><td class="num">8</td><td class="num">7</td><td class="num">1</td><td class="num">87.50%</td><td class="num">12.50%</td></tr>
+          <tr><td>Richard Group LCC</td><td class="num">8</td><td class="num">5</td><td class="num">3</td><td class="num">62.50%</td><td class="num">12.50%</td></tr>
+          <tr><td>Dobco, Inc.</td><td class="num">8</td><td class="num">4</td><td class="num">4</td><td class="num">50.00%</td><td class="num">0.00%</td></tr>
+          <tr><td>Schweitzer Engineering Laboratories, Inc.</td><td class="num">1</td><td class="num">1</td><td class="num">0</td><td class="num">100.00%</td><td class="num">0.00%</td></tr>
+          <tr><td>Total</td><td class="num">107</td><td class="num">99</td><td class="num">8</td><td class="num">92.52%</td><td class="num">17.76%</td></tr>
+        </tbody>
+      </table>
+      <p>This table follows the submitter. A 50% response rate for Dobco, Inc. means four of its eight RFIs are still open. It does not mean Dobco, Inc. was tasked to answer them.</p>
+    </section>
+
+    <section id="tasked">
+      <h2><span class="section-no">Section 5</span>Who is tasked</h2>
+      <p>AE is tasked with 66 of 107 RFIs, about 62%, and all 66 are answered. CT is tasked with 15. Seven of those are answered and eight are open, a response rate of 46.67%. Every other tasked party is at 100%: PM 9, JBMDL 8, AE/JBMDL 4, and one each for AE/JBMDL/PM, AE/PM, CT/PM, JBMDL/AE, and USACE DB.</p>
+      <p>The open-RFI bar for the tasked party is a single bar: CT, 8. The discipline stack shows what each tasked party was given. Electrical is 38 of AE’s 66, about 58%. All 15 of CT’s RFIs are Other. General is 6 of JBMDL’s 8. Other is 5 of PM’s 9.</p>
+    </section>
+
+    <section id="open">
+      <h2><span class="section-no">Section 6</span>The eight open RFIs</h2>
+      <p>All eight open RFIs are tasked to CT, and all eight are discipline Other.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>RFI</th><th>Submitter</th><th>Tasked party</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>RFI-086</td><td>Willdan</td><td>CT</td></tr>
+          <tr><td>RFI-092</td><td>Dobco, Inc.</td><td>CT</td></tr>
+          <tr><td>RFI-093</td><td>Dobco, Inc.</td><td>CT</td></tr>
+          <tr><td>RFI-095</td><td>Dobco, Inc.</td><td>CT</td></tr>
+          <tr><td>RFI-096</td><td>Dobco, Inc.</td><td>CT</td></tr>
+          <tr><td>RFI-100</td><td>Richard Group LCC</td><td>CT</td></tr>
+          <tr><td>RFI-106</td><td>Richard Group LCC</td><td>CT</td></tr>
+          <tr><td>RFI-107</td><td>Richard Group LCC</td><td>CT</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="reading">
+      <h2><span class="section-no">Section 7</span>How to read it</h2>
+      <p>Three different parties lead the three questions on the header. DAVID BOLAND, INC submitted the most RFIs, and none of them are open. AE holds the most assignments, and none of them are open. CT holds all eight open RFIs, at a response rate of 46.67%. Those eight were submitted by Dobco, Inc., Richard Group LCC, and Willdan.</p>
+      <p>This coordination page stops at assignment and the eight open RFIs. The next chapter is the register, where those eight rows can be filtered and read with the start of each question.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="11-powerbi-document-impact.html">Previous: 11. Document impact</a>
+      <a class="pager-next" href="13-powerbi-register.html">Next: 13. RFI register</a>
+    </nav>
+    <p>Prepared from the Origin, Assignment &amp; Outstanding Workload page and the tables in <cite>data/processed/powerbi</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

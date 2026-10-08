@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital Engineering RFI Analytics &amp; AI Platform — Report</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead hero">
+    <div class="masthead-inner">
+      <p class="kicker">Project report</p>
+      <h1>Digital Engineering RFI Analytics &amp; AI Platform</h1>
+      <p class="subtitle">A report series on turning a real construction RFI register into a structured analytics and AI workflow.</p>
+      <div class="meta">
+        <span>Source: USACE RFI log</span>
+        <span>Solicitation W912DS26BA032</span>
+        <span>3 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html" aria-current="page">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <figure class="plate">
+      <img src="images/workflow.png" alt="Construction records moving from the site through documents and a database into project dashboards.">
+      <figcaption>Site records, documents, and dashboards in one workflow.</figcaption>
+    </figure>
+    <nav class="toc" aria-label="Report contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="01-project-introduction-and-data-source.html">Project introduction and data source</a></li>
+        <li><a href="02-raw-data-profile.html">Raw data profile</a></li>
+        <li><a href="03-raw-table-investigation.html">Raw table investigation</a></li>
+        <li><a href="04-clean-rfi-table.html">Clean RFI table</a></li>
+        <li><a href="05-clean-table-validation.html">Clean table validation</a></li>
+        <li><a href="06-rfi-features.html">RFI features</a></li>
+        <li><a href="07-star-schema.html">Star schema</a></li>
+        <li><a href="08-python-scripts.html">Python scripts</a></li>
+        <li><a href="09-powerbi-data.html">Power BI data</a></li>
+        <li><a href="10-powerbi-executive-overview.html">Executive overview</a></li>
+        <li><a href="11-powerbi-document-impact.html">Document impact</a></li>
+        <li><a href="12-powerbi-coordination.html">Coordination</a></li>
+        <li><a href="13-powerbi-register.html">RFI register</a></li>
+        <li><a href="14-workflow-still-ahead.html">Work still ahead</a></li>
+      </ol>
+    </nav>
+
+    <section>
+      <h2><span class="section-no">Chapters</span>Read the report</h2>
+      <p>The first chapter sets the purpose of the platform and the public RFI workbook. Later chapters follow the data from the workbook profile, through the raw table, the clean RFI table, validation, and the derived feature fields, into the DuckDB star schema. The script chapter lists the Python files in run order. Chapter 9 describes the Power BI tables. Chapters 10 to 13 are the four Power BI pages. The last chapter is the Databricks work still to run, and it is updated as each notebook finishes.</p>
+      <p><a href="14-workflow-still-ahead.html">Read the work still ahead</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a class="pager-next" href="01-project-introduction-and-data-source.html">Next: 1. Introduction</a>
+    </nav>
+    <p>Chapters prepared from the project notes, the workbook profile, the raw-table investigation, the clean RFI table, the validation results, the feature table, the DuckDB star schema, the Python scripts, the Power BI export, the four Power BI pages, and the Databricks work still to run.</p>
+  </footer>
+  </div>
+</body>
+</html>

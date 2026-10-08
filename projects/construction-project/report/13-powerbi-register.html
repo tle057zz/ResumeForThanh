@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>13. RFI Register</title>
+  <link rel="stylesheet" href="styles.css?v=pager">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 13</p>
+      <h1>RFI register</h1>
+      <p class="subtitle">The fourth Power BI page: search one RFI, or filter the register by status, discipline, submitter, and document impact.</p>
+      <div class="meta">
+        <span>Page: Search, filter, and investigate</span>
+        <span>107 rows, 8 open</span>
+        <span>8 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band dusk">
+    <img src="images/site-dusk.png" alt="A construction site at dusk, with the building frame still visible.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html" aria-current="page">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#page">The page</a></li>
+        <li><a href="#live">Live report</a></li>
+        <li><a href="#kpis">KPI cards</a></li>
+        <li><a href="#filters">Filters</a></li>
+        <li><a href="#register">The register</a></li>
+        <li><a href="#open">The eight open RFIs</a></li>
+        <li><a href="#reading">How to read it</a></li>
+      </ol>
+    </nav>
+
+    <section id="page">
+      <h2><span class="section-no">Section 1</span>The page</h2>
+      <p>The page title is Search, Filter &amp; Investigate Individual RFIs. The question on the header is which RFIs require review, follow-up, or document action. The first three pages count the project, the document changes, and the parties. This page is the row behind each count.</p>
+      <p>Filters sit on the left: an RFI number search, a party list, status, discipline, and document impact. Four cards sit across the top. The register table fills the rest of the page. It is sorted by RFI number. Question Summary is the start of <code>fact_rfi.question</code>, shortened so the row stays one line. The full question and the response stay in the fact table.</p>
+    </section>
+
+    <section id="live">
+      <h2><span class="section-no">Section 2</span>Live report</h2>
+      <p>The published report is <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">rif_vis</a>. The bar under the frame switches pages: executive, Drawing &amp; Specification Change Analysis, COORDINATION &amp; RESPONSIBILITY, and RFI Register.</p>
+      <figure class="plate schema embed">
+        <iframe title="rif_vis" width="1024" height="1060" src="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" frameborder="0" allowfullscreen="true"></iframe>
+        <figcaption>Live <cite>rif_vis</cite> report. <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">Open the report</a>.</figcaption>
+      </figure>
+      <div class="callout">
+        <p>This chapter is dashboard 4. Use the arrows beside <strong>4 of 4</strong> to open the RFI Register. Page 1 is the executive dashboard. Page 2 is Drawing &amp; Specification Change Analysis. Page 3 is COORDINATION &amp; RESPONSIBILITY.</p>
+      </div>
+    </section>
+
+    <section id="kpis">
+      <h2><span class="section-no">Section 3</span>KPI cards</h2>
+      <p>The four cards match the earlier pages, and they recount whatever the filters leave in view.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Card</th><th class="num">Unfiltered</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Total RFIs</td><td class="num">107</td><td>Rows left after the current filters</td></tr>
+          <tr><td>Open RFIs</td><td class="num">8</td><td>Those rows with a blank response</td></tr>
+          <tr><td>Response Rate</td><td class="num">92.52%</td><td>Answered rows divided by the rows in view</td></tr>
+          <tr><td>Document Update RFIs</td><td class="num">19</td><td>Rows whose document-update flag is Yes</td></tr>
+        </tbody>
+      </table>
+      <p>Setting status to Open leaves eight rows. All eight are unanswered, so the response rate becomes 0%. All eight have document impact Unknown, so the document-update card becomes 0.</p>
+    </section>
+
+    <section id="filters">
+      <h2><span class="section-no">Section 4</span>Filters</h2>
+      <p>The RFI number box searches <code>fact_rfi.rfi_id</code>. Typing <code>RFI-008</code> leaves that one row: Architectural, Specification Clarification, submitted by DAVID BOLAND, INC, tasked to AE, document impact Both.</p>
+      <p>Status is Answered or Open. Discipline is the ten names from <code>dim_discipline</code>. Document impact is five labels built from the drawing flag and the specification flag.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Document impact</th><th class="num">RFIs</th><th>Flags</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Both</td><td class="num">16</td><td>Drawing Yes and specification Yes</td></tr>
+          <tr><td>Drawing only</td><td class="num">2</td><td>Drawing Yes and specification Unknown</td></tr>
+          <tr><td>Specification only</td><td class="num">1</td><td>Specification Yes and drawing Unknown</td></tr>
+          <tr><td>No update</td><td class="num">51</td><td>Both flags No</td></tr>
+          <tr><td>Unknown</td><td class="num">37</td><td>Both flags Unknown</td></tr>
+          <tr><td>Total</td><td class="num">107</td><td></td></tr>
+        </tbody>
+      </table>
+      <p>The party slicer is titled <code>party_name</code> and lists all 16 names in <code>dim_party</code>. The filter uses the active relationship, <code>from_party_key</code>, so it keeps the submitter. Six names return rows: DAVID BOLAND, INC (71), Carbon Recall Chattanooga (11), and Willdan, Dobco, Inc., and Richard Group LCC (8 each), plus Schweitzer Engineering Laboratories, Inc. (1). The other ten names are tasked parties. Selecting AE, CT, JBMDL, PM, or USACE DB leaves the register empty.</p>
+      <p>The received date is on every row, shown as year, month, and day. There is no answered date, so this page does not show days open or a response-time target.</p>
+    </section>
+
+    <section id="register">
+      <h2><span class="section-no">Section 5</span>The register</h2>
+      <p>Each row is one RFI. The columns are the RFI number, the received date split into year, month, and day, status, discipline, issue type, originating party, responsible party, the question preview, and document impact. The table below is the first 10 of 107, in RFI number order.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>RFI</th><th>Received</th><th>Status</th><th>Discipline</th><th>Issue type</th><th>Submitter</th><th>Tasked</th><th>Impact</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>RFI-001</td><td>1 Sep 2026</td><td>Answered</td><td>Electrical</td><td>Material Requirement</td><td>Schweitzer Engineering Laboratories, Inc.</td><td>JBMDL</td><td>Unknown</td></tr>
+          <tr><td>RFI-002</td><td>2 Sep 2026</td><td>Answered</td><td>Electrical</td><td>Drawing Conflict</td><td>Willdan</td><td>AE</td><td>Both</td></tr>
+          <tr><td>RFI-003</td><td>2 Sep 2026</td><td>Answered</td><td>Other</td><td>Compliance Requirement</td><td>Willdan</td><td>CT</td><td>Unknown</td></tr>
+          <tr><td>RFI-004</td><td>2 Sep 2026</td><td>Answered</td><td>Other</td><td>Design Clarification</td><td>Willdan</td><td>CT/PM</td><td>Unknown</td></tr>
+          <tr><td>RFI-005</td><td>2 Sep 2026</td><td>Answered</td><td>Controls / SCADA</td><td>Interface Coordination</td><td>Willdan</td><td>AE/JBMDL</td><td>No update</td></tr>
+          <tr><td>RFI-006</td><td>2 Sep 2026</td><td>Answered</td><td>Cybersecurity</td><td>Compliance Requirement</td><td>Willdan</td><td>AE/JBMDL</td><td>No update</td></tr>
+          <tr><td>RFI-007</td><td>2 Sep 2026</td><td>Answered</td><td>Other</td><td>Compliance Requirement</td><td>Willdan</td><td>CT</td><td>Unknown</td></tr>
+          <tr><td>RFI-008</td><td>4 Sep 2026</td><td>Answered</td><td>Architectural</td><td>Specification Clarification</td><td>DAVID BOLAND, INC</td><td>AE</td><td>Both</td></tr>
+          <tr><td>RFI-009</td><td>4 Sep 2026</td><td>Answered</td><td>Quality / Inspection</td><td>Inspection / Quality</td><td>DAVID BOLAND, INC</td><td>AE</td><td>Unknown</td></tr>
+          <tr><td>RFI-010</td><td>4 Sep 2026</td><td>Answered</td><td>Structural</td><td>Specification Clarification</td><td>DAVID BOLAND, INC</td><td>AE</td><td>No update</td></tr>
+        </tbody>
+      </table>
+      <p>The question preview for RFI-001 starts with the approved electric meter models for AMRS integration. RFI-002 starts with the battery energy storage system capacity discrepancy. RFI-008 starts with the finishes schedule and the paint specification.</p>
+    </section>
+
+    <section id="open">
+      <h2><span class="section-no">Section 6</span>The eight open RFIs</h2>
+      <p>Filtering status to Open leaves these eight rows. All eight are discipline Other, all eight are tasked to CT, and all eight are document impact Unknown.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>RFI</th><th>Received</th><th>Issue type</th><th>Submitter</th><th>Question preview</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>RFI-086</td><td>14 Sep 2026</td><td>Compliance Requirement</td><td>Willdan</td><td>FAR liquidated damages</td></tr>
+          <tr><td>RFI-092</td><td>16 Sep 2026</td><td>Missing Information</td><td>Dobco, Inc.</td><td>Award date and notice to proceed</td></tr>
+          <tr><td>RFI-093</td><td>16 Sep 2026</td><td>Compliance Requirement</td><td>Dobco, Inc.</td><td>New Jersey prevailing wage</td></tr>
+          <tr><td>RFI-095</td><td>16 Sep 2026</td><td>Compliance Requirement</td><td>Dobco, Inc.</td><td>Tax-exempt certificate</td></tr>
+          <tr><td>RFI-096</td><td>16 Sep 2026</td><td>Scope Gap</td><td>Dobco, Inc.</td><td>Percentage of work the contractor performs</td></tr>
+          <tr><td>RFI-100</td><td>21 Sep 2026</td><td>Design Clarification</td><td>Richard Group LCC</td><td>Hand delivery of the bid</td></tr>
+          <tr><td>RFI-106</td><td>21 Sep 2026</td><td>Missing Information</td><td>Richard Group LCC</td><td>Target date for funding</td></tr>
+          <tr><td>RFI-107</td><td>21 Sep 2026</td><td>Material Requirement</td><td>Richard Group LCC</td><td>Adjusting the bid for material prices</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="reading">
+      <h2><span class="section-no">Section 7</span>How to read it</h2>
+      <p>Use the earlier pages to see the pattern, then use this page to find the row. Status Open is the eight-RFI backlog, all with CT. Document impact Both is the 16 RFIs that change a drawing and a specification. An RFI number in the search box opens that one record, with its submitter, its tasked party, and the start of the question.</p>
+      <p>The party list looks like every organisation on the project. It filters the submitter. A tasked party such as AE or CT has to be read from the Responsible Party column, or from the coordination page.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="12-powerbi-coordination.html">Previous: 12. Coordination</a>
+      <a class="pager-next" href="14-workflow-still-ahead.html">Next: 14. Work still ahead</a>
+    </nav>
+    <p>Prepared from the RFI Register page and the tables in <cite>data/processed/powerbi</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

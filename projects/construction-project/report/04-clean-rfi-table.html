@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>4. Clean RFI Table</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 4</p>
+      <h1>Clean RFI table</h1>
+      <p class="subtitle">What remained after cleaning the raw register into records that can be analysed.</p>
+      <div class="meta">
+        <span>Source: data/processed/rfi_clean.csv</span>
+        <span>107 RFIs</span>
+        <span>4 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band field">
+    <img src="images/field-tablet.png" alt="An engineer reviewing a building model and charts on a tablet at the site.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html" aria-current="page">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#result">Cleaning result</a></li>
+        <li><a href="#excluded">Rows left out</a></li>
+        <li><a href="#status">Status</a></li>
+        <li><a href="#dates">Dates</a></li>
+        <li><a href="#parties">Parties</a></li>
+        <li><a href="#notes">Notes</a></li>
+        <li><a href="#sample">First 10 clean rows</a></li>
+      </ol>
+    </nav>
+
+    <section id="result">
+      <h2><span class="section-no">Section 1</span>Cleaning result</h2>
+      <p><code>04_clean_rfi.py</code> read <code>data/processed/raw_rfi.csv</code> and wrote <code>data/processed/rfi_clean.csv</code>. The workbook and the raw table were not changed.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Check</th><th class="num">Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Raw rows read</td><td class="num">112</td></tr>
+          <tr><td>Rows kept</td><td class="num">107</td></tr>
+          <tr><td>Rows excluded</td><td class="num">5</td></tr>
+          <tr><td>RFI identifiers</td><td>RFI-001 to RFI-107</td></tr>
+          <tr><td>Questions present</td><td class="num">107</td></tr>
+          <tr><td>Leading or double spaces left</td><td class="num">0</td></tr>
+        </tbody>
+      </table>
+      <p>Each kept identifier is zero-padded, so source number 1 is <code>RFI-001</code>. Excel serial dates are calendar dates. Because the source Status column was empty, a response sets <code>status</code> to Answered and <code>response_available</code> to Yes. A blank response sets them to Open and No.</p>
+    </section>
+
+    <section id="excluded">
+      <h2><span class="section-no">Section 2</span>Rows left out</h2>
+      <p>Five raw rows were not RFI records. They are listed in <code>data/processed/rfi_excluded.csv</code>.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Raw identifier</th><th>Reason</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>RFIs received after the due date</td><td>Section label, not an RFI record</td></tr>
+          <tr><td>108</td><td>Identifier only, no party, date, or question</td></tr>
+          <tr><td>109</td><td>Identifier only, no party, date, or question</td></tr>
+          <tr><td>110</td><td>Identifier only, no party, date, or question</td></tr>
+          <tr><td>111</td><td>Identifier only, no party, date, or question</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="status">
+      <h2><span class="section-no">Section 3</span>Status</h2>
+      <p>99 of 107 kept RFIs have a response. Eight do not.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Status</th><th>Response available</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Answered</td><td>Yes</td><td class="num">99</td></tr>
+          <tr><td>Open</td><td>No</td><td class="num">8</td></tr>
+        </tbody>
+      </table>
+      <p>The open records are RFI-086, RFI-092, RFI-093, RFI-095, RFI-096, RFI-100, RFI-106, and RFI-107.</p>
+    </section>
+
+    <section id="dates">
+      <h2><span class="section-no">Section 4</span>Dates</h2>
+      <p>Received dates run from 1 September 2026 to 21 September 2026. Nine dates appear. 4 September accounts for 67 of the 107 RFIs.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Date received</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2026-09-01</td><td class="num">1</td></tr>
+          <tr><td>2026-09-02</td><td class="num">6</td></tr>
+          <tr><td>2026-09-04</td><td class="num">67</td></tr>
+          <tr><td>2026-09-10</td><td class="num">11</td></tr>
+          <tr><td>2026-09-14</td><td class="num">2</td></tr>
+          <tr><td>2026-09-15</td><td class="num">1</td></tr>
+          <tr><td>2026-09-16</td><td class="num">8</td></tr>
+          <tr><td>2026-09-17</td><td class="num">3</td></tr>
+          <tr><td>2026-09-21</td><td class="num">8</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="parties">
+      <h2><span class="section-no">Section 5</span>Parties</h2>
+      <p>After the five empty rows were removed, every kept RFI has a submitting party and a tasked party. DAVID BOLAND, INC submitted 71 RFIs. AE was tasked with 66.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>From</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>DAVID BOLAND, INC</td><td class="num">71</td></tr>
+          <tr><td>Carbon Recall Chattanooga</td><td class="num">11</td></tr>
+          <tr><td>Willdan</td><td class="num">8</td></tr>
+          <tr><td>Dobco, Inc.</td><td class="num">8</td></tr>
+          <tr><td>Richard Group LCC</td><td class="num">8</td></tr>
+          <tr><td>Schweitzer Engineering Laboratories, Inc.</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+      <table class="data-table">
+        <thead>
+          <tr><th>Tasked</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AE</td><td class="num">66</td></tr>
+          <tr><td>CT</td><td class="num">15</td></tr>
+          <tr><td>PM</td><td class="num">9</td></tr>
+          <tr><td>JBMDL</td><td class="num">8</td></tr>
+          <tr><td>AE/JBMDL</td><td class="num">4</td></tr>
+          <tr><td>AE/JBMDL/PM</td><td class="num">1</td></tr>
+          <tr><td>AE/PM</td><td class="num">1</td></tr>
+          <tr><td>CT/PM</td><td class="num">1</td></tr>
+          <tr><td>JBMDL/AE</td><td class="num">1</td></tr>
+          <tr><td>USACE DB</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="notes">
+      <h2><span class="section-no">Section 6</span>Notes</h2>
+      <p>72 kept RFIs have a note. 35 notes are blank. The filled notes are still the same six phrases found in the raw table.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Note</th><th class="num">Rows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>No spec/drawing update required.</td><td class="num">51</td></tr>
+          <tr><td>Updated spec/dwg included</td><td class="num">15</td></tr>
+          <tr><td>Correct attachment sent to USACE for inclusion in the set.</td><td class="num">2</td></tr>
+          <tr><td>Drawing update provided as part of RFI-47</td><td class="num">2</td></tr>
+          <tr><td>Updated spec/dwg included/ Redundant with RFI-08</td><td class="num">1</td></tr>
+          <tr><td>Updated spec included</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="sample">
+      <h2><span class="section-no">Section 7</span>First 10 clean rows</h2>
+      <p>Question text is shortened here. The full text is in <code>rfi_clean.csv</code>.</p>
+      <div class="table-scroll">
+        <table class="data-table sample-table">
+          <thead>
+            <tr>
+              <th>RFI</th>
+              <th>From</th>
+              <th>Tasked</th>
+              <th>Date received</th>
+              <th>Status</th>
+              <th>Question</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RFI-001</td>
+              <td>Schweitzer Engineering Laboratories, Inc.</td>
+              <td>JBMDL</td>
+              <td>2026-09-01</td>
+              <td>Answered</td>
+              <td>The specifications identify approved electric meter models for AMRS integration. Would the Government accept the…</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>RFI-002</td>
+              <td>Willdan</td>
+              <td>AE</td>
+              <td>2026-09-02</td>
+              <td>Answered</td>
+              <td>Battery Energy Storage System Capacity Discrepancy The solicitation appears to contain conflicting BESS sizing…</td>
+              <td>Updated spec/dwg included</td>
+            </tr>
+            <tr>
+              <td>RFI-003</td>
+              <td>Willdan</td>
+              <td>CT</td>
+              <td>2026-09-02</td>
+              <td>Answered</td>
+              <td>Applicable Davis-Bacon Wage Determination The solicitation references a wage determination associated with Burlington…</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>RFI-004</td>
+              <td>Willdan</td>
+              <td>CT/PM</td>
+              <td>2026-09-02</td>
+              <td>Answered</td>
+              <td>Site Walk Date Clarification The solicitation references a site visit as occurring on &quot;Friday, 03 September 2026.&quot;…</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>RFI-005</td>
+              <td>Willdan</td>
+              <td>AE/JBMDL</td>
+              <td>2026-09-02</td>
+              <td>Answered</td>
+              <td>Existing SCADA Integration Requirements The specifications reference integration between the new microgrid control…</td>
+              <td>No spec/drawing update required.</td>
+            </tr>
+            <tr>
+              <td>RFI-006</td>
+              <td>Willdan</td>
+              <td>AE/JBMDL</td>
+              <td>2026-09-02</td>
+              <td>Answered</td>
+              <td>Cybersecurity / RMF Requirements The specifications include multiple references to cybersecurity support and RMF…</td>
+              <td>No spec/drawing update required.</td>
+            </tr>
+            <tr>
+              <td>RFI-007</td>
+              <td>Willdan</td>
+              <td>CT</td>
+              <td>2026-09-02</td>
+              <td>Answered</td>
+              <td>CPARS and Past Performance Questionnaires (PPQs) The Supplementary Instructions to Bidders references Contractor…</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>RFI-008</td>
+              <td>DAVID BOLAND, INC</td>
+              <td>AE</td>
+              <td>2026-09-04</td>
+              <td>Answered</td>
+              <td>Spec: 09 06 00 – Schedules for Finishes, 09 90 00 – Paints and Coatings Question: Paragraph 1.6.3 of Section 09 90 00…</td>
+              <td>Updated spec/dwg included</td>
+            </tr>
+            <tr>
+              <td>RFI-009</td>
+              <td>DAVID BOLAND, INC</td>
+              <td>AE</td>
+              <td>2026-09-04</td>
+              <td>Answered</td>
+              <td>Spec: 01 45 35 Special Inspections Question: Subpart 1.2 of Section 01 45 35 of the specifications states that the…</td>
+              <td>Correct attachment sent to USACE for inclusion in the set.</td>
+            </tr>
+            <tr>
+              <td>RFI-010</td>
+              <td>DAVID BOLAND, INC</td>
+              <td>AE</td>
+              <td>2026-09-04</td>
+              <td>Answered</td>
+              <td>1. Discipline: Structural Sheet: S-501 Detail: K15 Spec: Question: On Sheet S-501 Detail K15 calls out a typical…</td>
+              <td>No spec/drawing update required.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="03-raw-table-investigation.html">Previous: 3. Raw table</a>
+      <a class="pager-next" href="05-clean-table-validation.html">Next: 5. Validation</a>
+    </nav>
+    <p>Prepared from <cite>data/processed/rfi_clean.csv</cite> and <cite>data/processed/rfi_excluded.csv</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

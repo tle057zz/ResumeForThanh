@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2. Raw Data Profile</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 2</p>
+      <h1>Raw data profile</h1>
+      <p class="subtitle">What the first read of the USACE RFI workbook showed, before any cleaning or interpretation.</p>
+      <div class="meta">
+        <span>Source: data/raw/rfi_log.xlsx</span>
+        <span>Read only</span>
+        <span>3 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band blueprint">
+    <img src="images/blueprint-site.png" alt="Pale blueprint of a tower crane and an open building frame.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html" aria-current="page">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#shape">Workbook shape</a></li>
+        <li><a href="#missing">Missing values</a></li>
+        <li><a href="#duplicates">Duplicate RFI IDs</a></li>
+        <li><a href="#dates">Dates</a></li>
+        <li><a href="#questions">Question length</a></li>
+        <li><a href="#responses">Response completeness</a></li>
+        <li><a href="#notes">Notes</a></li>
+        <li><a href="#status">Status</a></li>
+        <li><a href="#from">Submitting parties</a></li>
+        <li><a href="#tasked">Tasked parties</a></li>
+      </ol>
+    </nav>
+
+    <section id="shape">
+      <h2><span class="section-no">Section 1</span>Workbook shape</h2>
+      <p><code>01_raw_data_profiling.py</code> opened <code>data/raw/rfi_log.xlsx</code> and did not change the workbook. The sheet has title rows above the real table.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Check</th><th class="num">Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Sheet rows read</td><td class="num">122</td></tr>
+          <tr><td>Header row</td><td class="num">Excel row 4</td></tr>
+          <tr><td>Title rows above the header</td><td class="num">3</td></tr>
+          <tr><td>Rows kept as RFI records</td><td class="num">112</td></tr>
+        </tbody>
+      </table>
+      <p>The header columns are RFI #, FROM, TASKED, DATE RECEIVED, QUESTION, RESPONSE, NOTES, and Status. The three rows above that header are title rows, not RFI records.</p>
+    </section>
+
+    <section id="missing">
+      <h2><span class="section-no">Section 2</span>Missing values</h2>
+      <p>Every kept row has an RFI identifier. Five rows have an identifier and no submitting party, tasked party, date, or question.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field</th><th class="num">Blank rows</th><th class="num">Filled rows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>rfi_number</td><td class="num">0</td><td class="num">112</td></tr>
+          <tr><td>from_party</td><td class="num">5</td><td class="num">107</td></tr>
+          <tr><td>tasked_to</td><td class="num">5</td><td class="num">107</td></tr>
+          <tr><td>date_received</td><td class="num">5</td><td class="num">107</td></tr>
+          <tr><td>question</td><td class="num">5</td><td class="num">107</td></tr>
+          <tr><td>response</td><td class="num">13</td><td class="num">99</td></tr>
+          <tr><td>notes</td><td class="num">40</td><td class="num">72</td></tr>
+          <tr><td>status_raw</td><td class="num">112</td><td class="num">0</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="duplicates">
+      <h2><span class="section-no">Section 3</span>Duplicate RFI IDs</h2>
+      <p>No RFI number is repeated. The 112 identifiers are unique, so a later duplicate check does not have to merge conflicting records.</p>
+    </section>
+
+    <section id="dates">
+      <h2><span class="section-no">Section 4</span>Dates</h2>
+      <p>107 rows have a received date. All 107 values are Excel serial numbers, not formatted calendar dates. Date conversion belongs in the cleaning step, not in this profile.</p>
+    </section>
+
+    <section id="questions">
+      <h2><span class="section-no">Section 5</span>Question length</h2>
+      <p>107 questions contain text. The questions are long engineering notes, not short titles.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Measure</th><th class="num">Characters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Shortest question</td><td class="num">66</td></tr>
+          <tr><td>Median question</td><td class="num">464</td></tr>
+          <tr><td>Longest question</td><td class="num">2,217</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="responses">
+      <h2><span class="section-no">Section 6</span>Response completeness</h2>
+      <p>99 of 112 records have response text. Thirteen responses are blank. Where a response exists, it is usually shorter than the question.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Measure</th><th class="num">Characters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Shortest response</td><td class="num">6</td></tr>
+          <tr><td>Median response</td><td class="num">111</td></tr>
+          <tr><td>Longest response</td><td class="num">737</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="notes">
+      <h2><span class="section-no">Section 7</span>Notes</h2>
+      <p>72 records have notes. Forty notes are blank. The filled notes are the source for a later document-impact check.</p>
+    </section>
+
+    <section id="status">
+      <h2><span class="section-no">Section 8</span>Status</h2>
+      <p>The Status column is blank on all 112 records. The source does not provide an original status to preserve. Any later status, such as Answered or Open, will be a derived field.</p>
+    </section>
+
+    <section id="from">
+      <h2><span class="section-no">Section 9</span>Submitting parties</h2>
+      <p>FROM shows who submitted the RFI. One contractor accounts for most of the register.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>FROM</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>DAVID BOLAND, INC</td><td class="num">71</td></tr>
+          <tr><td>Carbon Recall Chattanooga</td><td class="num">11</td></tr>
+          <tr><td>Dobco, Inc.</td><td class="num">8</td></tr>
+          <tr><td>Richard Group LCC</td><td class="num">8</td></tr>
+          <tr><td>Willdan</td><td class="num">8</td></tr>
+          <tr><td>Schweitzer Engineering Laboratories, Inc.</td><td class="num">1</td></tr>
+          <tr><td>Blank</td><td class="num">5</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="tasked">
+      <h2><span class="section-no">Section 10</span>Tasked parties</h2>
+      <p>TASKED shows who was asked to answer. AE is the main reviewer. A few rows name more than one party.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>TASKED</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AE</td><td class="num">66</td></tr>
+          <tr><td>CT</td><td class="num">15</td></tr>
+          <tr><td>PM</td><td class="num">9</td></tr>
+          <tr><td>JBMDL</td><td class="num">8</td></tr>
+          <tr><td>AE/JBMDL</td><td class="num">4</td></tr>
+          <tr><td>AE/JBMDL/PM</td><td class="num">1</td></tr>
+          <tr><td>AE/PM</td><td class="num">1</td></tr>
+          <tr><td>CT/PM</td><td class="num">1</td></tr>
+          <tr><td>JBMDL/AE</td><td class="num">1</td></tr>
+          <tr><td>USACE DB</td><td class="num">1</td></tr>
+          <tr><td>Blank</td><td class="num">5</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="01-project-introduction-and-data-source.html">Previous: 1. Introduction</a>
+      <a class="pager-next" href="03-raw-table-investigation.html">Next: 3. Raw table</a>
+    </nav>
+    <p>Prepared from <cite>docs/data_profiling.md</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

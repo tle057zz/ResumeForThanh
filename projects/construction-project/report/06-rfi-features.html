@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>6. RFI Features</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 6</p>
+      <h1>RFI features</h1>
+      <p class="subtitle">Rule-based discipline, issue type, document-update, and word-count fields added to the clean table.</p>
+      <div class="meta">
+        <span>Source: data/processed/rfi_features.csv</span>
+        <span>107 RFIs</span>
+        <span>4 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band collage">
+    <img src="images/site-collage.png" alt="Construction scenes covering structures, drawings, solar panels, piping, steel, and a digital site review.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html" aria-current="page">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#run">Feature run</a></li>
+        <li><a href="#discipline">Discipline</a></li>
+        <li><a href="#issue">Issue type</a></li>
+        <li><a href="#documents">Document updates</a></li>
+        <li><a href="#words">Word counts</a></li>
+        <li><a href="#sample">First 10 feature rows</a></li>
+      </ol>
+    </nav>
+
+    <section id="run">
+      <h2><span class="section-no">Section 1</span>Feature run</h2>
+      <p><code>06_build_rfi_features.py</code> read <code>data/processed/rfi_clean.csv</code> and wrote <code>data/processed/rfi_features.csv</code>. The clean table was not changed. All 107 identifiers remain <code>RFI-001</code> through <code>RFI-107</code>.</p>
+      <p>The new fields are derived. Where a question already names a discipline, that label is kept. Otherwise the opening of the question is matched to keywords. Drawing and specification flags come from the notes. A later model can replace these rules.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field</th><th>How it is set</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>discipline</td><td>Stated discipline in the question, otherwise keyword rules</td></tr>
+          <tr><td>issue_type</td><td>Keyword rules on the question</td></tr>
+          <tr><td>drawing_update_required</td><td>Yes, No, or Unknown from the notes</td></tr>
+          <tr><td>spec_update_required</td><td>Yes, No, or Unknown from the notes</td></tr>
+          <tr><td>document_update_required</td><td>Yes when either update flag is Yes; No when both are No; otherwise Unknown</td></tr>
+          <tr><td>question_word_count</td><td>Words in the question</td></tr>
+          <tr><td>response_word_count</td><td>Words in the response</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="discipline">
+      <h2><span class="section-no">Section 2</span>Discipline</h2>
+      <p>Electrical is the largest group, with 40 of 107 RFIs. Twenty-four fall into Other, mostly contracting and solicitation questions that do not name an engineering discipline.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Discipline</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Electrical</td><td class="num">40</td></tr>
+          <tr><td>Other</td><td class="num">24</td></tr>
+          <tr><td>General</td><td class="num">15</td></tr>
+          <tr><td>Civil</td><td class="num">9</td></tr>
+          <tr><td>Structural</td><td class="num">5</td></tr>
+          <tr><td>Mechanical</td><td class="num">4</td></tr>
+          <tr><td>Architectural</td><td class="num">3</td></tr>
+          <tr><td>Quality / Inspection</td><td class="num">3</td></tr>
+          <tr><td>Controls / SCADA</td><td class="num">2</td></tr>
+          <tr><td>Cybersecurity</td><td class="num">2</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="issue">
+      <h2><span class="section-no">Section 3</span>Issue type</h2>
+      <p>62 RFIs cite a specification section and are labelled Specification Clarification. Drawing Conflict is rare in this first pass: only two questions use conflict language the rules recognise.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Issue type</th><th class="num">RFIs</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Specification Clarification</td><td class="num">62</td></tr>
+          <tr><td>Compliance Requirement</td><td class="num">11</td></tr>
+          <tr><td>Missing Information</td><td class="num">11</td></tr>
+          <tr><td>Design Clarification</td><td class="num">6</td></tr>
+          <tr><td>Inspection / Quality</td><td class="num">6</td></tr>
+          <tr><td>Material Requirement</td><td class="num">4</td></tr>
+          <tr><td>Interface Coordination</td><td class="num">3</td></tr>
+          <tr><td>Drawing Conflict</td><td class="num">2</td></tr>
+          <tr><td>Constructability</td><td class="num">1</td></tr>
+          <tr><td>Scope Gap</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="documents">
+      <h2><span class="section-no">Section 4</span>Document updates</h2>
+      <p>51 notes say no specification or drawing update is required. Those rows are No on all three flags. A note that a specification or drawing was updated is Yes. A blank note, or a note that only says an attachment was sent, stays Unknown.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Flag</th><th class="num">Yes</th><th class="num">No</th><th class="num">Unknown</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Drawing update required</td><td class="num">18</td><td class="num">51</td><td class="num">38</td></tr>
+          <tr><td>Spec update required</td><td class="num">17</td><td class="num">51</td><td class="num">39</td></tr>
+          <tr><td>Document update required</td><td class="num">19</td><td class="num">51</td><td class="num">37</td></tr>
+        </tbody>
+      </table>
+      <p>Document update is Yes for 19 RFIs: 16 notes update both the specification and the drawing, two update a drawing only, and one updates a specification only.</p>
+    </section>
+
+    <section id="words">
+      <h2><span class="section-no">Section 5</span>Word counts</h2>
+      <p>Questions run from 9 to 335 words, with a median of 69. Responses run from 0 to 109 words, with a median of 16. Eight responses have no words, the same eight open RFIs.</p>
+    </section>
+
+    <section id="sample">
+      <h2><span class="section-no">Section 6</span>First 10 feature rows</h2>
+      <p>Question text is shortened here. The full text and the remaining rows are in <code>rfi_features.csv</code>.</p>
+      <div class="table-scroll">
+        <table class="data-table sample-table">
+          <thead>
+            <tr>
+              <th>RFI</th>
+              <th>Discipline</th>
+              <th>Issue type</th>
+              <th>Document</th>
+              <th class="num">Question words</th>
+              <th class="num">Response words</th>
+              <th>Question</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RFI-001</td>
+              <td>Electrical</td>
+              <td>Material Requirement</td>
+              <td>Unknown</td>
+              <td class="num">49</td>
+              <td class="num">68</td>
+              <td>The specifications identify approved electric meter models for AMRS integration. Would the Government accept the…</td>
+            </tr>
+            <tr>
+              <td>RFI-002</td>
+              <td>Electrical</td>
+              <td>Drawing Conflict</td>
+              <td>Yes</td>
+              <td class="num">108</td>
+              <td class="num">21</td>
+              <td>Battery Energy Storage System Capacity Discrepancy The solicitation appears to contain conflicting BESS sizing…</td>
+            </tr>
+            <tr>
+              <td>RFI-003</td>
+              <td>Other</td>
+              <td>Compliance Requirement</td>
+              <td>Unknown</td>
+              <td class="num">52</td>
+              <td class="num">69</td>
+              <td>Applicable Davis-Bacon Wage Determination The solicitation references a wage determination associated with Burlington…</td>
+            </tr>
+            <tr>
+              <td>RFI-004</td>
+              <td>Other</td>
+              <td>Design Clarification</td>
+              <td>Unknown</td>
+              <td class="num">37</td>
+              <td class="num">5</td>
+              <td>Site Walk Date Clarification The solicitation references a site visit as occurring on &quot;Friday, 03 September 2026.&quot;…</td>
+            </tr>
+            <tr>
+              <td>RFI-005</td>
+              <td>Controls / SCADA</td>
+              <td>Interface Coordination</td>
+              <td>No</td>
+              <td class="num">53</td>
+              <td class="num">43</td>
+              <td>Existing SCADA Integration Requirements The specifications reference integration between the new microgrid control…</td>
+            </tr>
+            <tr>
+              <td>RFI-006</td>
+              <td>Cybersecurity</td>
+              <td>Compliance Requirement</td>
+              <td>No</td>
+              <td class="num">80</td>
+              <td class="num">78</td>
+              <td>Cybersecurity / RMF Requirements The specifications include multiple references to cybersecurity support and RMF…</td>
+            </tr>
+            <tr>
+              <td>RFI-007</td>
+              <td>Other</td>
+              <td>Compliance Requirement</td>
+              <td>Unknown</td>
+              <td class="num">63</td>
+              <td class="num">105</td>
+              <td>CPARS and Past Performance Questionnaires (PPQs) The Supplementary Instructions to Bidders references Contractor…</td>
+            </tr>
+            <tr>
+              <td>RFI-008</td>
+              <td>Architectural</td>
+              <td>Specification Clarification</td>
+              <td>Yes</td>
+              <td class="num">252</td>
+              <td class="num">9</td>
+              <td>Spec: 09 06 00 – Schedules for Finishes, 09 90 00 – Paints and Coatings Question: Paragraph 1.6.3 of Section 09 90 00…</td>
+            </tr>
+            <tr>
+              <td>RFI-009</td>
+              <td>Quality / Inspection</td>
+              <td>Inspection / Quality</td>
+              <td>Unknown</td>
+              <td class="num">63</td>
+              <td class="num">13</td>
+              <td>Spec: 01 45 35 Special Inspections Question: Subpart 1.2 of Section 01 45 35 of the specifications states that the…</td>
+            </tr>
+            <tr>
+              <td>RFI-010</td>
+              <td>Structural</td>
+              <td>Specification Clarification</td>
+              <td>No</td>
+              <td class="num">109</td>
+              <td class="num">16</td>
+              <td>1. Discipline: Structural Sheet: S-501 Detail: K15 Spec: Question: On Sheet S-501 Detail K15 calls out a typical…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="05-clean-table-validation.html">Previous: 5. Validation</a>
+      <a class="pager-next" href="07-star-schema.html">Next: 7. Star schema</a>
+    </nav>
+    <p>Prepared from <cite>data/processed/rfi_features.csv</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

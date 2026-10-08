@@ -442,6 +442,13 @@ def serve_walmart_m5(subpath: str):
     base_dir = os.path.join(app.root_path, 'projects', 'walmart-m5', 'reports')
     return send_from_directory(base_dir, subpath)
 
+@app.route('/construction-project/<path:subpath>')
+def serve_construction_project(subpath: str):
+    """Serve reports from projects/construction-project/report."""
+    record_visit('construction-project')
+    base_dir = os.path.join(app.root_path, 'projects', 'construction-project', 'report')
+    return send_from_directory(base_dir, subpath)
+
 @app.route('/<path:path>')
 def static_proxy(path):
     # Serve static files with aggressive caching headers in production

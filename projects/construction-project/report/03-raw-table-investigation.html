@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3. Raw Table Investigation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 3</p>
+      <h1>Raw table investigation</h1>
+      <p class="subtitle">What the loaded raw RFI table contains, before any cleaning.</p>
+      <div class="meta">
+        <span>Source: data/processed/raw_rfi.csv</span>
+        <span>112 rows</span>
+        <span>4 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band desk">
+    <img src="images/site-desk.png" alt="Drawings, a hard hat, and a laptop showing a building model on a site desk.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html" aria-current="page">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#load">Raw table</a></li>
+        <li><a href="#sample">First 10 rows</a></li>
+        <li><a href="#completeness">Completeness</a></li>
+        <li><a href="#uniqueness">Uniqueness</a></li>
+        <li><a href="#duplicates">Duplicates</a></li>
+        <li><a href="#dates">Dates</a></li>
+        <li><a href="#text">Text length</a></li>
+        <li><a href="#notes">Notes</a></li>
+        <li><a href="#whitespace">Whitespace</a></li>
+      </ol>
+    </nav>
+
+    <section id="load">
+      <h2><span class="section-no">Section 1</span>Raw table</h2>
+      <p><code>02_load_rfi_excel.py</code> wrote <code>data/processed/raw_rfi.csv</code>. The original workbook was left unchanged. Cell values were copied as stored, including Excel date serials. Each row also records the source file and the time the table was loaded.</p>
+      <p><code>03_raw_rfi_investigation.py</code> then checked that table. It did not clean or transform the rows. The saved checks are in <code>data/processed/profiling/</code>.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Check</th><th class="num">Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Rows</td><td class="num">112</td></tr>
+          <tr><td>Columns</td><td class="num">10</td></tr>
+          <tr><td>Schema</td><td>Matches the expected raw table</td></tr>
+          <tr><td>Source file on every row</td><td>rfi_log.xlsx</td></tr>
+        </tbody>
+      </table>
+      <p>The columns are <code>rfi_number</code>, <code>from_party</code>, <code>tasked_to</code>, <code>date_received</code>, <code>question</code>, <code>response</code>, <code>notes</code>, <code>status_raw</code>, <code>source_file</code>, and <code>ingestion_timestamp</code>.</p>
+    </section>
+
+    <section id="sample">
+      <h2><span class="section-no">Section 2</span>First 10 rows</h2>
+      <p>These are the first 10 records in <code>raw_rfi.csv</code>. Question and response text is shortened here. <code>status_raw</code> is blank on each of these rows. Every row uses source file <code>rfi_log.xlsx</code>.</p>
+      <div class="table-scroll">
+        <table class="data-table sample-table">
+          <thead>
+            <tr>
+              <th>RFI</th>
+              <th>From</th>
+              <th>Tasked</th>
+              <th>Date received</th>
+              <th>Question</th>
+              <th>Response</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Schweitzer Engineering Laboratories, Inc.</td>
+              <td>JBMDL</td>
+              <td>46266</td>
+              <td>The specifications identify approved electric meter models for AMRS integration. Would the Government accept the SEL-735 Power Quality and…</td>
+              <td>Only the meters that are explicitly listed in the Meter Data Management Plan will be authorized on the…</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Willdan</td>
+              <td>AE</td>
+              <td>46267</td>
+              <td>Battery Energy Storage System Capacity Discrepancy The solicitation appears to contain conflicting BESS sizing information. The drawings…</td>
+              <td>Each individual BESS: 500KW/KWH Total System Power Capacity: 1.5MW Total System Energy Capacity: 1.5MWH Spec…</td>
+              <td>Updated spec/dwg included</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Willdan</td>
+              <td>CT</td>
+              <td>46267</td>
+              <td>Applicable Davis-Bacon Wage Determination The solicitation references a wage determination associated with Burlington County, New Jersey.…</td>
+              <td>The Government acknowledges the inquiry regarding the geographic location of the project site at Joint Base…</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Willdan</td>
+              <td>CT/PM</td>
+              <td>46267</td>
+              <td>Site Walk Date Clarification The solicitation references a site visit as occurring on &quot;Friday, 03 September 2026.&quot; However, 03 September…</td>
+              <td>Walk thru was held 9/3/26.</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Willdan</td>
+              <td>AE/JBMDL</td>
+              <td>46267</td>
+              <td>Existing SCADA Integration Requirements The specifications reference integration between the new microgrid control system and existing…</td>
+              <td>Concerning existing cybersecurity boundary requirements; Any connections to the existing base EMCS must be…</td>
+              <td>No spec/drawing update required.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Willdan</td>
+              <td>AE/JBMDL</td>
+              <td>46267</td>
+              <td>Cybersecurity / RMF Requirements The specifications include multiple references to cybersecurity support and RMF activities. Question:…</td>
+              <td>The contractor/vendor will not be responsible for the ATO. The contractor’s/vendor’s responsibility is to…</td>
+              <td>No spec/drawing update required.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Willdan</td>
+              <td>CT</td>
+              <td>46267</td>
+              <td>CPARS and Past Performance Questionnaires (PPQs) The Supplementary Instructions to Bidders references Contractor Representatives are…</td>
+              <td>This solicitation is an Invitation for Bid (IFB), and the award will be made to the responsible bidder with…</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>DAVID BOLAND, INC</td>
+              <td>AE</td>
+              <td>46269</td>
+              <td>Spec: 09 06 00 – Schedules for Finishes, 09 90 00 – Paints and Coatings Question: Paragraph 1.6.3 of Section 09 90 00 of the specifications…</td>
+              <td>Concur, will strike the requirement for SSPC QP 1.</td>
+              <td>Updated spec/dwg included</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>DAVID BOLAND, INC</td>
+              <td>AE</td>
+              <td>46269</td>
+              <td>Spec: 01 45 35 Special Inspections Question: Subpart 1.2 of Section 01 45 35 of the specifications states that the “Schedule of Special…</td>
+              <td>Concur, this attachment has been sent to USACE for inclusion in the documents.</td>
+              <td>Correct attachment sent to USACE for inclusion in the set.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>DAVID BOLAND, INC</td>
+              <td>AE</td>
+              <td>46269</td>
+              <td>1. Discipline: Structural Sheet: S-501 Detail: K15 Spec: Question: On Sheet S-501 Detail K15 calls out a typical exterior pad detail. Note…</td>
+              <td>Detail K15 on sheet S-501 is to be used for Electrical Equipment Pad and Switchgear Pad</td>
+              <td>No spec/drawing update required.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="completeness">
+      <h2><span class="section-no">Section 3</span>Completeness</h2>
+      <p>Five rows have an RFI identifier and no party, date, or question. Status is blank on every row. Response and notes are the other fields with substantial gaps.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Column</th><th class="num">Filled</th><th class="num">Blank</th><th class="num">Blank %</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>rfi_number</td><td class="num">112</td><td class="num">0</td><td class="num">0.00</td></tr>
+          <tr><td>from_party</td><td class="num">107</td><td class="num">5</td><td class="num">4.46</td></tr>
+          <tr><td>tasked_to</td><td class="num">107</td><td class="num">5</td><td class="num">4.46</td></tr>
+          <tr><td>date_received</td><td class="num">107</td><td class="num">5</td><td class="num">4.46</td></tr>
+          <tr><td>question</td><td class="num">107</td><td class="num">5</td><td class="num">4.46</td></tr>
+          <tr><td>response</td><td class="num">99</td><td class="num">13</td><td class="num">11.61</td></tr>
+          <tr><td>notes</td><td class="num">72</td><td class="num">40</td><td class="num">35.71</td></tr>
+          <tr><td>status_raw</td><td class="num">0</td><td class="num">112</td><td class="num">100.00</td></tr>
+          <tr><td>source_file</td><td class="num">112</td><td class="num">0</td><td class="num">0.00</td></tr>
+          <tr><td>ingestion_timestamp</td><td class="num">112</td><td class="num">0</td><td class="num">0.00</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="uniqueness">
+      <h2><span class="section-no">Section 4</span>Uniqueness</h2>
+      <p>Every RFI number is unique, and every non-blank question is unique. Some response texts repeat. Notes collapse into a few repeated phrases.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Column</th><th class="num">Unique values</th><th class="num">Non-blank rows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>rfi_number</td><td class="num">112</td><td class="num">112</td></tr>
+          <tr><td>from_party</td><td class="num">6</td><td class="num">107</td></tr>
+          <tr><td>tasked_to</td><td class="num">10</td><td class="num">107</td></tr>
+          <tr><td>date_received</td><td class="num">9</td><td class="num">107</td></tr>
+          <tr><td>question</td><td class="num">107</td><td class="num">107</td></tr>
+          <tr><td>response</td><td class="num">93</td><td class="num">99</td></tr>
+          <tr><td>notes</td><td class="num">6</td><td class="num">72</td></tr>
+          <tr><td>status_raw</td><td class="num">0</td><td class="num">0</td></tr>
+          <tr><td>source_file</td><td class="num">1</td><td class="num">112</td></tr>
+          <tr><td>ingestion_timestamp</td><td class="num">1</td><td class="num">112</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="duplicates">
+      <h2><span class="section-no">Section 5</span>Duplicates</h2>
+      <p>The table has no exact duplicate rows and no repeated RFI number.</p>
+    </section>
+
+    <section id="dates">
+      <h2><span class="section-no">Section 6</span>Dates</h2>
+      <p>All 107 populated <code>date_received</code> values are numeric Excel serials. None are already calendar dates. The serials run from 46266 to 46286, across 9 distinct values. Converting those serials is part of cleaning.</p>
+    </section>
+
+    <section id="text">
+      <h2><span class="section-no">Section 7</span>Text length</h2>
+      <p>Questions are long. Responses are shorter. Notes are short repeated lines.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Column</th><th class="num">Blank rows</th><th class="num">Shortest</th><th class="num">Average</th><th class="num">Longest</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>question</td><td class="num">5</td><td class="num">66</td><td class="num">587.58</td><td class="num">2,217</td></tr>
+          <tr><td>response</td><td class="num">13</td><td class="num">6</td><td class="num">167.54</td><td class="num">737</td></tr>
+          <tr><td>notes</td><td class="num">40</td><td class="num">21</td><td class="num">31.58</td><td class="num">58</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="notes">
+      <h2><span class="section-no">Section 8</span>Notes</h2>
+      <p>The 72 filled notes use only six phrases. Most say either that no drawing or specification update was required, or that an updated specification or drawing was included.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Note</th><th class="num">Rows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>No spec/drawing update required.</td><td class="num">51</td></tr>
+          <tr><td>Updated spec/dwg included</td><td class="num">15</td></tr>
+          <tr><td>Correct attachment sent to USACE for inclusion in the set.</td><td class="num">2</td></tr>
+          <tr><td>Drawing update provided as part of RFI-47</td><td class="num">2</td></tr>
+          <tr><td>Updated spec/dwg included/ Redundant with RFI-08</td><td class="num">1</td></tr>
+          <tr><td>Updated spec included</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="whitespace">
+      <h2><span class="section-no">Section 9</span>Whitespace</h2>
+      <p>No field has leading or trailing whitespace. Blank values are empty, not padded spaces.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="02-raw-data-profile.html">Previous: 2. Profile</a>
+      <a class="pager-next" href="04-clean-rfi-table.html">Next: 4. Clean table</a>
+    </nav>
+    <p>Prepared from <cite>data/processed/raw_rfi.csv</cite> and the profiling checks in <cite>data/processed/profiling/</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

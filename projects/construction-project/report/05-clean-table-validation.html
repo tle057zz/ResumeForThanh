@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>5. Clean Table Validation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 5</p>
+      <h1>Clean table validation</h1>
+      <p class="subtitle">Checks that the analytical RFI table still matches the cleaning rules.</p>
+      <div class="meta">
+        <span>Source: data/processed/validation/validation_results.csv</span>
+        <span>9 checks passed</span>
+        <span>4 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band dusk">
+    <img src="images/site-dusk.png" alt="A lit construction site at dusk with drawing and dashboard overlays.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html" aria-current="page">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#run">Validation run</a></li>
+        <li><a href="#checks">Check results</a></li>
+        <li><a href="#rules">What each check covers</a></li>
+      </ol>
+    </nav>
+
+    <section id="run">
+      <h2><span class="section-no">Section 1</span>Validation run</h2>
+      <p><code>05_validate_rfi.py</code> read <code>data/processed/rfi_clean.csv</code> and <code>data/processed/rfi_excluded.csv</code>. It did not change either file. The results are saved in <code>data/processed/validation/validation_results.csv</code>.</p>
+      <p>All 9 checks passed. The clean table still has 107 RFIs, numbered <code>RFI-001</code> through <code>RFI-107</code>, and the five excluded rows are still outside it.</p>
+    </section>
+
+    <section id="checks">
+      <h2><span class="section-no">Section 2</span>Check results</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th>Check</th><th>Result</th><th>Detail</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>columns</td><td>PASS</td><td>rfi_id, from_party, tasked_to, date_received, question, response, notes, status, response_available</td></tr>
+          <tr><td>row_count</td><td>PASS</td><td>107 rows</td></tr>
+          <tr><td>rfi_id_sequence</td><td>PASS</td><td>RFI-001 to RFI-107</td></tr>
+          <tr><td>question_present</td><td>PASS</td><td>0 blank</td></tr>
+          <tr><td>from_party_present</td><td>PASS</td><td>0 blank</td></tr>
+          <tr><td>tasked_to_present</td><td>PASS</td><td>0 blank</td></tr>
+          <tr><td>date_received_iso</td><td>PASS</td><td>0 invalid</td></tr>
+          <tr><td>status_matches_response</td><td>PASS</td><td>0 mismatches</td></tr>
+          <tr><td>excluded_rows_absent</td><td>PASS</td><td>5 excluded, 0 still in the clean table</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="rules">
+      <h2><span class="section-no">Section 3</span>What each check covers</h2>
+      <p>The column check requires those nine fields, in that order. The identifier check requires the rows to stay in order from <code>RFI-001</code> to <code>RFI-107</code>, with no gaps and no duplicates.</p>
+      <p>Every kept row must have a question, a submitting party, a tasked party, and a real calendar date. Answered is allowed only when a response is present and <code>response_available</code> is Yes. Open is allowed only when the response is blank and <code>response_available</code> is No.</p>
+      <p>The last check reads the five excluded identifiers — the section label and numbers 108 through 111 — and confirms none of them appear in the clean table.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="04-clean-rfi-table.html">Previous: 4. Clean table</a>
+      <a class="pager-next" href="06-rfi-features.html">Next: 6. Features</a>
+    </nav>
+    <p>Prepared from <cite>data/processed/validation/validation_results.csv</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

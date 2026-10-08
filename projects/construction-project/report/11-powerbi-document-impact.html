@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>11. Document Impact</title>
+  <link rel="stylesheet" href="styles.css?v=pager">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 11</p>
+      <h1>Document impact</h1>
+      <p class="subtitle">The second Power BI page: which RFIs change a drawing, a specification, or both.</p>
+      <div class="meta">
+        <span>Page: Design &amp; Document Impact</span>
+        <span>19 document updates</span>
+        <span>8 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band desk">
+    <img src="images/site-desk.png" alt="The open concrete frame of a building under a crane, with a city skyline beyond.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html" aria-current="page">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#page">The page</a></li>
+        <li><a href="#live">Live report</a></li>
+        <li><a href="#kpis">KPI cards</a></li>
+        <li><a href="#categories">Five categories</a></li>
+        <li><a href="#issue">Issue type</a></li>
+        <li><a href="#discipline">Discipline</a></li>
+        <li><a href="#reading">How to read it</a></li>
+      </ol>
+    </nav>
+
+    <section id="page">
+      <h2><span class="section-no">Section 1</span>The page</h2>
+      <p>The page title is Design &amp; Document Impact. The question on the header is which RFIs are causing drawing or specification changes, and where those changes come from. The counts are the unfiltered page, and they match the 107 rows in <code>data/processed/powerbi</code>.</p>
+      <figure class="plate schema">
+        <img src="images/document-impact.jpg" alt="Design and Document Impact dashboard with five KPI cards, a bar chart of five impact categories, stacked bars by issue type and discipline, an update-rate chart, and a discipline matrix.">
+        <figcaption>Design &amp; Document Impact, unfiltered: 19 document updates, a rate of 17.76%.</figcaption>
+      </figure>
+      <p>Five cards run across the top. The category bar and the issue-type stack sit under them. Discipline mix, update rate, and a discipline matrix fill the bottom.</p>
+    </section>
+
+    <section id="live">
+      <h2><span class="section-no">Section 2</span>Live report</h2>
+      <p>The published report is <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">rif_vis</a>. The bar under the frame switches pages: executive, Drawing &amp; Specification Change Analysis, COORDINATION &amp; RESPONSIBILITY, and RFI Register.</p>
+      <figure class="plate schema embed">
+        <iframe title="rif_vis" width="1024" height="1060" src="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" frameborder="0" allowfullscreen="true"></iframe>
+        <figcaption>Live <cite>rif_vis</cite> report. <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">Open the report</a>.</figcaption>
+      </figure>
+      <div class="callout">
+        <p>This chapter is dashboard 2. Use the arrows beside <strong>2 of 4</strong> to open Drawing &amp; Specification Change Analysis. Page 1 is the executive dashboard. Page 3 is COORDINATION &amp; RESPONSIBILITY. Page 4 is RFI Register.</p>
+      </div>
+      <figure class="plate hint">
+        <img src="images/report-pager-2.png" alt="A red circle around the report page control that reads 2 of 4, with a previous arrow and a next arrow.">
+        <figcaption>The page control for Drawing &amp; Specification Change Analysis.</figcaption>
+      </figure>
+    </section>
+
+    <section id="kpis">
+      <h2><span class="section-no">Section 3</span>KPI cards</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th>Card</th><th class="num">Value</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Document Update RFIs</td><td class="num">19</td><td>Drawing, specification, or both</td></tr>
+          <tr><td>Drawing Update RFIs</td><td class="num">18</td><td>Drawing flag is Yes</td></tr>
+          <tr><td>Spec Update RFIs</td><td class="num">17</td><td>Specification flag is Yes</td></tr>
+          <tr><td>Both Updates RFIs</td><td class="num">16</td><td>Counted in both of the cards above</td></tr>
+          <tr><td>Document Update Rate</td><td class="num">17.76%</td><td>19 divided by 107</td></tr>
+        </tbody>
+      </table>
+      <p>Drawing Update 18 and Spec Update 17 are not a split of the 19. Sixteen RFIs sit in both cards. The remaining three are two drawing-only RFIs and one specification-only RFI: 16 + 2 + 1 = 19, and 16 + 2 = 18, and 16 + 1 = 17.</p>
+    </section>
+
+    <section id="categories">
+      <h2><span class="section-no">Section 4</span>Five categories</h2>
+      <p>RFIs by Document Impact is the same five slices as the donut on the Executive Overview, drawn as bars.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Category</th><th class="num">RFIs</th><th class="num">Share</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>No update</td><td class="num">51</td><td class="num">47.66%</td></tr>
+          <tr><td>Unknown</td><td class="num">37</td><td class="num">34.58%</td></tr>
+          <tr><td>Both</td><td class="num">16</td><td class="num">14.95%</td></tr>
+          <tr><td>Drawing only</td><td class="num">2</td><td class="num">1.87%</td></tr>
+          <tr><td>Specification only</td><td class="num">1</td><td class="num">0.93%</td></tr>
+        </tbody>
+      </table>
+      <p>Of the 19 updates, 16 change both documents. That is 84% of the RFIs that record an update. Unknown stays its own category. It is 37 of 107 RFIs, and it is concentrated: Other has 23 of 24 Unknown, General has 8 of 15, Quality / Inspection has 3 of 3, Compliance Requirement has 8 of 11, and Inspection / Quality has 4 of 6.</p>
+    </section>
+
+    <section id="issue">
+      <h2><span class="section-no">Section 5</span>Issue type</h2>
+      <p>The issue-type chart is a 100% stack. Specification Clarification is 62 RFIs. Fourteen of them are Both (22.58%), one is specification only, 30 are No update (48.39%), and 17 are Unknown (27.42%). Those 14 Both rows are most of the 16 combined updates on the page.</p>
+      <p>Missing Information has the two drawing-only RFIs, plus one Both. Drawing Conflict is two RFIs: <code>RFI-002</code> is Both and Electrical, and <code>RFI-101</code> is No update and Civil. Compliance Requirement is 72.73% Unknown. Interface Coordination and Constructability are entirely No update. Scope Gap, the single RFI <code>RFI-096</code>, is Unknown.</p>
+    </section>
+
+    <section id="discipline">
+      <h2><span class="section-no">Section 6</span>Discipline</h2>
+      <p>The discipline stack and the rate chart answer two different questions. Electrical has the most updates, 11 of 40, a rate of 27.50%. Those 11 are 8 Both, both of the drawing-only RFIs, and the one specification-only RFI. Architectural has the highest rate, 2 of 3, which is 66.67%, on a set of three RFIs. Civil is 3 of 9, 33.33%.</p>
+      <p>The rate chart shows the disciplines with a confirmed update, from Architectural at 66.67% down to General at 6.67%. Controls / SCADA, Cybersecurity, Other, and Quality / Inspection have a rate of 0 on the matrix. Other is 24 RFIs with no confirmed update and 23 Unknown, so that zero is not a finding that nothing changed.</p>
+      <p>The matrix column Specification Issue RFIs is the count of issue type Specification Clarification. It is not the Spec Update card. The column totals 62. Drawing Conflict RFIs totals 2, one Civil and one Electrical.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Discipline</th><th class="num">RFIs</th><th class="num">Document updates</th><th class="num">Drawing conflict</th><th class="num">Specification clarification</th><th class="num">Update rate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Architectural</td><td class="num">3</td><td class="num">2</td><td class="num">0</td><td class="num">3</td><td class="num">66.67%</td></tr>
+          <tr><td>Civil</td><td class="num">9</td><td class="num">3</td><td class="num">1</td><td class="num">6</td><td class="num">33.33%</td></tr>
+          <tr><td>Controls / SCADA</td><td class="num">2</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0.00%</td></tr>
+          <tr><td>Cybersecurity</td><td class="num">2</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0.00%</td></tr>
+          <tr><td>Electrical</td><td class="num">40</td><td class="num">11</td><td class="num">1</td><td class="num">24</td><td class="num">27.50%</td></tr>
+          <tr><td>General</td><td class="num">15</td><td class="num">1</td><td class="num">0</td><td class="num">13</td><td class="num">6.67%</td></tr>
+          <tr><td>Mechanical</td><td class="num">4</td><td class="num">1</td><td class="num">0</td><td class="num">4</td><td class="num">25.00%</td></tr>
+          <tr><td>Other</td><td class="num">24</td><td class="num">0</td><td class="num">0</td><td class="num">8</td><td class="num">0.00%</td></tr>
+          <tr><td>Quality / Inspection</td><td class="num">3</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0.00%</td></tr>
+          <tr><td>Structural</td><td class="num">5</td><td class="num">1</td><td class="num">0</td><td class="num">4</td><td class="num">20.00%</td></tr>
+          <tr><td>Total</td><td class="num">107</td><td class="num">19</td><td class="num">2</td><td class="num">62</td><td class="num">17.76%</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="reading">
+      <h2><span class="section-no">Section 7</span>How to read it</h2>
+      <p>Nineteen of 107 RFIs record a document update, and 16 of those 19 change both the drawing and the specification. Electrical carries 11 of the 19. Architectural’s 66.67% rate is 2 RFIs out of 3. Specification Clarification is both the largest issue type and the source of 15 of the 19 updates.</p>
+      <p>The 37 Unknown rows are a gap in the notes, not a No. Other, General, Quality / Inspection, and Compliance Requirement hold most of that gap. The next page separates submitters from the parties tasked to answer. The live report above includes the RFI Register.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="10-powerbi-executive-overview.html">Previous: 10. Executive overview</a>
+      <a class="pager-next" href="12-powerbi-coordination.html">Next: 12. Coordination</a>
+    </nav>
+    <p>Prepared from the Design &amp; Document Impact page and the tables in <cite>data/processed/powerbi</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>

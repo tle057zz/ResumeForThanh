@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>7. Star Schema</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 7</p>
+      <h1>Star schema</h1>
+      <p class="subtitle">The feature table loaded into DuckDB as one fact and four dimensions.</p>
+      <div class="meta">
+        <span>Source: data/processed/rfi.duckdb</span>
+        <span>6 checks passed</span>
+        <span>4 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band frame">
+    <img src="images/site-desk.png" alt="The open concrete frame of a building under a crane, with a city skyline beyond.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html" aria-current="page">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#load">Database load</a></li>
+        <li><a href="#checks">Quality checks</a></li>
+        <li><a href="#dimensions">Dimensions</a></li>
+        <li><a href="#relationships">Relationships</a></li>
+        <li><a href="#diagrams">Diagrams</a></li>
+      </ol>
+    </nav>
+
+    <section id="load">
+      <h2><span class="section-no">Section 1</span>Database load</h2>
+      <p><code>07_load_rfi_duckdb.py</code> read <code>data/processed/rfi_features.csv</code> and ran <code>sql/01_create_star_schema.sql</code>. It wrote <code>data/processed/rfi.duckdb</code>. The feature CSV was not changed. A later run replaces that database file.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Table</th><th class="num">Rows</th><th>Grain</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>fact_rfi</td><td class="num">107</td><td>One row per RFI, RFI-001 to RFI-107</td></tr>
+          <tr><td>dim_date</td><td class="num">9</td><td>One row per received date</td></tr>
+          <tr><td>dim_party</td><td class="num">16</td><td>One row per party name</td></tr>
+          <tr><td>dim_discipline</td><td class="num">10</td><td>One row per discipline</td></tr>
+          <tr><td>dim_issue_type</td><td class="num">10</td><td>One row per issue type</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="checks">
+      <h2><span class="section-no">Section 2</span>Quality checks</h2>
+      <p><code>sql/02_quality_checks.sql</code> wrote <code>data/processed/validation/sql_quality_checks.csv</code>. All 6 checks passed.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Check</th><th>Result</th><th>Detail</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>fact_row_count</td><td>PASS</td><td>107 rows</td></tr>
+          <tr><td>duplicate_rfi_id</td><td>PASS</td><td>0 duplicated identifiers</td></tr>
+          <tr><td>rfi_id_sequence</td><td>PASS</td><td>RFI-001 to RFI-107</td></tr>
+          <tr><td>missing_dimension_keys</td><td>PASS</td><td>0 facts missing a dimension key</td></tr>
+          <tr><td>blank_question</td><td>PASS</td><td>0 blank</td></tr>
+          <tr><td>invalid_status</td><td>PASS</td><td>0 outside Answered and Open</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="dimensions">
+      <h2><span class="section-no">Section 3</span>Dimensions</h2>
+      <p>Received dates run from 1 September 2026 to 21 September 2026. Each <code>date_key</code> is the date written as <code>YYYYMMDD</code>.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Date received</th><th>Date key</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2026-09-01</td><td>20260901</td></tr>
+          <tr><td>2026-09-02</td><td>20260902</td></tr>
+          <tr><td>2026-09-04</td><td>20260904</td></tr>
+          <tr><td>2026-09-10</td><td>20260910</td></tr>
+          <tr><td>2026-09-14</td><td>20260914</td></tr>
+          <tr><td>2026-09-15</td><td>20260915</td></tr>
+          <tr><td>2026-09-16</td><td>20260916</td></tr>
+          <tr><td>2026-09-17</td><td>20260917</td></tr>
+          <tr><td>2026-09-21</td><td>20260921</td></tr>
+        </tbody>
+      </table>
+      <p>The 16 parties are the distinct submitting and tasked names together: AE, AE/JBMDL, AE/JBMDL/PM, AE/PM, CT, CT/PM, Carbon Recall Chattanooga, DAVID BOLAND, INC, Dobco, Inc., JBMDL, JBMDL/AE, PM, Richard Group LCC, Schweitzer Engineering Laboratories, Inc., USACE DB, and Willdan.</p>
+      <p>The 10 disciplines are Architectural, Civil, Controls / SCADA, Cybersecurity, Electrical, General, Mechanical, Other, Quality / Inspection, and Structural.</p>
+      <p>The 10 issue types are Compliance Requirement, Constructability, Design Clarification, Drawing Conflict, Inspection / Quality, Interface Coordination, Material Requirement, Missing Information, Scope Gap, and Specification Clarification.</p>
+    </section>
+
+    <section id="relationships">
+      <h2><span class="section-no">Section 4</span>Relationships</h2>
+      <p>Each fact row points at exactly one date, one submitting party, one tasked party, one discipline, and one issue type. Submitting and tasked parties share <code>dim_party</code>.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Fact column</th><th>Dimension</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>date_key</td><td>dim_date</td><td>Date the RFI was received</td></tr>
+          <tr><td>from_party_key</td><td>dim_party</td><td>Party that submitted the RFI</td></tr>
+          <tr><td>tasked_party_key</td><td>dim_party</td><td>Party tasked to answer the RFI</td></tr>
+          <tr><td>discipline_key</td><td>dim_discipline</td><td>Derived engineering discipline</td></tr>
+          <tr><td>issue_type_key</td><td>dim_issue_type</td><td>Derived issue type</td></tr>
+        </tbody>
+      </table>
+      <p>Question, response, notes, status, document-update flags, and word counts stay on <code>fact_rfi</code>.</p>
+    </section>
+
+    <section id="diagrams">
+      <h2><span class="section-no">Section 5</span>Diagrams</h2>
+      <figure class="plate">
+        <img src="images/star-schema.png" alt="Star schema with fact_rfi in the center, linked to dim_date, dim_party, dim_discipline, and dim_issue_type.">
+        <figcaption>fact_rfi at the center, with one link to each dimension.</figcaption>
+      </figure>
+      <figure class="plate schema">
+        <img src="images/star-schema-columns.png" alt="Entity diagram listing the columns of dim_date, dim_party, dim_discipline, dim_issue_type, and fact_rfi.">
+        <figcaption>Columns and keys for the fact and the four dimensions.</figcaption>
+      </figure>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="06-rfi-features.html">Previous: 6. Features</a>
+      <a class="pager-next" href="08-python-scripts.html">Next: 8. Python scripts</a>
+    </nav>
+    <p>Prepared from <cite>data/processed/rfi.duckdb</cite> and <cite>data/processed/validation/sql_quality_checks.csv</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>
