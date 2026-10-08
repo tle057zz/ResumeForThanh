@@ -83,7 +83,29 @@
 
     <section id="roles">
       <h2><span class="section-no">Section 3</span>Two roles, one party list</h2>
-      <p><code>dim_party</code> is one list of 16 names. <code>from_party_key</code> is the active relationship, so a chart titled with <code>party_name</code> and no extra measure counts submitters. <code>tasked_party_key</code> is the inactive relationship. The responsible-party charts on this page turn that relationship on for the measure. The two roles do not share a name: six contractors submit, and ten government or design parties are tasked.</p>
+      <p>The originating party is who asked. The responsible party is who must answer.</p>
+      <p>In the workbook those are the <code>FROM</code> and <code>TASKED</code> columns. In the star schema they are two keys on the same RFI, both pointing at <code>dim_party</code>: <code>from_party_key</code> for the submitter and <code>tasked_party_key</code> for the party tasked to respond.</p>
+      <p>On this register the two roles do not share a name. Six contractors submit the questions. Ten government or design parties are asked to answer them.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Role</th><th>Source column</th><th>Who they are here</th><th>What the register shows</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Originating party</td>
+            <td><code>FROM</code></td>
+            <td>The organisation that submitted the RFI</td>
+            <td>DAVID BOLAND, INC submitted 71 of 107. The 8 open RFIs came from Dobco, Inc., Richard Group LCC, and Willdan.</td>
+          </tr>
+          <tr>
+            <td>Responsible party</td>
+            <td><code>TASKED</code></td>
+            <td>The party assigned to review and respond</td>
+            <td>AE was tasked with 66, and all 66 are answered. CT was tasked with 15, and all 8 open RFIs sit with CT.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Power BI keeps the roles apart. The active relationship is the originating party, so a normal chart of <code>party_name</code> counts submitters. The responsible-party charts turn on the inactive <code>tasked_party_key</code> relationship for that measure only. That is why this page can show both who generated the questions and who still owes the answer.</p>
       <p>The received date is on every row. There is no answered date, so this page does not show days open or a response-time target.</p>
     </section>
 

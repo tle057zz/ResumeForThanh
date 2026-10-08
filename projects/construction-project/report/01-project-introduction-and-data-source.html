@@ -83,15 +83,15 @@
       <p>A contractor then raises an RFI in Forma Build against the published information. The RFI moves from draft, to submitted, to open for review, to answered with one official response, then closed and distributed. The closed RFI can be saved back into the CDE. Submittals, forms, and issues follow the same pattern: each one hangs off the published documents.</p>
       <p>The RFI register is exported from that system. The export is the raw Excel workbook. Steps −7 through 0 run from the start of the project to that export. Step 01 is where this platform picks up the register.</p>
       <ol class="flow">
-        <li class="prior" data-step="-7">Project and CDE set up in Forma</li>
-        <li class="prior" data-step="-6">Site planning in Forma</li>
+        <li class="prior note" data-step="-7">Project and CDE set up in Forma<span class="flow-note">I set up folders, naming, and permissions so the BIM engineer has one controlled place to file the model.</span></li>
+        <li class="prior note" data-step="-6">Site planning in Forma<span class="flow-note">Planners set the site context before design starts.</span></li>
         <li class="prior note" data-step="-5">Design work in progress<span class="flow-note">BIM engineers place their Revit models here, in the CDE work-in-progress area.</span></li>
-        <li class="prior" data-step="-4">Shared for review in the CDE</li>
-        <li class="prior" data-step="-3">Models published to the Forma CDE</li>
-        <li class="prior" data-step="-2">EDMS revision and issue control</li>
-        <li class="prior" data-step="-1">RFI closed in Forma Build</li>
-        <li class="prior" data-step="0">RFI register exported</li>
-        <li>Raw RFI Excel data</li>
+        <li class="prior note" data-step="-4">Shared for review in the CDE<span class="flow-note">The BIM team releases the model for coordination. I look after that handoff.</span></li>
+        <li class="prior note" data-step="-3">Models published to the Forma CDE<span class="flow-note">This is the authorised revision. The site builds from this issue.</span></li>
+        <li class="prior note" data-step="-2">EDMS revision and issue control<span class="flow-note">I record the current revision, who approved it, and who it was issued to.</span></li>
+        <li class="prior note" data-step="-1">RFI closed in Forma Build<span class="flow-note">I run the RFI to one official answer. A drawing change goes back to the BIM engineer.</span></li>
+        <li class="prior note" data-step="0">RFI register exported<span class="flow-note">The closed register leaves Forma as a workbook.</span></li>
+        <li class="note">Raw RFI Excel data<span class="flow-note">This platform starts here.</span></li>
         <li>Python cleaning and validation</li>
         <li>Structured SQL database</li>
         <li>Power BI reporting</li>
