@@ -6,9 +6,10 @@
   <title>Digital Engineering RFI Analytics &amp; AI Platform — Report</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="contents-page">
   <div class="sheet">
   <header class="masthead hero">
+    <div class="site-glow" aria-hidden="true"></div>
     <div class="masthead-inner">
       <p class="kicker">Project report</p>
       <h1>Digital Engineering RFI Analytics &amp; AI Platform</h1>
@@ -67,16 +68,50 @@
     <section>
       <h2><span class="section-no">Chapters</span>Read the report</h2>
       <p>The first chapter sets the purpose of the platform and the public RFI workbook. Later chapters follow the data from the workbook profile, through the raw table, the clean RFI table, validation, and the derived feature fields, into the DuckDB star schema. The script chapter lists the Python files in run order. Chapter 9 describes the Power BI tables. Chapters 10 to 13 are the four Power BI pages. The last chapter is the Databricks work still to run, and it is updated as each notebook finishes.</p>
+      <p>Digital engineering across a construction project, from design through a common data environment, is set out in this talk by Chandra Hampiholi of Surbana Jurong.</p>
+      <figure class="plate">
+        <a href="https://www.youtube.com/watch?v=-wlHp3dd0sk">
+          <img src="images/idd-digital-engineering.jpg" alt="Title slide: How Digital Engineering is Transforming the Construction Industry, IDD for Built-Environment, by Chandra Hampiholi of Surbana Jurong.">
+        </a>
+        <figcaption><a href="https://www.youtube.com/watch?v=-wlHp3dd0sk">How Digital Engineering is Transforming the Construction Industry</a> (BuildTech Asia).</figcaption>
+      </figure>
+      <p>A five-minute overview of digital engineering, from requirements through a model and into the built system, is below.</p>
+      <figure class="plate video">
+        <iframe title="Digital Engineering [5min Overview]" src="https://www.youtube.com/embed/RCCFpc5tEQ8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <figcaption><a href="https://www.youtube.com/watch?v=RCCFpc5tEQ8">Digital Engineering [5min Overview]</a> (CameoMagic).</figcaption>
+      </figure>
       <p><a href="14-workflow-still-ahead.html">Read the work still ahead</a></p>
     </section>
   </main>
 
   <footer class="site-footer">
+    <div class="hazard" aria-hidden="true"></div>
     <nav class="chapter-pager" aria-label="Chapter sequence">
       <a class="pager-next" href="01-project-introduction-and-data-source.html">Next: 1. Introduction</a>
     </nav>
     <p>Chapters prepared from the project notes, the workbook profile, the raw-table investigation, the clean RFI table, the validation results, the feature table, the DuckDB star schema, the Python scripts, the Power BI export, the four Power BI pages, and the Databricks work still to run.</p>
   </footer>
   </div>
+  <script>
+    (function () {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var nodes = document.querySelectorAll(".contents-page .hazard, .contents-page .site-glow");
+      if (!nodes.length || !("IntersectionObserver" in window)) return;
+      var seen = new WeakMap();
+      function apply(el) {
+        el.classList.toggle("is-paused", !(seen.get(el) && !document.hidden));
+      }
+      var watch = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          seen.set(entry.target, entry.isIntersecting);
+          apply(entry.target);
+        });
+      }, { rootMargin: "48px" });
+      nodes.forEach(function (el) { watch.observe(el); });
+      document.addEventListener("visibilitychange", function () {
+        nodes.forEach(apply);
+      });
+    })();
+  </script>
 </body>
 </html>
