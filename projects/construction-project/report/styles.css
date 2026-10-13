@@ -303,6 +303,38 @@ a:hover {
   padding: 1.5rem 1.55rem 2.2rem;
 }
 
+/* Site elevation at the foot of every sheet: frame building, brick wall, truck. */
+.page::after {
+  content: "";
+  display: block;
+  height: 9rem;
+  margin: 2.6rem -1.55rem -2.2rem;
+  pointer-events: none;
+  background-color: #efe8d6;
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20176%2074%22%3E%3Crect%20x%3D%224%22%20y%3D%2250%22%20width%3D%22164%22%20height%3D%225%22%20fill%3D%22%23161d22%22%2F%3E%3Cpath%20fill%3D%22%23243038%22%20d%3D%22M6%2022h84v28H6z%22%2F%3E%3Cpath%20fill%3D%22%23d86a1c%22%20d%3D%22M6%2022h84v7H6z%22%2F%3E%3Cpath%20stroke%3D%22%23f6f3ea%22%20stroke-width%3D%222%22%20d%3D%22M22%2029v21M40%2029v21M58%2029v21M76%2029v21%22%2F%3E%3Cpath%20fill%3D%22%23243038%22%20d%3D%22M90%2012h62v38H90z%22%2F%3E%3Cpath%20fill%3D%22%23f0c014%22%20d%3D%22M90%2012h62v7H90z%22%2F%3E%3Cpath%20fill%3D%22%23d7e4ec%22%20d%3D%22M114%2022h30v16H114z%22%2F%3E%3Cpath%20stroke%3D%22%23f0c014%22%20stroke-width%3D%222%22%20d%3D%22M104%2022v24%22%2F%3E%3Crect%20x%3D%22156%22%20y%3D%2240%22%20width%3D%2214%22%20height%3D%227%22%20fill%3D%22%23d86a1c%22%2F%3E%3Ccircle%20cx%3D%2234%22%20cy%3D%2260%22%20r%3D%2213%22%20fill%3D%22%23161d22%22%2F%3E%3Ccircle%20cx%3D%2234%22%20cy%3D%2260%22%20r%3D%225%22%20fill%3D%22%23f6f3ea%22%2F%3E%3Ccircle%20cx%3D%2272%22%20cy%3D%2260%22%20r%3D%2213%22%20fill%3D%22%23161d22%22%2F%3E%3Ccircle%20cx%3D%2272%22%20cy%3D%2260%22%20r%3D%225%22%20fill%3D%22%23f6f3ea%22%2F%3E%3Ccircle%20cx%3D%22128%22%20cy%3D%2260%22%20r%3D%2213%22%20fill%3D%22%23161d22%22%2F%3E%3Ccircle%20cx%3D%22128%22%20cy%3D%2260%22%20r%3D%225%22%20fill%3D%22%23f6f3ea%22%2F%3E%3Crect%20x%3D%22108%22%20y%3D%222%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23f0c014%22%2F%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20112%22%3E%3Crect%20x%3D%226%22%20y%3D%22104%22%20width%3D%22188%22%20height%3D%228%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%224%22%20width%3D%228%22%20height%3D%22104%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%2256%22%20y%3D%224%22%20width%3D%228%22%20height%3D%22104%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%22102%22%20y%3D%224%22%20width%3D%228%22%20height%3D%22104%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%22148%22%20y%3D%224%22%20width%3D%228%22%20height%3D%22104%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%22186%22%20y%3D%224%22%20width%3D%228%22%20height%3D%22104%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%224%22%20width%3D%22184%22%20height%3D%227%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%2240%22%20width%3D%22184%22%20height%3D%226%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%2210%22%20y%3D%2274%22%20width%3D%22184%22%20height%3D%226%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2282%22%20width%3D%2234%22%20height%3D%2220%22%20fill%3D%22%23c4622d%22%2F%3E%3Crect%20x%3D%2266%22%20y%3D%2282%22%20width%3D%2234%22%20height%3D%2220%22%20fill%3D%22%23a84b28%22%2F%3E%3Crect%20x%3D%22112%22%20y%3D%2282%22%20width%3D%2234%22%20height%3D%2220%22%20fill%3D%22%23c4622d%22%2F%3E%3Crect%20x%3D%22158%22%20y%3D%2282%22%20width%3D%2226%22%20height%3D%2220%22%20fill%3D%22%23a84b28%22%2F%3E%3Cpath%20stroke%3D%22%23f6f3ea%22%20stroke-width%3D%222%22%20d%3D%22M20%2092h34M66%2092h34M112%2092h34M158%2092h26M37%2082v20M83%2082v20M129%2082v20%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2250%22%20width%3D%2222%22%20height%3D%2216%22%20fill%3D%22%23c5d5df%22%20stroke%3D%22%23243038%22%20stroke-width%3D%222%22%2F%3E%3Crect%20x%3D%2270%22%20y%3D%2250%22%20width%3D%2222%22%20height%3D%2216%22%20fill%3D%22%23c5d5df%22%20stroke%3D%22%23243038%22%20stroke-width%3D%222%22%2F%3E%3Crect%20x%3D%22116%22%20y%3D%2250%22%20width%3D%2222%22%20height%3D%2216%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%22160%22%20y%3D%2250%22%20width%3D%2218%22%20height%3D%2216%22%20fill%3D%22%23c5d5df%22%20stroke%3D%22%23243038%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20stroke%3D%22%23f0c014%22%20stroke-width%3D%223%22%20d%3D%22M20%2012l34%2026M54%2012L20%2038%22%2F%3E%3Cpath%20stroke%3D%22%23f0c014%22%20stroke-width%3D%223%22%20d%3D%22M66%2012l34%2026M100%2012L66%2038%22%2F%3E%3Cpath%20stroke%3D%22%23f0c014%22%20stroke-width%3D%223%22%20d%3D%22M116%2018h22M116%2018v14M138%2018v14%22%2F%3E%3C%2Fsvg%3E"),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2236%22%20height%3D%2216%22%20viewBox%3D%220%200%2036%2016%22%3E%3Crect%20y%3D%227%22%20width%3D%2236%22%20height%3D%223%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%228%22%20width%3D%224%22%20height%3D%2216%22%20fill%3D%22%23243038%22%2F%3E%3Crect%20x%3D%228%22%20width%3D%224%22%20height%3D%224%22%20fill%3D%22%23f0c014%22%2F%3E%3C%2Fsvg%3E"),
+    linear-gradient(#f0c014, #f0c014),
+    linear-gradient(#161d22, #161d22),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2264%22%20height%3D%2228%22%20viewBox%3D%220%200%2064%2028%22%3E%3Crect%20width%3D%2264%22%20height%3D%2228%22%20fill%3D%22%23f3ead8%22%2F%3E%3Crect%20width%3D%2230%22%20height%3D%2212%22%20fill%3D%22%23c4622d%22%2F%3E%3Crect%20x%3D%2232%22%20width%3D%2230%22%20height%3D%2212%22%20fill%3D%22%23a84b28%22%2F%3E%3Crect%20y%3D%2216%22%20width%3D%2214%22%20height%3D%2212%22%20fill%3D%22%23a84b28%22%2F%3E%3Crect%20x%3D%2216%22%20y%3D%2216%22%20width%3D%2230%22%20height%3D%2212%22%20fill%3D%22%23c4622d%22%2F%3E%3Crect%20x%3D%2248%22%20y%3D%2216%22%20width%3D%2216%22%20height%3D%2212%22%20fill%3D%22%23b5522a%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat, no-repeat, repeat-x, no-repeat, no-repeat, repeat-x;
+  background-position:
+    right 1.15rem bottom 0,
+    left 1.15rem bottom 2.5rem,
+    left bottom 2.75rem,
+    left bottom 2.5rem,
+    left bottom,
+    left bottom 0.75rem;
+  background-size:
+    10rem auto,
+    11.5rem auto,
+    36px 16px,
+    100% 4px,
+    100% 0.75rem,
+    64px 28px;
+}
+
 .toc,
 .panel,
 .field,
@@ -783,6 +815,93 @@ li + li {
   margin-left: auto;
 }
 
+/* A brick course lays across a control when it is chosen or current. */
+.report-nav a,
+.stack li,
+.link-card {
+  position: relative;
+}
+
+.report-nav a::after,
+.stack li::after,
+.link-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    #c4622d 0 8px,
+    #f3ead8 8px 9px,
+    #a84b28 9px 17px,
+    #f3ead8 17px 18px
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.stack li.plus::after {
+  content: none;
+}
+
+.report-nav a:hover::after,
+.report-nav a:focus-visible::after,
+.report-nav a:active::after,
+.report-nav a[aria-current="page"]::after,
+.stack li:hover::after,
+.link-card:hover::after,
+.link-card:focus-visible::after,
+.link-card:active::after {
+  transform: scaleX(1);
+}
+
+.chapter-pager a {
+  padding-bottom: 0.14rem;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #c4622d 0 8px,
+    #161d22 8px 9px,
+    #a84b28 9px 17px,
+    #161d22 17px 18px
+  );
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 3px;
+}
+
+.chapter-pager a:hover,
+.chapter-pager a:focus-visible,
+.chapter-pager a:active {
+  background-size: 100% 3px;
+  color: #fff;
+}
+
+.report-nav a:focus-visible,
+.link-card:focus-visible {
+  outline: 2px solid var(--steel);
+  outline-offset: 2px;
+}
+
+.chapter-pager a:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .report-nav a::after,
+  .stack li::after,
+  .link-card::after {
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .chapter-pager a {
+    transition: background-size 220ms cubic-bezier(0.16, 1, 0.3, 1), color 150ms ease;
+  }
+}
+
 @media (max-width: 720px) {
   body {
     padding: 0.6rem 0 1.2rem;
@@ -833,6 +952,26 @@ li + li {
   .site-footer {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .page::after {
+    height: 7.25rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    background-position:
+      right 0.4rem bottom 0,
+      left 0.4rem bottom 1.9rem,
+      left bottom 2.1rem,
+      left bottom 1.9rem,
+      left bottom,
+      left bottom 0.55rem;
+    background-size:
+      7.2rem auto,
+      8.4rem auto,
+      28px 12px,
+      100% 3px,
+      100% 0.55rem,
+      48px 21px;
   }
 }
 
@@ -1008,13 +1147,20 @@ html:has(body.contents-page) {
 
   .contents-page .report-nav a,
   .contents-page .chapter-pager a {
-    transition: background-color 150ms ease, color 150ms ease;
+    transition: background-color 150ms ease, background-size 220ms cubic-bezier(0.16, 1, 0.3, 1), color 150ms ease;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html:has(body.contents-page) {
     scroll-behavior: auto;
+  }
+
+  .report-nav a::after,
+  .stack li::after,
+  .link-card::after,
+  .chapter-pager a {
+    transition: none;
   }
 }
 
@@ -1087,6 +1233,7 @@ html:has(body.contents-page) {
   .hazard,
   .site-glow,
   .toc::after,
+  .page::after,
   .masthead::before,
   .masthead::after {
     display: none;
