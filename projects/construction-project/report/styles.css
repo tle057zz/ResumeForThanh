@@ -402,6 +402,67 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Each section in "In this chapter" lays a brick course, in list order. */
+nav[aria-label="Chapter contents"] li {
+  break-inside: avoid;
+  padding: 0.12rem 0.2rem;
+}
+
+nav[aria-label="Chapter contents"] li::marker {
+  color: var(--steel);
+  font-family: var(--sans);
+  font-weight: 700;
+}
+
+nav[aria-label="Chapter contents"] a {
+  background-image: repeating-linear-gradient(
+    90deg,
+    #c4622d 0 8px,
+    #f3ead8 8px 9px,
+    #a84b28 9px 17px,
+    #f3ead8 17px 18px
+  );
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+nav[aria-label="Chapter contents"] li:hover,
+nav[aria-label="Chapter contents"] li:focus-within {
+  background: rgba(240, 192, 20, 0.34);
+}
+
+nav[aria-label="Chapter contents"] a:hover,
+nav[aria-label="Chapter contents"] a:focus-visible,
+nav[aria-label="Chapter contents"] a:active {
+  text-decoration: none;
+  color: #14364a;
+}
+
+nav[aria-label="Chapter contents"] a:focus-visible {
+  outline: 2px solid var(--steel);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  nav[aria-label="Chapter contents"] a {
+    animation: bay-course 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  nav[aria-label="Chapter contents"] li:nth-child(1) a { animation-delay: 0.04s; }
+  nav[aria-label="Chapter contents"] li:nth-child(2) a { animation-delay: 0.08s; }
+  nav[aria-label="Chapter contents"] li:nth-child(3) a { animation-delay: 0.12s; }
+  nav[aria-label="Chapter contents"] li:nth-child(4) a { animation-delay: 0.16s; }
+  nav[aria-label="Chapter contents"] li:nth-child(5) a { animation-delay: 0.2s; }
+  nav[aria-label="Chapter contents"] li:nth-child(6) a { animation-delay: 0.24s; }
+  nav[aria-label="Chapter contents"] li:nth-child(7) a { animation-delay: 0.28s; }
+  nav[aria-label="Chapter contents"] li:nth-child(8) a { animation-delay: 0.32s; }
+  nav[aria-label="Chapter contents"] li:nth-child(9) a { animation-delay: 0.36s; }
+  nav[aria-label="Chapter contents"] li:nth-child(n + 10) a { animation-delay: 0.4s; }
+}
+
 section {
   margin: 2.4rem 0;
 }
@@ -1162,6 +1223,16 @@ html:has(body.contents-page) {
   .chapter-pager a {
     transition: none;
   }
+
+  nav[aria-label="Chapter contents"] a {
+    animation: none;
+    background-size: 100% 3px;
+  }
+}
+
+@keyframes bay-course {
+  from { background-size: 0 3px; }
+  to { background-size: 100% 3px; }
 }
 
 @keyframes work-lights {
@@ -1237,6 +1308,11 @@ html:has(body.contents-page) {
   .masthead::before,
   .masthead::after {
     display: none;
+  }
+
+  nav[aria-label="Chapter contents"] a {
+    animation: none;
+    background-size: 100% 3px;
   }
 
   a {
