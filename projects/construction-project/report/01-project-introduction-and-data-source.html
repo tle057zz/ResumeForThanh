@@ -38,7 +38,8 @@
     <a href="11-powerbi-document-impact.html">11. Document impact</a>
     <a href="12-powerbi-coordination.html">12. Coordination</a>
     <a href="13-powerbi-register.html">13. RFI register</a>
-    <a href="14-workflow-still-ahead.html">14. Work still ahead</a>
+    <a href="14-dashboard-conclusion.html">14. Conclusion</a>
+    <a href="15-workflow-still-ahead.html">15. Work still ahead</a>
   </nav>
 
   <main class="page">
@@ -65,39 +66,41 @@
 
     <section id="introduction">
       <h2><span class="section-no">Section 1</span>Project introduction</h2>
-      <p>This project develops a <strong>Digital Engineering RFI Analytics &amp; AI Platform</strong> using a real construction Request for Information (RFI) dataset from a U.S. Army Corps of Engineers infrastructure project.</p>
+      <p>This project develops a <strong>Digital Engineering RFI Analytics &amp; AI Platform</strong> using a real procurement-stage Request for Information (RFI) / bidder-clarification dataset from a U.S. Army Corps of Engineers infrastructure procurement.</p>
       <p>The goal is to show how project information stored in spreadsheets and other semi-structured sources can become a structured digital workflow for project reporting, engineering coordination, document control, automation, and AI-assisted analysis.</p>
-      <h3 id="project-systems">Project systems before the workbook</h3>
-      <p>A project begins when the team sets it up in Autodesk Forma and establishes the common data environment. Site planning and design come next. An RFI starts only after drawings and specifications are published. The spreadsheet is the export of that controlled register. Two roles inside Forma sit in front of this platform:</p>
+      <h3 id="project-systems">Illustrative upstream project workflow and RFI analytics pipeline</h3>
+      <p><strong>Scope and provenance.</strong> The actual dataset is a procurement-stage RFI / bidder-clarification register released publicly by the U.S. Army Corps of Engineers (USACE) with solicitation W912DS26BA032. The original internal system used to collect, review, and compile the questions is <strong>not verified</strong>. Autodesk Forma is presented below solely as an <strong>illustrative CDE / project-systems architecture</strong>, not as the proven origin of the Excel workbook.</p>
+      <p>For the illustrative upstream process, a project team could configure <strong>Forma Data Management</strong> as its common data environment (CDE), define information requirements, and support drawings, specifications, and models created by engineers using tools such as Revit, Civil 3D, or AutoCAD. Document-control or EDMS capabilities operate <em>throughout</em> information development, review, authorisation, issue, and archival, rather than appearing as one step after publication.</p>
       <ul>
-        <li><strong>Common data environment (CDE).</strong> Forma Data Management, formerly Autodesk Docs, is the CDE. It is the single place for models, drawings, and specifications. Design files are produced in Revit, Civil 3D, and AutoCAD, then published into the CDE.</li>
-        <li><strong>Electronic document management system (EDMS).</strong> Document control is the EDMS function of that same environment. It records the current revision, who approved it, and who it was issued to. Superseded revisions stay in the archive. The site builds from the published issue.</li>
+        <li><strong>Common data environment (CDE).</strong> A governed approach to collecting, managing, and exchanging project information. In the example architecture, Forma Data Management provides the controlled files, access, versioning, and review environment.</li>
+        <li><strong>Electronic document management (EDMS).</strong> The document-control functionality supporting registration, metadata, revisions, reviews, permissions, transmittals, and audit records across the lifecycle. A CDE may incorporate these EDMS capabilities.</li>
+        <li><strong>Project Systems Engineer (illustrative role).</strong> Supports configuration, permission controls, workflow testing, integration, troubleshooting, and analytics; design authorisation and technical answers remain with the responsible engineering and procurement personnel.</li>
       </ul>
-      <p>Each file moves through four states in the CDE, following ISO 19650:</p>
+      <p>ISO 19650 commonly describes four CDE <strong>information states</strong>, not necessarily four physical folders:</p>
       <ol>
-        <li><strong>Work in progress.</strong> Only the authoring team can use the file.</li>
-        <li><strong>Shared.</strong> The file is coordinated and open for review and comment.</li>
-        <li><strong>Published.</strong> The file is the authorised revision.</li>
-        <li><strong>Archived.</strong> A superseded revision is kept as a record.</li>
+        <li><strong>Work in progress.</strong> Information being developed and checked by its responsible task team.</li>
+        <li><strong>Shared.</strong> Information made available for coordination or review under agreed controls.</li>
+        <li><strong>Published.</strong> Information authorised for a specified purpose; here, the relevant example is <em>issued-for-tender</em> documentation, not automatically issued-for-construction documentation.</li>
+        <li><strong>Archived.</strong> The retained history and record of superseded or exchanged information.</li>
       </ol>
-      <p>A contractor then raises an RFI in Forma Build against the published information. The RFI moves from draft, to submitted, to open for review, to answered with one official response, then closed and distributed. The closed RFI can be saved back into the CDE. Submittals, forms, and issues follow the same pattern: each one hangs off the published documents.</p>
-      <p>The RFI register is exported from that system. The export is the raw Excel workbook. Steps −7 through 0 run from the start of the project to that export. Step 01 is where this platform picks up the register.</p>
+      <p>After procurement drawings and specifications are released, prospective bidders can raise technical clarification questions. The contracting and engineering teams register, allocate, investigate, and respond to them. In a hypothetical implementation those questions might be tracked in a digital workflow system, but the source does <strong>not</strong> establish that USACE used Forma Build. Nor does it establish that every RFI was closed before the register was published.</p>
+      <p><strong>How to read the workflow:</strong> Steps −7 to −1 describe an illustrative upstream information-management and procurement sequence. Step 0 identifies the <strong>verified public Excel source</strong>. From Step 01 onward, this portfolio project ingests and analyses that workbook. Steps 05–07 describe planned advanced analytics and AI capabilities, not established features of the original source system.</p>
       <ol class="flow">
-        <li class="prior note" data-step="-7">Project and CDE set up in Forma<span class="flow-note">I set up folders, naming, and permissions so the BIM engineer has one controlled place to file the model.</span></li>
-        <li class="prior note" data-step="-6">Site planning in Forma<span class="flow-note">Planners set the site context before design starts.</span></li>
-        <li class="prior note" data-step="-5">Design work in progress<span class="flow-note">BIM engineers place their Revit models here, in the CDE work-in-progress area.</span></li>
-        <li class="prior note" data-step="-4">Shared for review in the CDE<span class="flow-note">The BIM team releases the model for coordination. I look after that handoff.</span></li>
-        <li class="prior note" data-step="-3">Models published to the Forma CDE<span class="flow-note">This is the authorised revision. The site builds from this issue.</span></li>
-        <li class="prior note" data-step="-2">EDMS revision and issue control<span class="flow-note">I record the current revision, who approved it, and who it was issued to.</span></li>
-        <li class="prior note" data-step="-1">RFI closed in Forma Build<span class="flow-note">I run the RFI to one official answer. A drawing change goes back to the BIM engineer.</span></li>
-        <li class="prior note" data-step="0">RFI register exported<span class="flow-note">The closed register leaves Forma as a workbook.</span></li>
-        <li class="note">Raw RFI Excel data<span class="flow-note">This platform starts here.</span></li>
-        <li>Python cleaning and validation</li>
-        <li>Structured SQL database</li>
-        <li>Power BI reporting</li>
-        <li>Databricks analytics</li>
-        <li>Machine learning and NLP models</li>
-        <li>Semantic search and RFI AI Copilot</li>
+        <li class="prior note" data-step="-7">Project requirements and CDE setup<span class="flow-note">Illustrative: define information requirements, naming, metadata, permissions, user groups, and controlled document workflows in a platform such as Forma Data Management.</span></li>
+        <li class="prior note" data-step="-6">Site planning and initial design<span class="flow-note">Illustrative: planners and engineering disciplines establish site context and start preparing design information; Forma Site Design could be used where relevant.</span></li>
+        <li class="prior note" data-step="-5">Design work in progress<span class="flow-note">Illustrative: engineering / BIM teams develop models, drawings, and technical specifications using authoring tools; document control and revision history apply throughout.</span></li>
+        <li class="prior note" data-step="-4">Shared for coordination and review<span class="flow-note">Illustrative: responsible teams share selected information for checking and coordination; project systems support access, review routing, and traceability.</span></li>
+        <li class="prior note" data-step="-3">Documents authorised for tender<span class="flow-note">Illustrative: the authorised tender drawings and specifications are issued for procurement under agreed document-control procedures, not automatically for construction.</span></li>
+        <li class="prior note" data-step="-2">Procurement package published<span class="flow-note">USACE releases solicitation documents for prospective bidders. A project CDE/EDMS could support preparation and issue, but the actual internal platform is unverified.</span></li>
+        <li class="prior note" data-step="-1">Tender RFIs registered and answered<span class="flow-note">Bidders ask clarification questions; procurement and technical staff allocate and respond. Forma Build is only an illustrative possible workflow, not a verified USACE source.</span></li>
+        <li class="prior note" data-step="0">Public RFI register published as Excel<span class="flow-note">Verified source: “RFI log for posting 9.23.26.xlsx” is made available with the procurement opportunity. Its original internal software and export method are unknown.</span></li>
+        <li class="note" data-step="01">Raw RFI Excel data<span class="flow-note">This analytics platform starts here: preserve the public workbook as data/raw/rfi_log.xlsx and maintain source lineage.</span></li>
+        <li data-step="02">Python cleaning and validation<span class="flow-note">Ingest the raw source, standardise records, test quality, and retain raw-versus-derived distinctions.</span></li>
+        <li data-step="03">Structured SQL database<span class="flow-note">Organise RFI records and validated analytical attributes into a queryable reporting model.</span></li>
+        <li data-step="04">Power BI reporting<span class="flow-note">Explore RFI volume, response coverage, disciplines, document impacts, and detailed records, within the data's limitations.</span></li>
+        <li data-step="05">Databricks analytics (planned)<span class="flow-note">Proposed extension for more advanced data analysis and experiment tracking.</span></li>
+        <li data-step="06">Machine learning and NLP models (planned)<span class="flow-note">Proposed classification and language-analysis experiments using clearly labelled derived attributes.</span></li>
+        <li data-step="07">Semantic search and RFI AI Copilot (planned)<span class="flow-note">Proposed retrieval and question-answering layer requiring explicit source grounding and evaluation.</span></li>
       </ol>
       <p>The work is designed to demonstrate capability across:</p>
       <ul class="chips">
@@ -114,12 +117,12 @@
         <li>Generative AI</li>
         <li>AI evaluation and governance</li>
       </ul>
-      <p>A major strength of the project is that it begins with a <strong>real publicly released construction RFI register</strong>, rather than a synthetic portfolio dataset.</p>
+      <p>A major strength of the project is that it begins with a <strong>real publicly released procurement RFI register</strong>, rather than a synthetic portfolio dataset.</p>
     </section>
 
     <section id="business-context">
       <h2><span class="section-no">Section 2</span>Business context</h2>
-      <p>Construction and infrastructure projects generate large volumes of RFIs throughout design, procurement, and delivery.</p>
+      <p>Infrastructure projects generate clarification requests during procurement and RFIs during design and construction delivery. This source specifically documents procurement-stage bidder questions and official responses.</p>
       <figure class="plate site">
         <img src="images/field-tablet.png" alt="An engineer on a construction site reviewing a building model, charts, and drawings on a tablet.">
         <figcaption>Drawings, schedules, and site records reviewed together.</figcaption>
@@ -160,7 +163,7 @@
 
     <section id="source-file">
       <h2><span class="section-no">Section 4</span>Source file</h2>
-      <p>The main source used in this project is the workbook published with the public federal procurement opportunity.</p>
+      <p>The verified source used in this project is the Excel workbook published with the federal procurement opportunity. Its internal authoring, document-management, and export software are not identified; Autodesk Forma is not established as its source.</p>
       <p class="ref"><span>Workbook</span>RFI log for posting 9.23.26.xlsx</p>
       <p>The workbook contains approximately <strong>111 RFI records</strong>. The original workbook will be preserved unchanged as the raw project source.</p>
     </section>
@@ -317,7 +320,7 @@
 
     <section id="limitations">
       <h2><span class="section-no">Section 9</span>Data limitations</h2>
-      <p>The source contains approximately 111 RFIs, which is relatively small for supervised machine learning.</p>
+      <p>The source contains approximately 111 RFI records, which is relatively small for supervised machine learning.</p>
       <p>It also does not directly contain all fields expected in a mature RFI system, such as due date, response date, closed date, formal priority, cost impact, schedule impact, discipline, issue category, workflow history, and revision history.</p>
       <div class="callout">
         <p>Any additional fields derived using rules, manual labelling, or AI will be clearly marked as <strong>derived attributes</strong>. The project will not present inferred values as if they were present in the original source.</p>

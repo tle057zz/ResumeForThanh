@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>14. What the dashboards mean</title>
+  <link rel="stylesheet" href="styles.css?v=pager">
+</head>
+<body>
+  <div class="sheet">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <p class="kicker"><a href="index.html">Report</a> · Chapter 14</p>
+      <h1>What the dashboards mean</h1>
+      <p class="subtitle">A reading of the report pages for the people who will act on the register, and what to do next.</p>
+      <div class="meta">
+        <span>107 RFIs</span>
+        <span>Four dashboard pages</span>
+        <span>13 October 2026</span>
+      </div>
+    </div>
+    <div class="hazard" aria-hidden="true"></div>
+  </header>
+  <figure class="drawing-band blueprint">
+    <img src="images/blueprint-site.png" alt="A site plan laid over a construction photograph.">
+  </figure>
+  <nav class="report-nav" aria-label="Report chapters">
+    <a href="index.html">Contents</a>
+    <a href="01-project-introduction-and-data-source.html">1. Introduction</a>
+    <a href="02-raw-data-profile.html">2. Profile</a>
+    <a href="03-raw-table-investigation.html">3. Raw table</a>
+    <a href="04-clean-rfi-table.html">4. Clean table</a>
+    <a href="05-clean-table-validation.html">5. Validation</a>
+    <a href="06-rfi-features.html">6. Features</a>
+    <a href="07-star-schema.html">7. Star schema</a>
+    <a href="08-python-scripts.html">8. Python scripts</a>
+    <a href="09-powerbi-data.html">9. Power BI data</a>
+    <a href="10-powerbi-executive-overview.html">10. Executive overview</a>
+    <a href="11-powerbi-document-impact.html">11. Document impact</a>
+    <a href="12-powerbi-coordination.html">12. Coordination</a>
+    <a href="13-powerbi-register.html">13. RFI register</a>
+    <a href="14-dashboard-conclusion.html" aria-current="page">14. Conclusion</a>
+    <a href="15-workflow-still-ahead.html">15. Work still ahead</a>
+  </nav>
+
+  <main class="page">
+    <nav class="toc" aria-label="Chapter contents">
+      <h2>In this chapter</h2>
+      <ol>
+        <li><a href="#picture">The register in one view</a></li>
+        <li><a href="#actions">What to do next</a></li>
+        <li><a href="#pages">How to use the pages</a></li>
+        <li><a href="#labels">What the labels can do</a></li>
+        <li><a href="#limits">What the dashboards do not say</a></li>
+      </ol>
+    </nav>
+
+    <section id="picture">
+      <h2><span class="section-no">Section 1</span>The register in one view</h2>
+      <div class="callout">
+        <p>The project has 107 questions. Ninety-nine have a written reply. Eight are still open, and all eight sit with CT. Nineteen record a change to a drawing, a specification, or both. Thirty-seven still do not say whether a document changed.</p>
+      </div>
+      <p>That is the whole register. The four dashboard pages are four ways of looking at the same 107 rows. The executive page is the project picture. The document page is what has to change on paper. The coordination page is who asked and who still owes an answer. The register is the row behind each count. A detail view opens one question when a row is selected.</p>
+      <p>Most of the work is already answered, and most of it is electrical specification questions from one contractor. The unfinished work is smaller, and it is not sitting with the busiest designer.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>What a manager needs</th><th>What the dashboards show</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Is the register under control?</td><td>99 of 107 have a reply. The response rate is 92.52%.</td></tr>
+          <tr><td>What is still open?</td><td>Eight RFIs, all tasked to CT, all labelled Other, all with an unknown document impact.</td></tr>
+          <tr><td>What must change in the documents?</td><td>19 RFIs. Sixteen of those change both the drawing and the specification. Electrical holds 11 of the 19.</td></tr>
+          <tr><td>Who is carrying the questions?</td><td>DAVID BOLAND, INC asked 71, and all 71 are answered. AE was tasked with 66, and all 66 are answered.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="actions">
+      <h2><span class="section-no">Section 2</span>What to do next</h2>
+      <p>Six actions follow from the pages. They are for the project team, not for a later model.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Do this</th><th>Why the dashboards say so</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Answer the eight open RFIs, with CT.</td>
+            <td>They are the whole backlog. They arrived on 14, 16, and 21 September, from Dobco, Inc., Richard Group LCC, and Willdan. They ask about liquidated damages, the award and notice to proceed, prevailing wage, a tax certificate, the share of work the contractor performs, hand delivery of the bid, a funding date, and adjusting the bid for material prices. They are bid and contract questions. They are not drawing conflicts.</td>
+          </tr>
+          <tr>
+            <td>Write Yes or No on the 37 unknown document notes.</td>
+            <td>Unknown means the note is blank or only says an attachment was sent. It is about a third of the register. Treating it as “no change” would hide that third. Other, General, Quality / Inspection, and Compliance Requirement hold most of it.</td>
+          </tr>
+          <tr>
+            <td>Review the 19 confirmed document updates, starting with Electrical.</td>
+            <td>Sixteen of the 19 change both the drawing and the specification. Electrical has 11. Specification Clarification is the source of 15 of the 19. Architectural is 2 of 3, so that high rate is not the workload.</td>
+          </tr>
+          <tr>
+            <td>Ask the tasked party, not the contractor who wrote the question.</td>
+            <td>DAVID BOLAND, INC submitted the most and has nothing open. AE holds the most assignments and has nothing open. CT holds every open RFI, at a response rate of 46.67%. On the register, the party filter is the submitter. Selecting AE or CT there shows an empty list.</td>
+          </tr>
+          <tr>
+            <td>Read 4 September as one intake day.</td>
+            <td>Sixty-seven of the 107 RFIs arrived that day. The later days are smaller. Every question received through 10 September is answered. The line between those dates is the drop after that one day.</td>
+          </tr>
+          <tr>
+            <td>Give “Other” a real home.</td>
+            <td>Other is 24 RFIs. Twenty-three of them have an unknown document impact, and all eight open RFIs are in it. It is a leftover label, not a discipline.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>If the team wants to know how long a question has been waiting, the register needs the date the reply was written. Every row has a received date. None has an answered date, so the dashboards cannot show days open.</p>
+    </section>
+
+    <section id="pages">
+      <h2><span class="section-no">Section 3</span>How to use the pages</h2>
+      <p>Open the published report <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdiNTRjNmItMjhmYy00YTVjLTlhZmMtOGIxMzFkMGM4YmE0IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9">rif_vis</a>. It has four pages. The project file in <code>data/processed/powerbi</code> uses the same 107 rows. Its page names are Executive overview, Engineering analysis, Document control, and RFI register. Selecting a row opens a hidden RFI detail page.</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Published page</th><th>Use it to</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Executive overview</td><td>See the five cards, the day the questions arrived, and the mix of discipline, issue type, and submitter.</td></tr>
+          <tr><td>Drawing and specification changes</td><td>See which questions change a drawing, a specification, or both, and which notes are still unknown.</td></tr>
+          <tr><td>Coordination and responsibility</td><td>See who asked and who was tasked. This is the page that shows CT holding the eight open RFIs.</td></tr>
+          <tr><td>RFI register</td><td>Find the row. Search an RFI number, or filter by status, discipline, and document impact, then read the question.</td></tr>
+        </tbody>
+      </table>
+      <p>Start with the cards. Open the document page before saying a drawing is unchanged. Open the coordination page before asking a contractor why their question is still open. Use the register to read the words.</p>
+    </section>
+
+    <section id="labels">
+      <h2><span class="section-no">Section 4</span>What the labels can do</h2>
+      <p>Discipline and issue type on the dashboards are labels already stored on each row. They are there so a chart can sort the register. Specification Clarification is 62 of 107, so it will lead every issue-type chart. Electrical is 40 of 107.</p>
+      <p>A first automatic check of the issue-type labels was run on 105 of the 107 questions. It agreed with the stored label about 7 times in 10. It did that mostly by calling questions specification clarifications. It did not pick out the drawing conflicts, the interface questions, or the material questions. Constructability (<code>RFI-023</code>) and Scope Gap (<code>RFI-096</code>) were left out of that check because each label appears once.</p>
+      <p>Use the charts to see the mix. Have a person confirm a rare label, and have a person confirm any document change. The label sorts the work. It does not answer the RFI.</p>
+    </section>
+
+    <section id="limits">
+      <h2><span class="section-no">Section 5</span>What the dashboards do not say</h2>
+      <p>Answered means the reply box has text. It does not mean the contractor has accepted the reply, and it does not mean the design is settled. A response rate of 92.52% is not a clean bill of health while 37 document notes are still unknown.</p>
+      <p>The dashboards do not show cost, days of delay, or a schedule impact. They do not close an RFI, and they do not revise a drawing. Those decisions stay with the people named on the coordination page.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="chapter-pager" aria-label="Chapter sequence">
+      <a href="13-powerbi-register.html">Previous: 13. RFI register</a>
+      <a class="pager-next" href="15-workflow-still-ahead.html">Next: 15. Work still ahead</a>
+    </nav>
+    <p>Prepared from the tables and pages in <cite>data/processed/powerbi</cite>, chapters 9 to 13, and the issue-type check in <cite>databricks/13_classify_rfi_issue_type</cite>.</p>
+  </footer>
+  </div>
+</body>
+</html>
