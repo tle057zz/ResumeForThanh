@@ -449,6 +449,13 @@ def serve_construction_project(subpath: str):
     base_dir = os.path.join(app.root_path, 'projects', 'construction-project', 'report')
     return send_from_directory(base_dir, subpath)
 
+@app.route('/new-construction-project/<path:subpath>')
+def serve_new_construction_project(subpath: str):
+    """Serve reports from projects/new-construction-project/web_reports."""
+    record_visit('new-construction-project')
+    base_dir = os.path.join(app.root_path, 'projects', 'new-construction-project', 'web_reports')
+    return send_from_directory(base_dir, subpath)
+
 @app.route('/<path:path>')
 def static_proxy(path):
     # Serve static files with aggressive caching headers in production

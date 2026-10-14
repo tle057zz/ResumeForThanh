@@ -1,0 +1,98 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.350Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.408Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.429Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.448Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "skipped-heading",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.468Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "ai-color-palette",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.491Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.511Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "pulsing-dot",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.531Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.550Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          "src/templates/index.html"
+        ],
+        "createdAt": "2026-10-14T04:55:54.571Z",
+        "reason": "User confirmed: keep the existing Projects list and insert the Snowden Towers card beside Digital Engineering RFI Analytics"
+      }
+    ]
+  }
+}
