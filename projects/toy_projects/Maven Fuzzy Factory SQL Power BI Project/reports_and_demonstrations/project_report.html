@@ -5,249 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Maven Fuzzy Factory | Project Report</title>
   <style>
-    :root {
-      --ink: #172033;
-      --muted: #5d687a;
-      --line: #d9e1ea;
-      --surface: #ffffff;
-      --canvas: #f5f7fa;
-      --accent: #1264a3;
-      --accent-soft: #e8f2fb;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: var(--canvas);
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6;
-    }
-
-    main {
-      width: min(1040px, calc(100% - 40px));
-      margin: 48px auto;
-      background: var(--surface);
-      border: 1px solid var(--line);
-    }
-
-    header {
-      padding: 48px 56px 42px;
-      background: var(--ink);
-      color: white;
-    }
-
-    .eyebrow {
-      margin: 0 0 12px;
-      color: #9ed2ff;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    h1, h2, h3, p { margin-top: 0; }
-
-    h1 {
-      max-width: 700px;
-      margin-bottom: 14px;
-      font-size: clamp(2rem, 5vw, 3.45rem);
-      line-height: 1.1;
-      letter-spacing: -0.045em;
-    }
-
-    .subtitle {
-      max-width: 700px;
-      margin: 0;
-      color: #d4dfeb;
-      font-size: 1.05rem;
-    }
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #1f9cf0, #0b74d1);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      letter-spacing: .01em;
-      border: 1px solid rgba(255,255,255,0.25);
-      box-shadow: 0 8px 24px rgba(0,0,0,.25);
-      transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
-    }
-    .cta:hover { background: linear-gradient(135deg, #0f86de, #0a66b2); transform: translateY(-1px); box-shadow: 0 10px 28px rgba(0,0,0,.3); }
-    .cta-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: transparent;
-      color: #e6f2ff;
-      text-decoration: none;
-      font-weight: 700;
-      letter-spacing: .01em;
-      border: 1px solid rgba(255,255,255,0.45);
-      box-shadow: 0 8px 24px rgba(0,0,0,.15) inset, 0 2px 8px rgba(0,0,0,.15);
-      transition: transform .15s ease, box-shadow .15s ease, background .2s ease, color .2s ease;
-    }
-    .cta-secondary:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); box-shadow: 0 10px 28px rgba(0,0,0,.18) inset, 0 4px 12px rgba(0,0,0,.2); color: #ffffff; }
-    .cta-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
-
-    .content { padding: 48px 56px 56px; }
-
-    section + section {
-      margin-top: 48px;
-      padding-top: 42px;
-      border-top: 1px solid var(--line);
-    }
-
-    h2 {
-      margin-bottom: 16px;
-      font-size: 1.55rem;
-      letter-spacing: -0.025em;
-    }
-
-    h3 {
-      margin-bottom: 8px;
-      font-size: 1rem;
-    }
-
-    p { color: var(--muted); }
-
-    .callout {
-      margin: 24px 0 0;
-      padding: 20px 22px;
-      border-left: 4px solid var(--accent);
-      background: var(--accent-soft);
-      color: #24445e;
-    }
-
-    .goal-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    .goal {
-      padding: 20px;
-      border: 1px solid var(--line);
-      background: #fff;
-    }
-
-    .goal p { margin-bottom: 0; }
-
-    .source {
-      padding: 24px;
-      border: 1px solid var(--line);
-      background: #fbfcfe;
-    }
-
-    a {
-      color: var(--accent);
-      font-weight: 650;
-    }
-
-    .table-wrap { overflow-x: auto; }
-
-    figure {
-      margin: 26px 0;
-      padding: 12px;
-      border: 1px solid var(--line);
-      background: #fbfcfe;
-    }
-
-    figure img {
-      display: block;
-      width: 100%;
-      height: auto;
-      border: 1px solid #edf1f5;
-    }
-
-    figcaption {
-      padding: 10px 4px 0;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-    .dashboard-page + .dashboard-page {
-      margin-top: 44px;
-      padding-top: 38px;
-      border-top: 1px solid var(--line);
-    }
-
-    ul {
-      margin: 14px 0 0;
-      padding-left: 20px;
-      color: var(--muted);
-    }
-
-    li + li { margin-top: 8px; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.94rem;
-    }
-
-    th, td {
-      padding: 15px 14px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      background: #f0f4f8;
-      color: #364152;
-      font-size: 0.78rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    td { color: var(--muted); }
-    td:first-child {
-      color: var(--ink);
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-weight: 700;
-    }
-
-    footer {
-      padding: 20px 56px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 700px) {
-      main { width: 100%; margin: 0; border: 0; }
-      header, .content, footer { padding-left: 24px; padding-right: 24px; }
-      .goal-grid { grid-template-columns: 1fr; }
-    }
+    body { font-size: 1.05rem; }
+    h1 { font-size: 3.4rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.5rem; }
   </style>
+  <link rel="stylesheet" href="shop.css">
 </head>
 <body>
+  <div class="kingdom" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud cloud-a"></div>
+    <div class="cloud cloud-b"></div>
+    <div class="cloud cloud-c"></div>
+    <div class="lawn"></div>
+    <div class="castle">
+      <span class="tower tower-l"></span>
+      <span class="tower tower-m"></span>
+      <span class="tower tower-r"></span>
+    </div>
+    <div class="swing">
+      <span class="bar"></span>
+      <span class="rope rope-l"></span>
+      <span class="rope rope-r"></span>
+      <span class="seat"></span>
+    </div>
+    <div class="slide">
+      <span class="deck"></span>
+      <span class="ramp"></span>
+      <span class="ladder"></span>
+    </div>
+  </div>
   <main>
     <header>
-      <p class="eyebrow">SQL + Power BI Analytics Project</p>
+      <nav class="aisles" aria-label="Catalog">
+        <a href="#overview">Overview</a>
+        <a href="#objective">Objective</a>
+        <a href="#source">Source</a>
+        <a href="#tables">Tables</a>
+        <a href="#sql">SQL</a>
+        <a href="#views">Views</a>
+        <a href="#export">Export</a>
+        <a href="#dashboard">Dashboard</a>
+      </nav>
       <h1>Maven Fuzzy Factory E-Commerce Performance</h1>
-      <p class="subtitle">A marketing, conversion, product, and landing-page performance analysis for an online toy retailer.</p>
+      <p class="subtitle">SQL + Power BI analytics project. A marketing, conversion, product, and landing-page performance analysis for an online toy retailer.</p>
       <div class="cta-group">
         <a class="cta" href="https://app.powerbi.com/view?r=eyJrIjoiMTVmMmU3OWItMGY3OS00ZTQ0LWI3YjMtNzE3ZDA2ZThhOWNmIiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener">
-          <span>Explore the live Power BI dashboard</span> <span aria-hidden="true">↗</span>
+          <span>Explore the live Power BI dashboard</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
         <a class="cta-secondary" href="https://github.com/tle057zz/ResumeForThanh/tree/main/projects/toy_projects" target="_blank" rel="noopener">
-          <span>Explore project repo</span> <span aria-hidden="true">📁</span>
+          <span>Explore project repo</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 8.5 12 4l8 4.5-8 4.5L4 8.5Z M4 8.5V16l8 4 8-4V8.5 M12 13v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </header>
 
     <div class="content">
-      <section>
+      <section id="overview">
         <h2>Project Overview</h2>
         <p>
           This project analyzes the end-to-end performance of Maven Fuzzy Factory, an online retailer selling
@@ -265,7 +81,7 @@
         </aside>
       </section>
 
-      <section>
+      <section id="objective">
         <h2>Business Objective</h2>
         <p>
           The objective is to give Maven Fuzzy Factory a clear, evidence-based view of how visitors move from
@@ -292,7 +108,7 @@
         </div>
       </section>
 
-      <section>
+      <section id="source">
         <h2>Data Source</h2>
         <div class="source">
           <h3>Maven Analytics — Toy Store E-Commerce Database</h3>
@@ -307,7 +123,7 @@
         </div>
       </section>
 
-      <section>
+      <section id="tables">
         <h2>Data Description</h2>
         <p>
           This is a relational e-commerce dataset that follows the customer journey from website acquisition to
@@ -398,7 +214,7 @@
         </div>
       </section>
 
-      <section>
+      <section id="sql">
         <h2>SQL Engineering &amp; Analytics Workflow</h2>
         <p>
           PostgreSQL was used as the project’s data-engineering and analytical layer. Instead of analysing
@@ -496,7 +312,7 @@
         </div>
       </section>
 
-      <section>
+      <section id="views">
         <h2>Analytics Views Created for Reporting</h2>
         <p>
           Four PostgreSQL views were created and exported as CSV datasets for Power BI. Each view applies the
@@ -558,7 +374,7 @@
         </aside>
       </section>
 
-      <section>
+      <section id="export">
         <h2>How SQL Views Were Prepared for Power BI</h2>
         <p>
           The Power BI report uses four exported CSV files generated from the PostgreSQL analytics views. Each view
@@ -642,7 +458,7 @@
         </aside>
       </section>
 
-      <section>
+      <section id="dashboard">
         <h2>Power BI Dashboard: Visual Analysis &amp; Interpretation</h2>
         <p>
           The Power BI dashboard contains four pages built from the exported SQL view outputs. KPI cards provide

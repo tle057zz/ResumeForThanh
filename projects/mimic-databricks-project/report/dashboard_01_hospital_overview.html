@@ -5,67 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard 1 — Hospital Overview | MIMIC Analytics</title>
   <style>
-    :root {
-      --bg:#0f1419; --surface:#1a2332; --surface-2:#243044; --border:#2d3f5c;
-      --text:#e8edf4; --muted:#94a3b8; --accent:#3b82f6; --accent-hover:#2563eb;
-      --gold:#f59e0b; --success:#22c55e; --warn:#f97316;
-      --font:"Segoe UI",system-ui,-apple-system,sans-serif;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
-    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
-    .container{max-width:1040px;margin:0 auto;padding:0 1.5rem}
-    header{background:linear-gradient(135deg,#1a3a6b,#0f1419 70%);border-bottom:1px solid var(--border);padding:2.5rem 0 2rem}
-    .badge{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:.2rem .8rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem}
-    header h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.4rem}
-    header .sub{color:var(--muted);font-size:.95rem;margin-bottom:1.2rem}
-    .nav-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
-    .btn{display:inline-flex;align-items:center;padding:.6rem 1.1rem;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none}
-    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);text-decoration:none}
-    .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{text-decoration:none}
-    section{padding:2.25rem 0;border-bottom:1px solid var(--border)}
-    h2{font-size:1.3rem;margin-bottom:.9rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);display:inline-block}
-    h3{font-size:.95rem;color:var(--gold);margin:1.4rem 0 .5rem}
-    h4{font-size:.88rem;color:var(--text);margin:1rem 0 .35rem}
-    p,li{color:var(--muted);font-size:.92rem;margin-bottom:.5rem}
-    ul{padding-left:1.2rem;margin-bottom:.75rem}
-    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.65rem;margin:1rem 0}
-    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center}
-    .kpi .val{font-size:1.5rem;font-weight:700;color:var(--accent)}
-    .kpi .lbl{font-size:.75rem;color:var(--muted)}
-    .kpi .ok{font-size:.68rem;color:var(--success);margin-top:.2rem}
-    .insight{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.85rem 1.1rem;margin:.65rem 0}
-    .insight strong{color:var(--text)}
-    .takeaway{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin:.5rem 0}
-    .takeaway ol{padding-left:1.2rem;margin:0}
-    .takeaway li{margin-bottom:.35rem}
-    .table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
-    table{width:100%;border-collapse:collapse;font-size:.84rem}
-    th{background:var(--surface-2);text-align:left;padding:.5rem .8rem;border:1px solid var(--border)}
-    td{padding:.45rem .8rem;border:1px solid var(--border);color:var(--muted)}
-    tr:nth-child(even) td{background:var(--surface)}
-    td strong,td em{color:var(--text)}
-    code{font-family:monospace;font-size:.8rem;background:var(--surface-2);padding:.1rem .35rem;border-radius:3px;color:var(--text)}
-    pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.9rem;overflow-x:auto;font-size:.76rem;line-height:1.65;margin:.6rem 0}
-    pre code{background:none;padding:0;color:#a8c7fa}
-    .visual-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;margin:.75rem 0}
-    .visual-card .tag{font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
-    .visual-card h4{margin:0 0 .5rem;font-size:1rem}
-    .match{color:var(--success);font-weight:600}
-    .hl{color:var(--gold);font-weight:600}
-    footer{padding:1.5rem 0;text-align:center;color:var(--muted);font-size:.8rem}
-    .page-map{display:flex;flex-wrap:wrap;gap:.4rem;margin:.75rem 0}
-    .page-map span,.page-map a{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;color:var(--muted)}
-    .page-map a{text-decoration:none}
-    .page-map .active{border-color:var(--accent);color:var(--accent);font-weight:600}
-    .site-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:.65rem 0;position:sticky;top:0;z-index:100}
-    .site-nav .container{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
-    .site-nav .brand{font-weight:700;color:var(--text);margin-right:.5rem;font-size:.9rem;text-decoration:none}
-    .site-nav a{padding:.35rem .7rem;border-radius:6px;font-size:.84rem;color:var(--muted);text-decoration:none}
-    .site-nav a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}
-    .site-nav a.active{color:var(--accent);background:var(--surface-2);font-weight:600}
-    .site-nav .disabled{color:#556;font-size:.84rem;padding:.35rem .7rem}
+    body { font-size: 1.05rem; }
+    h1 { font-size: 2.75rem; }
+    h2 { font-size: 1.9rem; }
+    h3 { font-size: 1.4rem; }
   </style>
+  <link rel="stylesheet" href="clinic.css">
 </head>
 <body>
 
@@ -168,7 +113,7 @@
 
     <div class="visual-card">
       <div class="tag">Visual 1 · Horizontal Bar Chart</div>
-      <h4>Total Admissions by admission_type</h4>
+      <h3>Total Admissions by admission_type</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Admission Type</th><th>Admissions</th><th>Share</th></tr></thead>
@@ -190,7 +135,7 @@
 
     <div class="visual-card">
       <div class="tag">Visual 2 · Vertical Bar Chart</div>
-      <h4>Patients by Age Group</h4>
+      <h3>Patients by Age Group</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Age Group</th><th>Patients</th><th>Share</th></tr></thead>
@@ -208,7 +153,7 @@
 
     <div class="visual-card">
       <div class="tag">Visual 3 · Line Chart</div>
-      <h4>Count of admission_id by Year</h4>
+      <h3>Count of admission_id by Year</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Year</th><th>Admissions</th><th>Note</th></tr></thead>
@@ -225,7 +170,7 @@
 
     <div class="visual-card">
       <div class="tag">Visual 4 · Donut Chart</div>
-      <h4>Admissions by Insurance</h4>
+      <h3>Admissions by Insurance</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Insurance</th><th>Admissions</th><th>Share</th></tr></thead>
@@ -241,7 +186,7 @@
 
     <div class="visual-card">
       <div class="tag">Visual 5 · Vertical Bar Chart</div>
-      <h4>Average of length_of_stay_days by admission_type</h4>
+      <h3>Average of length_of_stay_days by admission_type</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Admission Type</th><th>Avg LOS</th></tr></thead>

@@ -5,64 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Executive Conclusion | MIMIC Analytics</title>
   <style>
-    :root {
-      --bg:#0f1419; --surface:#1a2332; --surface-2:#243044; --border:#2d3f5c;
-      --text:#e8edf4; --muted:#94a3b8; --accent:#3b82f6; --accent-hover:#2563eb;
-      --gold:#f59e0b; --success:#22c55e;
-      --font:"Segoe UI",system-ui,-apple-system,sans-serif;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65}
-    a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
-    .container{max-width:1040px;margin:0 auto;padding:0 1.5rem}
-    header{background:linear-gradient(135deg,#1a3a6b,#0f1419 70%);border-bottom:1px solid var(--border);padding:2.5rem 0 2rem}
-    .badge{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:.2rem .8rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.6rem}
-    header h1{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.4rem}
-    header .sub{color:var(--muted);font-size:.95rem;margin-bottom:1.2rem}
-    .nav-links{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
-    .btn{display:inline-flex;align-items:center;padding:.6rem 1.1rem;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none}
-    .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover);text-decoration:none}
-    .btn-ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{text-decoration:none}
-    section{padding:2.25rem 0;border-bottom:1px solid var(--border)}
-    h2{font-size:1.3rem;margin-bottom:.9rem;padding-bottom:.35rem;border-bottom:2px solid var(--accent);display:inline-block}
-    h3{font-size:.95rem;color:var(--gold);margin:1.4rem 0 .5rem}
-    p,li{color:var(--muted);font-size:.92rem;margin-bottom:.5rem}
-    ul,ol{padding-left:1.2rem;margin-bottom:.75rem}
-    .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.65rem;margin:1rem 0}
-    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center}
-    .kpi .val{font-size:1.35rem;font-weight:700;color:var(--accent)}
-    .kpi .lbl{font-size:.72rem;color:var(--muted)}
-    .summary-box{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:1.1rem 1.3rem;margin:1rem 0}
-    .summary-box p{margin-bottom:.6rem}
-    .summary-box p:last-child{margin-bottom:0}
-    .insight{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:.85rem 1.1rem;margin:.65rem 0}
-    .insight strong{color:var(--text)}
-    .theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.75rem;margin:1rem 0}
-    .theme-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.15rem}
-    .theme-card .num{font-size:.72rem;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:.35rem}
-    .theme-card h4{font-size:.9rem;color:var(--text);margin-bottom:.4rem}
-    .theme-card p{font-size:.86rem;margin:0}
-    .rec-list{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin:.75rem 0}
-    .rec-list ol{margin:0;padding-left:1.2rem}
-    .rec-list li{margin-bottom:.5rem}
-    .rec-list li strong{color:var(--text)}
-    .table-wrap{overflow-x:auto;margin:.6rem 0 1rem}
-    table{width:100%;border-collapse:collapse;font-size:.84rem}
-    th{background:var(--surface-2);text-align:left;padding:.5rem .8rem;border:1px solid var(--border)}
-    td{padding:.45rem .8rem;border:1px solid var(--border);color:var(--muted)}
-    tr:nth-child(even) td{background:var(--surface)}
-    td strong{color:var(--text)}
-    code{font-family:monospace;font-size:.8rem;background:var(--surface-2);padding:.1rem .35rem;border-radius:3px;color:var(--text)}
-    .hl{color:var(--gold);font-weight:600}
-    .limit-list li{margin-bottom:.35rem}
-    footer{padding:1.5rem 0;text-align:center;color:var(--muted);font-size:.8rem}
-    .site-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:.65rem 0;position:sticky;top:0;z-index:100}
-    .site-nav .container{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
-    .site-nav .brand{font-weight:700;color:var(--text);margin-right:.5rem;font-size:.9rem;text-decoration:none}
-    .site-nav a{padding:.35rem .7rem;border-radius:6px;font-size:.84rem;color:var(--muted);text-decoration:none}
-    .site-nav a:hover{color:var(--text);background:var(--surface-2);text-decoration:none}
-    .site-nav a.active{color:var(--accent);background:var(--surface-2);font-weight:600}
+    body { font-size: 1.05rem; }
+    h1 { font-size: 2.75rem; }
+    h2 { font-size: 1.9rem; }
+    h3 { font-size: 1.4rem; }
   </style>
+  <link rel="stylesheet" href="clinic.css">
 </head>
 <body>
 
@@ -205,27 +153,27 @@
     <div class="theme-grid">
       <div class="theme-card">
         <div class="num">Theme 1</div>
-        <h4>Emergency-driven, older-adult cohort</h4>
+        <h3>Emergency-driven, older-adult cohort</h3>
         <p>EW EMER. = 37.8% of admissions. Patients aged 50–79 = 62%. Insurance: OTHER 54%, Medicare 38%.</p>
       </div>
       <div class="theme-card">
         <div class="num">Theme 2</div>
-        <h4>Acute on chronic</h4>
+        <h3>Acute on chronic</h3>
         <p>Primary = cardiac/renal events. Secondary = hypertension, diabetes, hyperlipidemia. Medications = IV fluids + insulin + cardiovascular drugs.</p>
       </div>
       <div class="theme-card">
         <div class="num">Theme 3</div>
-        <h4>High coding density</h4>
+        <h3>High coding density</h3>
         <p>~16 diagnoses, ~72 prescriptions, ~4 transfers per admission. Documentation-rich US hospital practice.</p>
       </div>
       <div class="theme-card">
         <div class="num">Theme 4</div>
-        <h4>Readmission risk</h4>
+        <h3>Readmission risk</h3>
         <p>19.3% 30-day readmission. 27.6% discharged to home health. Significant post-acute care needs.</p>
       </div>
       <div class="theme-card">
         <div class="num">Theme 5</div>
-        <h4>Volume ≠ intensity</h4>
+        <h3>Volume ≠ intensity</h3>
         <p>EW EMER. drives volume; URGENT/DIRECT EMER. drive longer LOS. Separate throughput from bed-day planning.</p>
       </div>
     </div>
