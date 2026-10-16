@@ -14,11 +14,13 @@ from dash import dash_table
 BASE_DIR = Path(__file__).resolve().parent
 RAW_DATA_CANDIDATES = [BASE_DIR / "Teen_Mental_Health_Dataset.csv"]
 CHART_DECIMAL_FORMAT = ".5f"
+CHART_COLORWAY = ["#0c8f88", "#e85d75", "#ef9f27", "#6b7fd7", "#2a9d8f", "#c9445d"]
+KPI_TONES = ["mint", "coral", "sun", "sky", "lavender"]
 INSIGHT_TEXT_STYLE = {
     "whiteSpace": "pre-wrap",
     "fontSize": "0.95rem",
-    "color": "#334155",
-    "lineHeight": "1.5",
+    "color": "#1c2434",
+    "lineHeight": "1.55",
 }
 POWER_BI_URL = "https://app.powerbi.com/view?r=eyJrIjoiNTAxMDY3MTUtMDg4Ni00M2IzLThhN2ItMmMzZGVmNzBmMGQ1IiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9"
 
@@ -160,17 +162,33 @@ def category_count(data: pd.DataFrame, column: str, value: str) -> int:
     return int((data[column].astype(str) == value).sum())
 
 
-def kpi(value: Any, label: str) -> html.Div:
+def kpi(value: Any, label: str, tone: str = "mint") -> html.Div:
     return html.Div(
-        className="kpi",
-        children=[html.Div(className="kpi-value", children=f"{value}"), html.Div(className="kpi-label", children=label)],
-        style={
-            "padding": "12px 16px",
-            "border": "1px solid rgba(0,0,0,.08)",
-            "borderRadius": "10px",
-            "background": "rgba(255,255,255,.7)",
-        },
+        className=f"kpi kpi-{tone}",
+        children=[
+            html.Div(className="kpi-value", children=f"{value}"),
+            html.Div(className="kpi-label", children=label),
+        ],
     )
+
+
+def style_figure(fig: go.Figure) -> go.Figure:
+    fig.update_layout(
+        colorway=CHART_COLORWAY,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(255,255,255,0.62)",
+        font=dict(family="Nunito Care, Segoe UI, sans-serif", color="#1c2434", size=13),
+        title_font=dict(family="Nunito Care, Segoe UI, sans-serif", color="#1c2434", size=16),
+        legend=dict(bgcolor="rgba(255,255,255,0.7)", bordercolor="rgba(213,228,239,0.9)", borderwidth=1),
+        margin=dict(t=52, r=18, b=42, l=48),
+    )
+    fig.update_xaxes(gridcolor="rgba(213,228,239,0.85)", zerolinecolor="rgba(213,228,239,0.85)")
+    fig.update_yaxes(gridcolor="rgba(213,228,239,0.85)", zerolinecolor="rgba(213,228,239,0.85)")
+    return fig
+
+
+def insight_block(text: str) -> html.Div:
+    return html.Div(className="mh-insight", children=[dcc.Markdown(text, style=INSIGHT_TEXT_STYLE)])
 
 
 def fmt_percent(value: float) -> str:
@@ -199,7 +217,7 @@ def bar(
     if data is None or len(data) == 0:
         empty_fig = go.Figure()
         empty_fig.update_layout(title=title, xaxis_title=x, yaxis_title=y)
-        return empty_fig
+        return style_figure(empty_fig)
 
     df = data.copy()
     # Ensure required columns exist
@@ -226,6 +244,7 @@ def bar(
             barmode=barmode,
             custom_data=custom_data_fields,
             category_orders=category_orders or {},
+            color_discrete_sequence=CHART_COLORWAY,
         )
     except Exception:
         # Fallback to a simple figure if Plotly rejects inputs
@@ -236,6 +255,9 @@ def bar(
     fig.update_layout(legend_title_text=color if color in df.columns else None, yaxis_title=y, xaxis_title=x)
     # Keep hover concise
     fig.update_traces(hovertemplate=f"{x}: %{{x}}<br>{y}: %{{y:{CHART_DECIMAL_FORMAT}}}<extra></extra>")
+    fig = style_figure(fig)
+    if not color or color not in df.columns:
+        fig.update_traces(marker_color=CHART_COLORWAY[0], selector=dict(type="bar"))
     return fig
 
 
@@ -260,6 +282,7 @@ def register_dash(server) -> None:
         __name__,
         server=server,
         url_base_pathname="/mental-health/",
+        assets_folder=str(BASE_DIR / "assets"),
         suppress_callback_exceptions=True,
         title="Teen Mental Health Analytics",
         meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1"}],
@@ -271,7 +294,7 @@ def register_dash(server) -> None:
     except Exception as e:
         # Show a helpful inline error page instead of crashing Flask
         app.layout = html.Div(
-            style={"padding": "16px"},
+            className="mh-shell mh-error",
             children=[
                 html.H3("Mental Health dashboard data not found"),
                 html.P(
@@ -286,7 +309,7 @@ def register_dash(server) -> None:
     # If dataframe loaded but empty, render a friendly message
     if df is None or len(df) == 0:
         app.layout = html.Div(
-            style={"padding": "16px"},
+            className="mh-shell mh-error",
             children=[
                 html.H3("No data loaded"),
                 html.P(f"Processed files were found in {data_dir}, but no rows were loaded."),
@@ -297,14 +320,11 @@ def register_dash(server) -> None:
 
     # Shared filters
     controls = html.Div(
-        style={"padding": "12px", "background": "rgba(0,0,0,0.02)", "borderRadius": "10px"},
+        className="mh-filters",
         children=[
             html.Div(
-                style={
-                    "display": "grid",
-                    "gridTemplateColumns": "repeat(auto-fit, minmax(220px, 1fr))",
-                    "gap": "12px",
-                },
+                className="chart-grid",
+                style={"marginTop": "0"},
                 children=[
                     html.Div(
                         children=[
@@ -358,49 +378,24 @@ def register_dash(server) -> None:
     tabs = dcc.Tabs(
         id="tabs",
         value="tab-overview",
+        parent_className="mh-tabs mh-panel",
         children=[
             dcc.Tab(label="Overview", value="tab-overview", children=[
+                html.Div(id="ov-kpis", className="kpi-grid"),
                 html.Div(
-                    id="ov-kpis",
-                    style={
-                        "display": "grid",
-                        "gridTemplateColumns": "repeat(auto-fit, minmax(180px, 1fr))",
-                        "gap": "12px",
-                        "marginTop": "12px",
-                    },
-                ),
-                html.Div(
-                    style={
-                        "display": "grid",
-                        "gridTemplateColumns": "repeat(auto-fit, minmax(320px, 1fr))",
-                        "gap": "12px",
-                        "marginTop": "12px",
-                    },
+                    className="chart-grid",
                     children=[
                         dcc.Graph(id="ov-by-gender", config={"responsive": True}, style={"minHeight": "320px"}),
                         dcc.Graph(id="ov-total-by-age", config={"responsive": True}, style={"minHeight": "320px"}),
                     ],
                 ),
                 dcc.Graph(id="ov-by-age-gender", config={"responsive": True}, style={"marginTop": "12px", "minHeight": "360px"}),
-                html.Div(id="ov-insights", style={"marginTop": "8px"}),
+                html.Div(id="ov-insights"),
             ]),
             dcc.Tab(label="Social Media Impact", value="tab-social", children=[
+                html.Div(id="sm-kpis", className="kpi-grid"),
                 html.Div(
-                    id="sm-kpis",
-                    style={
-                        "display": "grid",
-                        "gridTemplateColumns": "repeat(auto-fit, minmax(180px, 1fr))",
-                        "gap": "12px",
-                        "marginTop": "12px",
-                    },
-                ),
-                html.Div(
-                    style={
-                        "display": "grid",
-                        "gridTemplateColumns": "repeat(auto-fit, minmax(320px, 1fr))",
-                        "gap": "12px",
-                        "marginTop": "12px",
-                    },
+                    className="chart-grid",
                     children=[
                         dcc.Graph(id="sm-by-usage-gender", config={"responsive": True}, style={"minHeight": "320px"}),
                         dcc.Graph(id="sm-by-usage-platform", config={"responsive": True}, style={"minHeight": "320px"}),
@@ -426,7 +421,7 @@ def register_dash(server) -> None:
                     row_selectable="multi",
                     selected_rows=[],
                 ),
-                html.Div(id="sm-insights", style={"marginTop": "8px"}),
+                html.Div(id="sm-insights"),
             ]),
             dcc.Tab(label="Stress and Anxiety", value="tab-stress", children=[
                 html.H4("Stress and Anxiety Matrix"),
@@ -448,12 +443,7 @@ def register_dash(server) -> None:
                     selected_rows=[],
                 ),
                 html.Div(
-                    style={
-                        "display": "grid",
-                        "gridTemplateColumns": "repeat(auto-fit, minmax(320px, 1fr))",
-                        "gap": "12px",
-                        "marginTop": "12px",
-                    },
+                    className="chart-grid",
                     children=[
                         dcc.Graph(id="sa-by-stress-gender", config={"responsive": True}, style={"minHeight": "320px"}),
                         dcc.Graph(id="sa-by-anxiety-gender", config={"responsive": True}, style={"minHeight": "320px"}),
@@ -461,25 +451,12 @@ def register_dash(server) -> None:
                     ],
                 ),
                 dcc.Graph(id="sa-distribution", config={"responsive": True}, style={"marginTop": "12px", "minHeight": "360px"}),
-                html.Div(id="sa-insights", style={"marginTop": "8px"}),
+                html.Div(id="sa-insights"),
             ]),
             dcc.Tab(label="Demographics and Lifestyle", value="tab-demographics", children=[
+                html.Div(id="dem-kpis", className="kpi-grid"),
                 html.Div(
-                    id="dem-kpis",
-                    style={
-                        "display": "grid",
-                        "gridTemplateColumns": "repeat(auto-fit, minmax(180px, 1fr))",
-                        "gap": "12px",
-                        "marginTop": "12px",
-                    },
-                ),
-                html.Div(
-                    style={
-                        "display": "grid",
-                        "gridTemplateColumns": "repeat(auto-fit, minmax(320px, 1fr))",
-                        "gap": "12px",
-                        "marginTop": "12px",
-                    },
+                    className="chart-grid",
                     children=[
                         dcc.Graph(id="dem-by-age-gender", config={"responsive": True}, style={"minHeight": "320px"}),
                         dcc.Graph(id="dem-by-interaction-platform", config={"responsive": True}, style={"minHeight": "320px"}),
@@ -504,114 +481,105 @@ def register_dash(server) -> None:
                     row_selectable="multi",
                     selected_rows=[],
                 ),
-                html.Div(id="dem-insights", style={"marginTop": "8px"}),
+                html.Div(id="dem-insights"),
             ]),
         ],
     )
 
     app.layout = html.Div(
-        style={"padding": "16px"},
+        className="mh-shell",
         children=[
-            # CTA to open the Power BI report (requested to be at the beginning)
-            html.H2("Teen Mental Health Analytics"),
+            html.Div(className="mh-decor", **{"aria-hidden": "true"}),
             html.Div(
-                style={
-                    "display": "flex",
-                    "alignItems": "center",
-                    "gap": "12px",
-                    "margin": "10px 0 16px 0",
-                    "padding": "10px 12px",
-                    "borderRadius": "12px",
-                    "border": "1px solid #bae6fd",
-                    "background": "#e0f2fe",
-                    "flexWrap": "wrap",
-                },
+                className="mh-content",
                 children=[
-                    html.A(
-                        "View the live Power BI dashboard",
-                        href=POWER_BI_URL,
-                        target="_blank",
-                        rel="noopener",
-                        style={
-                            "display": "inline-block",
-                            "padding": "10px 14px",
-                            "borderRadius": "10px",
-                            "border": "1px solid #0284c7",
-                            "background": "#0284c7",
-                            "color": "#ffffff",
-                            "textDecoration": "none",
-                            "fontWeight": "700",
-                        },
-                    ),
-                    html.Span(
-                        "Below are interactive dashboards built with Python (Dash + Plotly). "
-                        "Note: On the free/low‑resource cloud service, these may respond more slowly to interactions.",
-                        style={"color": "#0c4a6e", "fontSize": "0.96rem", "fontWeight": "600"},
-                    ),
-                ],
-            ),
-            # Project context (from original Streamlit)
-            html.Div(
-                style={
-                    "padding": "12px",
-                    "marginBottom": "12px",
-                    "background": "rgba(0,0,0,0.02)",
-                    "border": "1px solid rgba(0,0,0,0.06)",
-                    "borderRadius": "10px",
-                },
-                children=[
-                    html.H4("Project Objective, Business Problem, and Data Transformations"),
-                    dcc.Markdown(
-                        (
-                            "### Project Objective & Business Problem\n"
-                            "This project analyzes teenage mental health patterns using social media usage, sleep, stress, anxiety, "
-                            "addiction level, academic performance, physical activity, gender, age group, platform usage, and social interaction level. "
-                            "The main business problem is to identify which behavioral and lifestyle factors are associated with higher depression risk among teenagers. "
-                            "The dashboard helps answer whether high social media usage, high stress, high anxiety, platform usage, age group, gender, or social "
-                            "interaction level are linked to different mental health outcomes.\n\n"
-                            "### Data Sources & Transformations\n"
-                            "The original dataset comes from `Teen_Mental_Health_Dataset.csv`. The data was preprocessed using "
-                            "`teen_mental_health_preprocessing.ipynb`, and the cleaned Power BI/Python‑ready tables were exported into `processed/`.\n\n"
-                            "- Loaded and validated the raw CSV with 1,200 rows and 13 columns.\n"
-                            "- Checked that all expected fields were present before processing.\n"
-                            "- Standardized text categories such as Male/Female, Instagram/TikTok/Both, and Low/Medium/High social interaction levels.\n"
-                            "- Converted numeric fields such as social media hours, sleep hours, stress level, anxiety level, addiction level, and depression label.\n"
-                            "- Created age groups: Early Teen, Middle Teen, and Late Teen.\n"
-                            "- Built a star schema with one fact table and four dimension tables.\n"
-                            "- Created surrogate keys for age, gender, platform, and social interaction.\n"
-                            "- Validated unique dimension keys, matching foreign keys, and unique respondent IDs.\n"
-                            "- Exported five cleaned CSV tables into `processed/`."
-                        ),
-                        style={"whiteSpace": "pre-wrap"},
-                    ),
-                    html.Div(
+                    html.Header(
+                        className="mh-hero",
                         children=[
-                            html.A(
-                                "Download Original CSV Dataset",
-                                href="/mental-health/download",
-                                target="_blank",
-                                rel="noopener",
-                                className="btn btn-primary",
-                                style={
-                                    "display": "inline-block",
-                                    "padding": "8px 12px",
-                                    "borderRadius": "8px",
-                                    "border": "1px solid rgba(0,0,0,0.1)",
-                                    "background": "#0d6efd",
-                                    "color": "white",
-                                    "textDecoration": "none",
-                                },
+                            html.Div(
+                                className="mh-hero-copy",
+                                children=[
+                                    html.H1("Teen Mental Health Analytics"),
+                                    html.P(
+                                        "Interactive view of how social media, sleep, stress, and lifestyle "
+                                        "relate to teen depression risk across age, gender, and platforms."
+                                    ),
+                                    html.Div(
+                                        className="mh-cta",
+                                        children=[
+                                            html.A(
+                                                "View the live Power BI dashboard",
+                                                href=POWER_BI_URL,
+                                                target="_blank",
+                                                rel="noopener",
+                                                className="mh-btn mh-btn-primary",
+                                            ),
+                                            html.A(
+                                                "Download Original CSV Dataset",
+                                                href="/mental-health/download",
+                                                target="_blank",
+                                                rel="noopener",
+                                                className="mh-btn mh-btn-secondary",
+                                            ),
+                                        ],
+                                    ),
+                                    html.P(
+                                        className="mh-note",
+                                        children=(
+                                            "Below are interactive dashboards built with Python (Dash + Plotly). "
+                                            "Note: On the free/low‑resource cloud service, these may respond more slowly to interactions."
+                                        ),
+                                    ),
+                                ],
+                            ),
+                            html.Div(
+                                className="mh-hero-art",
+                                children=[
+                                    html.Img(
+                                        src="/mental-health/assets/hero-care.svg",
+                                        alt="Soft wellness illustration with calm shapes",
+                                    )
+                                ],
+                            ),
+                        ],
+                    ),
+                    html.Section(
+                        className="mh-panel",
+                        children=[
+                            html.H2("Project Objective, Business Problem, and Data Transformations"),
+                            dcc.Markdown(
+                                (
+                                    "### Project Objective & Business Problem\n"
+                                    "This project analyzes teenage mental health patterns using social media usage, sleep, stress, anxiety, "
+                                    "addiction level, academic performance, physical activity, gender, age group, platform usage, and social interaction level. "
+                                    "The main business problem is to identify which behavioral and lifestyle factors are associated with higher depression risk among teenagers. "
+                                    "The dashboard helps answer whether high social media usage, high stress, high anxiety, platform usage, age group, gender, or social "
+                                    "interaction level are linked to different mental health outcomes.\n\n"
+                                    "### Data Sources & Transformations\n"
+                                    "The original dataset comes from `Teen_Mental_Health_Dataset.csv`. The data was preprocessed using "
+                                    "`teen_mental_health_preprocessing.ipynb`, and the cleaned Power BI/Python‑ready tables were exported into `processed/`.\n\n"
+                                    "- Loaded and validated the raw CSV with 1,200 rows and 13 columns.\n"
+                                    "- Checked that all expected fields were present before processing.\n"
+                                    "- Standardized text categories such as Male/Female, Instagram/TikTok/Both, and Low/Medium/High social interaction levels.\n"
+                                    "- Converted numeric fields such as social media hours, sleep hours, stress level, anxiety level, addiction level, and depression label.\n"
+                                    "- Created age groups: Early Teen, Middle Teen, and Late Teen.\n"
+                                    "- Built a star schema with one fact table and four dimension tables.\n"
+                                    "- Created surrogate keys for age, gender, platform, and social interaction.\n"
+                                    "- Validated unique dimension keys, matching foreign keys, and unique respondent IDs.\n"
+                                    "- Exported five cleaned CSV tables into `processed/`."
+                                ),
+                                style={"whiteSpace": "pre-wrap"},
                             ),
                             html.Span(
-                                "" if any(p.exists() for p in RAW_DATA_CANDIDATES) else "  (Original CSV not found in project directories.)",
-                                style={"marginLeft": "8px", "color": "#6b7280"},
+                                "" if any(p.exists() for p in RAW_DATA_CANDIDATES) else "Original CSV not found in project directories.",
+                                className="mh-note",
                             ),
-                        ]
+                        ],
                     ),
+                    controls,
+                    tabs,
                 ],
             ),
-            controls,
-            tabs,
         ],
     )
 
@@ -664,11 +632,11 @@ def register_dash(server) -> None:
 
         m = metrics(local)
         kpis = [
-            kpi(f"{m['Total Respondents']:,}", "Total Respondents"),
-            kpi(f"{m['Depressed Respondents']:,}", "Depressed Respondents"),
-            kpi(fmt_decimal(m["Average Stress Level"]), "Average Stress"),
-            kpi(fmt_decimal(m["Average Anxiety Level"]), "Average Anxiety"),
-            kpi(fmt_decimal(m["Average Addiction Level"]), "Average Addiction"),
+            kpi(f"{m['Total Respondents']:,}", "Total Respondents", "mint"),
+            kpi(f"{m['Depressed Respondents']:,}", "Depressed Respondents", "coral"),
+            kpi(fmt_decimal(m["Average Stress Level"]), "Average Stress", "sun"),
+            kpi(fmt_decimal(m["Average Anxiety Level"]), "Average Anxiety", "sky"),
+            kpi(fmt_decimal(m["Average Addiction Level"]), "Average Addiction", "lavender"),
         ]
 
         by_gender = group_summary(local, ["Gender"], {"Gender": GENDER_ORDER})
@@ -708,7 +676,7 @@ def register_dash(server) -> None:
             f"By gender, the highest rate is {highest_gender} at {fmt_percent(highest_gender_rate)} "
             f"(Female {fmt_percent(female_rate)}, Male {fmt_percent(male_rate)})."
         )
-        ov_insights = dcc.Markdown(ov_text, style=INSIGHT_TEXT_STYLE)
+        ov_insights = insight_block(ov_text)
         return kpis, fig_gender, fig_age, fig_age_gender, ov_insights
 
     # ---------- Social Media Impact callbacks ----------
@@ -766,9 +734,9 @@ def register_dash(server) -> None:
 
         m = metrics(local)
         kpis = [
-            kpi(f"{int((local['DailySocialMediaHours'] >= 6).sum()):,}", "High SM Users"),
-            kpi(fmt_percent((local["DailySocialMediaHours"] >= 6).mean() if len(local) else 0), "High SM User Rate"),
-            kpi(fmt_percent((local["StressLevel"] >= 7).mean() if len(local) else 0), "High Stress Rate"),
+            kpi(f"{int((local['DailySocialMediaHours'] >= 6).sum()):,}", "High SM Users", "coral"),
+            kpi(fmt_percent((local["DailySocialMediaHours"] >= 6).mean() if len(local) else 0), "High SM User Rate", "sun"),
+            kpi(fmt_percent((local["StressLevel"] >= 7).mean() if len(local) else 0), "High Stress Rate", "lavender"),
         ]
 
         # Recompute summaries for charts only
@@ -823,6 +791,9 @@ def register_dash(server) -> None:
             yaxis2=dict(title="Depression Rate", overlaying="y", side="right", tickformat=".1%"),
             xaxis_title="PlatformUsage",
         )
+        style_figure(combo)
+        combo.update_traces(marker_color="#0c8f88", selector=dict(type="bar"))
+        combo.update_traces(line_color="#e85d75", marker_color="#e85d75", selector=dict(type="scatter"))
 
         # Table data comes from base (stable indices)
         table = by_usage_platform_all[
@@ -867,7 +838,7 @@ def register_dash(server) -> None:
             f"Overall, {top_platform} shows the highest depression rate at {fmt_percent(top_platform_rate)}, "
             f"and the average daily social‑media time is {fmt_decimal(m['Average Social Media Hours'])} hours."
         )
-        sm_insights = dcc.Markdown(sm_text, style=INSIGHT_TEXT_STYLE)
+        sm_insights = insight_block(sm_text)
 
         return kpis, fig_usage_gender, fig_usage_platform, combo, table, new_selected_rows, sm_insights
 
@@ -936,8 +907,9 @@ def register_dash(server) -> None:
                 ],
             }
         )
-        fig_indicators = px.bar(indicators, x="Indicator", y="Value", title="Average Mental Health Indicator Levels", text_auto=CHART_DECIMAL_FORMAT)
+        fig_indicators = px.bar(indicators, x="Indicator", y="Value", title="Average Mental Health Indicator Levels", text_auto=CHART_DECIMAL_FORMAT, color_discrete_sequence=CHART_COLORWAY)
         fig_indicators.update_traces(texttemplate=f"%{{y:{CHART_DECIMAL_FORMAT}}}")
+        style_figure(fig_indicators)
 
         depression_distribution = (
             local.groupby(["Stress Category", "Depression Status"], observed=True)
@@ -970,7 +942,7 @@ def register_dash(server) -> None:
             f"Average sleep is {fmt_decimal(m['Average Sleep Hours'])} hours, and average social‑media use is "
             f"{fmt_decimal(m['Average Social Media Hours'])} hours."
         )
-        insights = dcc.Markdown(sa_text, style=INSIGHT_TEXT_STYLE)
+        insights = insight_block(sa_text)
 
         # Rebuild selected_rows indices to match current matrix (prevents sticky selections)
         new_selected_rows = []
@@ -1044,11 +1016,11 @@ def register_dash(server) -> None:
 
         m = metrics(local)
         kpis = [
-            kpi(f"{m['Total Respondents']:,}", "Total Respondents"),
-            kpi(f"{m['Depressed Respondents']:,}", "Depressed Respondents"),
-            kpi(fmt_decimal(m["Average Stress Level"]), "Average Stress"),
-            kpi(fmt_decimal(m["Average Anxiety Level"]), "Average Anxiety"),
-            kpi(fmt_decimal(m["Average Addiction Level"]), "Average Addiction"),
+            kpi(f"{m['Total Respondents']:,}", "Total Respondents", "mint"),
+            kpi(f"{m['Depressed Respondents']:,}", "Depressed Respondents", "coral"),
+            kpi(fmt_decimal(m["Average Stress Level"]), "Average Stress", "sun"),
+            kpi(fmt_decimal(m["Average Anxiety Level"]), "Average Anxiety", "sky"),
+            kpi(fmt_decimal(m["Average Addiction Level"]), "Average Addiction", "lavender"),
         ]
 
         by_age_gender = group_summary(local, ["AgeGroup", "Gender"], {"AgeGroup": AGE_ORDER, "Gender": GENDER_ORDER})
@@ -1091,6 +1063,7 @@ def register_dash(server) -> None:
             custom_data=["Gender", "Indicator"],
         )
         fig_avg_by_gender.update_traces(texttemplate=f"%{{y:{CHART_DECIMAL_FORMAT}}}")
+        style_figure(fig_avg_by_gender)
 
         # Table data comes from stable base summary
         table = by_age_gender_all[
@@ -1131,7 +1104,7 @@ def register_dash(server) -> None:
             f"stress {top_gender_stress} ({fmt_decimal(top_gender_stress_value)}), and "
             f"addiction {top_gender_addiction} ({fmt_decimal(top_gender_addiction_value)})."
         )
-        insights = dcc.Markdown(dem_text, style=INSIGHT_TEXT_STYLE)
+        insights = insight_block(dem_text)
 
         return kpis, fig_age_gender, fig_interaction_platform, fig_avg_by_gender, table, new_selected_rows, insights
 

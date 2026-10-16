@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 200" role="img" aria-label="Soft wellness illustration">
+  <circle cx="110" cy="110" r="78" fill="#ffffff" fill-opacity="0.55"/>
+  <path d="M110 148c-28-18-46-34-46-56 0-16 12-28 28-28 10 0 18 5 23 12 5-7 13-12 23-12 16 0 28 12 28 28 0 22-18 38-46 56z" fill="#e85d75" fill-opacity="0.92"/>
+  <circle cx="58" cy="52" r="14" fill="#0c8f88" fill-opacity="0.85"/>
+  <circle cx="168" cy="44" r="11" fill="#ef9f27" fill-opacity="0.9"/>
+  <circle cx="178" cy="150" r="16" fill="#6b7fd7" fill-opacity="0.75"/>
+  <path d="M42 168c18-20 34-20 52 0 18-20 34-20 52 0" fill="none" stroke="#0a6f6a" stroke-width="6" stroke-linecap="round"/>
+</svg>
