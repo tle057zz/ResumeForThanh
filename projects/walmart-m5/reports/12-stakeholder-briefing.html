@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Step 12 · Stakeholder Briefing — Walmart M5</title>
+  <style>
+    body { font-size: 1.05rem; }
+    h1 { font-size: 3.1rem; }
+    h2 { font-size: 1.9rem; }
+    h3 { font-size: 1.4rem; }
+  </style>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topnav">
+      <div class="brand">
+        <strong>Walmart M5 Data Platform</strong>
+        <span>Step 12 report · Stakeholder briefing</span>
+      </div>
+      <nav class="nav-links" aria-label="Report pages">
+        <a href="index.html">Overview</a>
+        <a href="01-raw-dataset.html">01 Raw</a>
+        <a href="02-python-ingestion.html">02 Ingestion</a>
+        <a href="03-airflow.html">03 Airflow</a>
+        <a href="04-databricks-bronze.html">04 Bronze</a>
+        <a href="05-databricks-silver.html">05 Silver</a>
+        <a href="06-databricks-gold.html">06 Gold</a>
+        <a href="07-airflow-databricks-jobs.html">07 Jobs</a>
+        <a href="08-executive-dashboard-analysis.html">08 Executive</a>
+        <a href="09-store-dashboard-analysis.html">09 Store</a>
+        <a href="10-product-dashboard-analysis.html">10 Product</a>
+        <a href="11-demand-dashboard-analysis.html">11 Demand</a>
+        <a href="12-stakeholder-briefing.html" aria-current="page">12 Brief</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">Step 12 · For leadership</div>
+      <h1>What the numbers say: decisions for the next planning cycle</h1>
+      <p>
+        A non-technical summary of validated findings from the Executive, Store,
+        Product, and Demand dashboards. Numbers below come from the Gold export
+        and the Power BI pages already reviewed in steps 08–11.
+      </p>
+      <div class="meta-row">
+        <span class="chip ok">No pipeline jargon</span>
+        <span class="chip ok">Findings from 08–11</span>
+        <span class="chip">Planning &amp; decisions</span>
+      </div>
+    </section>
+
+    <section class="grid stats" aria-label="Business snapshot">
+      <article class="stat">
+        <div class="label">Network sales</div>
+        <div class="value">$191.58M</div>
+        <div class="hint">67M units · 10 stores</div>
+      </article>
+      <article class="stat">
+        <div class="label">FOODS share</div>
+        <div class="value">58%</div>
+        <div class="hint">$111.1M of sales</div>
+      </article>
+      <article class="stat">
+        <div class="label">Flagship store</div>
+        <div class="value">CA_3</div>
+        <div class="hint">17.1% of network · $32.70M</div>
+      </article>
+      <article class="stat">
+        <div class="label">Full-year sales growth</div>
+        <div class="value">~9%</div>
+        <div class="hint">CAGR 2012→2015</div>
+      </article>
+    </section>
+
+    <section class="panel section">
+      <h2>1. Bottom line for the boss</h2>
+      <p>
+        Demand is healthy when you read it on a daily basis. Average daily units
+        rose from about <strong>37.8K in 2015</strong> to about
+        <strong>41.8K in 2016 year-to-date</strong> (through 22 May). Comparing
+        the same calendar window (1 Jan–22 May), 2016 sales are about
+        <strong>18% higher</strong> than 2015. The business is concentrated:
+        <strong>California is ~45% of sales</strong>, one store (<strong>CA_3</strong>)
+        is the clear flagship, and <strong>FOODS</strong> is still the revenue engine
+        at roughly <strong>58%</strong> of sales.
+      </p>
+      <p>
+        The main planning risk is reading partial years as a crash: 2016 only has
+        <strong>143 days</strong> in the training window, so annual totals look
+        small even while per-day demand is strong. Use same-window year-over-year
+        and average daily metrics for leadership reviews.
+      </p>
+    </section>
+
+    <section class="panel section">
+      <h2>2. Key findings (from dashboards 08–11)</h2>
+
+      <h3>Network &amp; growth (Executive)</h3>
+      <ul>
+        <li>Total validated volume: <strong>66.9M units</strong> and <strong>$191.58M</strong> sales across 1,941 sales days.</li>
+        <li>Full calendar years 2012–2015 show sales CAGR about <strong>9.1%</strong> (2013 +10%, 2014 +5.4%, 2015 +12%).</li>
+        <li>Category mix: FOODS <strong>$111.1M (58%)</strong>, HOUSEHOLD <strong>$57.1M (30%)</strong>, HOBBIES <strong>$23.3M (12%)</strong>.</li>
+        <li>FOODS share eased slightly over time (~60% early years → ~55% in 2015) as HOUSEHOLD/HOBBIES grew, but FOODS remains primary.</li>
+      </ul>
+
+      <h3>Stores &amp; geography (Store)</h3>
+      <ul>
+        <li>State mix: <strong>CA 44.9%</strong> ($85.97M) · <strong>TX 28.8%</strong> · <strong>WI 26.4%</strong>.</li>
+        <li><strong>CA_3</strong> leads at $32.70M (17.1% of network); <strong>CA_4</strong> is last at $12.47M — about a <strong>2.6×</strong> gap.</li>
+        <li>Every store is FOODS-led (~58% average). Extremes: WI_2 highest FOODS (64.5%); CA_2 lowest FOODS / highest HOUSEHOLD (FOODS 49.3%, HOUSEHOLD 38.4%).</li>
+        <li>Average sell price is tight across stores (~$4.34–$4.45), so CA_3’s lead is volume, not a much higher price point.</li>
+      </ul>
+
+      <h3>Products &amp; assortment (Product)</h3>
+      <ul>
+        <li>All <strong>Top 15</strong> SKUs by units sit in department <strong>FOODS_3</strong>.</li>
+        <li>Head SKU <code>FOODS_3_090</code>: ~<strong>1.02M units</strong> (~1.5% of all units) and ~$1.38M sales.</li>
+        <li>FOODS is both largest and most volatile on average; HOBBIES is smallest and calmest.</li>
+        <li>FOODS_3 drives sales at a low average price (high-velocity grocery). HOUSEHOLD_2 has extreme max prices (up to $107.32) but far less total sales than FOODS_3.</li>
+      </ul>
+
+      <h3>Demand &amp; calendar (Demand)</h3>
+      <ul>
+        <li>Rolling demand is upward: mean 7-day average ≈ <strong>34.4K</strong> units/day; mean 28-day total ≈ <strong>957K</strong>.</li>
+        <li>About <strong>92%</strong> of units land on non-event days; labeled event days are only ~8% of units.</li>
+        <li>On a units-per-day basis, M5 “event” days are slightly <em>weaker</em> than non-event days (FOODS −3.3%, HOUSEHOLD −6.9%, HOBBIES −8.7%) — holidays/closures pull averages down.</li>
+        <li>FOODS still dominates volume on both event and non-event days.</li>
+      </ul>
+    </section>
+
+    <section class="panel section">
+      <h2>3. Outlook: what to expect next</h2>
+      <p>
+        These are planning implications from the observed history — not a separate
+        forecast model. Use them to set expectations and capacity, then refresh
+        after each Gold / Power BI update.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Signal in the data</th><th>Planning implication</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Avg daily units 2015 → 2016 YTD: ~37.8K → ~41.8K</td>
+            <td>Baseline demand planning should assume continued strength on a per-day basis, not a 2016 “collapse” from partial-year totals.</td>
+          </tr>
+          <tr>
+            <td>Same-window sales +18% (Jan–22 May 2016 vs 2015)</td>
+            <td>Near-term reviews should use comparable calendar windows; full-year cards alone will mislead until a complete year is available.</td>
+          </tr>
+          <tr>
+            <td>Full-year sales CAGR ~9% (2012–2015)</td>
+            <td>Reasonable multi-year planning band if assortment and store coverage stay similar — re-check after each annual close.</td>
+          </tr>
+          <tr>
+            <td>FOODS ~58% sales; Top 15 all FOODS_3</td>
+            <td>Most forecast error and stock risk will sit in FOODS_3 head SKUs; protect service levels there first.</td>
+          </tr>
+          <tr>
+            <td>HOUSEHOLD share growing while FOODS share eases</td>
+            <td>Keep FOODS as the engine, but allocate some assortment and promo attention to HOUSEHOLD growth stores (e.g. CA_2 mix).</td>
+          </tr>
+          <tr>
+            <td>Event days weaker on units/day in this calendar</td>
+            <td>Do not assume holiday labels automatically lift volume; build baselines on normal days and treat Dec 25 / closures as special cases.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel section">
+      <h2>4. Decisions and actions to take</h2>
+      <ol>
+        <li>
+          <strong>Store ops:</strong> Treat <strong>CA_3</strong> as the benchmark for staffing, replenishment, and assortment. Open a focused review on <strong>CA_4</strong> (lowest sales) and <strong>CA_2</strong> (highest HOUSEHOLD mix).
+        </li>
+        <li>
+          <strong>Category investment:</strong> Put the majority of demand-planning and inventory effort on <strong>FOODS</strong>, especially department <strong>FOODS_3</strong> head SKUs (<code>FOODS_3_090</code>, <code>FOODS_3_586</code>, and the rest of the Top 15).
+        </li>
+        <li>
+          <strong>Leadership metrics:</strong> Report growth with <strong>average daily units/sales</strong> and <strong>same-calendar-window YoY</strong>. Keep the all-years YoY card (~27%) as context only — it mixes uneven year edges.
+        </li>
+        <li>
+          <strong>Promo &amp; calendar:</strong> Plan from non-event baselines. Interpret labeled events with units/day, not stacked totals. Always exclude or specially model <strong>25 Dec</strong> in forecasting baselines.
+        </li>
+        <li>
+          <strong>Pricing watch:</strong> Use the department price table for assortment reviews — watch HOUSEHOLD_2 high-price outliers while remembering they are not the volume engine.
+        </li>
+        <li>
+          <strong>Operating cadence:</strong> After each Gold refresh, re-open the four Power BI pages and this brief; the detailed validation pages (08–11) remain the audit trail if numbers move.
+        </li>
+      </ol>
+    </section>
+
+    <section class="panel section">
+      <h2>5. Suggested 90-day plan</h2>
+      <table>
+        <thead>
+          <tr><th>Horizon</th><th>Owner focus</th><th>Success look</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Next 30 days</td>
+            <td>Confirm FOODS_3 head-SKU availability and CA_3 replenishment rules; brief leadership on same-window YoY only.</td>
+            <td>No surprise stockouts on Top 15; leadership pack uses daily / comparable YoY language.</td>
+          </tr>
+          <tr>
+            <td>30–60 days</td>
+            <td>CA_4 and CA_2 deep-dives (volume gap vs mix shift); align promo calendar to non-event baselines.</td>
+            <td>Written store actions; event plans do not inflate expected holiday units without evidence.</td>
+          </tr>
+          <tr>
+            <td>60–90 days</td>
+            <td>Re-forecast FOODS capacity using latest rolling 7D/28D; review HOUSEHOLD growth share store by store.</td>
+            <td>Updated demand plan for next season; HOUSEHOLD opportunities listed where mix already supports them.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel section">
+      <h2>6. Where to dig deeper</h2>
+      <p>
+        This page stays at business language. Technical validation, DAX, and
+        screenshots live on the analysis pages:
+      </p>
+      <p class="hint-line">
+        <a href="08-executive-dashboard-analysis.html">08 Executive</a> ·
+        <a href="09-store-dashboard-analysis.html">09 Store</a> ·
+        <a href="10-product-dashboard-analysis.html">10 Product</a> ·
+        <a href="11-demand-dashboard-analysis.html">11 Demand</a> ·
+        <a href="index.html">Overview</a>
+      </p>
+      <p>
+        Live dashboard:
+        <a href="https://app.powerbi.com/view?r=eyJrIjoiODI4NmU2YTYtZDBiMC00ZjM4LTkxMzgtNWMyOTlhZjc5OWNjIiwidCI6ImJlOTdiY2NhLWEzZTItNDc4Yy1iMWM1LWQ5YTRkMWI2NTY3YyJ9" target="_blank" rel="noopener noreferrer">Open Power BI ↗</a>
+      </p>
+    </section>
+
+    <p class="footer">
+      <a href="11-demand-dashboard-analysis.html">← 11 Demand</a> ·
+      <a href="index.html">Overview</a> ·
+      findings distilled from gold_export validation · Sep 2026
+    </p>
+  </div>
+</body>
+</html>

@@ -281,6 +281,13 @@ pre, .mermaid {
   line-height: 1.55;
 }
 
+.panel ol {
+  margin: 12px 0 0;
+  padding-left: 1.35rem;
+}
+.panel ol li { margin: 0 0 10px; }
+.panel ol li:last-child { margin-bottom: 0; }
+
 .checklist { list-style: none; margin: 14px 0 0; padding: 0; }
 .checklist li {
   display: grid;
